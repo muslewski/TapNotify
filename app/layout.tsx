@@ -1,16 +1,7 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
-
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
+import { HeroUIProvider } from "@heroui/system";
+import { ThemeProvider as NextThemesProvider } from "next-themes";
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -23,11 +14,24 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
-        {children}
+    <html lang="en" suppressHydrationWarning>
+      <body>
+        <HeroUIProvider>
+          <NextThemesProvider
+            attribute="class"
+            defaultTheme="dark"
+            themes={[
+              "dark",
+              "light",
+              "ceres",
+              "umbriel",
+              "neptune",
+              "callisto",
+            ]}
+          >
+            <main className="min-h-screen">{children}</main>
+          </NextThemesProvider>
+        </HeroUIProvider>
       </body>
     </html>
   );
