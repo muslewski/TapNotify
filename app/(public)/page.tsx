@@ -1,5 +1,4 @@
 import LoginCard from "@/components/auth/login-card";
-import OAuth from "@/components/auth/oauth";
 
 export default function Home() {
   return (

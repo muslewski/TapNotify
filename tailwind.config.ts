@@ -19,106 +19,202 @@ export default {
         dark: {
           // Mercury
           colors: {
-            background: "#08080A", // the page background color
-            foreground: "#edecec", // the page text color
+            background: "#01000F", // the page background color
+            foreground: "#EEECEC", // the page text color
             divider: "rgba(255, 255, 255, 0.15)", // used for divider and single line border
-            overlay: "#EE0043", // used for modal, popover, etc.
-            focus: "#EE0043", // used for focus state outline
-            content1: "#1d1a1a", // used for card, modal, popover, etc.
-            content2: "#322d2d",
-            content3: "#463f3f",
-            content4: "#6b6565",
+            overlay: "#F3124A", // used for modal, popover, etc.
+            focus: "#F3124A", // used for focus state outline
+            content1: "#1A191F", // used for card, modal, popover, etc.
+            content2: "#27262D",
+            content3: "#34333C",
+            content4: "#51505C",
 
             // brand colors
             default: {
-              DEFAULT: "#463F3F",
-              foreground: "#c6c3c3", // contrast color 800
-              "50": "#1d1a1a",
-              "100": "#272323",
-              "200": "#322d2d",
-              "300": "#403939",
-              "400": "#463f3f",
-              "500": "#6b6565",
-              "600": "#837e7e",
-              "700": "#aaa7a7",
-              "800": "#c6c3c3",
-              "900": "#edecec",
+              DEFAULT: "#34333C", // 200
+              foreground: "#C3C2CA", // contrast color 700
+              "900": "#F0F0F1",
+              "800": "#E1E0E4",
+              "700": "#C3C2CA",
+              "600": "#A6A5B0",
+              "500": "#8A8997",
+              "400": "#6F6E7E",
+              "300": "#51505C", // content4
+              "200": "#34333C", // content3 & default
+              "100": "#27262D", // content2
+              "50": "#1A191F", // content1
             },
             primary: {
-              DEFAULT: "#EE0043",
-              foreground: "#fab0c5", // contrast color 800
-              "50": "#64001c",
-              "100": "#830025",
-              "200": "#a90030",
-              "300": "#d9003d",
-              "400": "#ee0043",
-              "500": "#f13369",
-              "600": "#f45481",
-              "700": "#f78aa9",
-              "800": "#fab0c5",
-              "900": "#fde6ec",
+              DEFAULT: "#F3124A", // 400
+              foreground: "#FFD9D9", // contrast color 800
+              "900": "#FFECEC",
+              "800": "#FFD9D9",
+              "700": "#FFB3B5",
+              "600": "#FF8B91",
+              "500": "#FC5E6D",
+              "400": "#F3124A",
+              "300": "#B40A35",
+              "200": "#7A0420",
+              "100": "#5E0217",
+              "50": "#2B0106",
             },
             secondary: {
-              DEFAULT: "#8653D3",
-              foreground: "#d9caf1", // contrast color 800
-              "50": "#382359",
-              "100": "#4a2e74",
-              "200": "#5f3b96",
-              "300": "#7a4cc0",
-              "400": "#8653d3",
-              "500": "#9e75dc",
-              "600": "#ae8ce2",
-              "700": "#c7b0eb",
-              "800": "#d9caf1",
-              "900": "#f3eefb",
+              DEFAULT: "#8653D3", // 400
+              foreground: "#E5DDF9", // contrast color 800
+              "900": "#F2EEFC",
+              "800": "#E5DDF9",
+              "700": "#CCBCF1",
+              "600": "#B39AE8",
+              "500": "#9C78DE",
+              "400": "#8653D3",
+              "300": "#623B9C",
+              "200": "#402569",
+              "100": "#301B51",
+              "50": "#130824",
             },
             success: {
-              DEFAULT: "#64C917",
-              foreground: "#cfeeb7", // contrast color 800
-              "50": "#2a540a",
-              "100": "#376f0d",
-              "200": "#478f10",
-              "300": "#5bb715",
-              "400": "#64c917",
-              "500": "#83d445",
-              "600": "#97db64",
-              "700": "#b8e694",
-              "800": "#cfeeb7",
-              "900": "#f0fae8",
+              DEFAULT: "#17C94F", // 400
+              foreground: "#DBF5DD", // contrast color 800
+              "900": "#EDFAEE",
+              "800": "#DBF5DD",
+              "700": "#B7EBBC",
+              "600": "#90E099",
+              "500": "#63D576",
+              "400": "#17C94F",
+              "300": "#0E9538",
+              "200": "#066423",
+              "100": "#044C19",
+              "50": "#023610",
             },
             warning: {
-              DEFAULT: "#F56D24",
-              foreground: "#fcd2bb", // contrast color 800
-              "50": "#672e0f",
-              "100": "#873c14",
-              "200": "#ae4d1a",
-              "300": "#df6321",
-              "400": "#f56d24",
-              "500": "#f78a50",
-              "600": "#f89d6c",
-              "700": "#fabc9a",
-              "800": "#fcd2bb",
-              "900": "#fef0e9",
+              DEFAULT: "#F57F24", // 400
+              foreground: "#FFE7D8", // contrast color 800
+              "900": "#FFF3EB",
+              "800": "#FFE7D8",
+              "700": "#FFCEB1",
+              "600": "#FEB589",
+              "500": "#FA9B5E",
+              "400": "#F57F24",
+              "300": "#B65D18",
+              "200": "#7B3C0C",
+              "100": "#5F2D07",
+              "50": "#441F04",
             },
             danger: {
-              DEFAULT: "#B0120C",
-              foreground: "#e7b6b4", // contrast color 800
-              "50": "#4a0805",
-              "100": "#610a07",
-              "200": "#7d0d09",
-              "300": "#a0100b",
-              "400": "#b0120c",
-              "500": "#c0413d",
-              "600": "#ca605c",
-              "700": "#db928f",
-              "800": "#e7b6b4",
-              "900": "#f7e7e7",
+              DEFAULT: "#A6150A", // 400
+              foreground: "#F3D3CE", // contrast color 800
+              "900": "#F9E9E6",
+              "800": "#F3D3CE",
+              "700": "#E3A99E",
+              "600": "#D27E70",
+              "500": "#BD5142",
+              "400": "#A6150A",
+              "300": "#7A0C05",
+              "200": "#510502",
+              "100": "#3E0301",
+              "50": "#2B0201",
             },
           },
         },
         light: {
           // Saturn
-          colors: {},
+          colors: {
+            background: "#FFF8E1", // the page background color
+            foreground: "#3E2723", // the page text color
+            divider: "rgba(0, 0, 0, 0.15)", // used for divider and single line border
+            overlay: "#FFC107", // used for modal, popover, etc.
+            focus: "#FFC107", // used for focus state outline
+            content1: "#FFF3E0", // used for card, modal, popover, etc.
+            content2: "#FFECB3",
+            content3: "#FFE082",
+            content4: "#FFD54F",
+
+            // brand colors
+            default: {
+              DEFAULT: "#FFE082", // 200
+              foreground: "#4E342E", // contrast color 700
+              "900": "#FFFAE6",
+              "800": "#FFF5D6",
+              "700": "#FFE082",
+              "600": "#FFCA60",
+              "500": "#FFB733",
+              "400": "#FFA000",
+              "300": "#C77C00",
+              "200": "#8A5800",
+              "100": "#664200",
+              "50": "#442C00",
+            },
+            primary: {
+              DEFAULT: "#FFC107", // 400
+              foreground: "#4E342E", // contrast color 800
+              "900": "#FFFDE7",
+              "800": "#FFF9C4",
+              "700": "#FFF59D",
+              "600": "#FFF176",
+              "500": "#FFEE58",
+              "400": "#FFC107",
+              "300": "#FFA000",
+              "200": "#FF8F00",
+              "100": "#FF6F00",
+              "50": "#E65100",
+            },
+            secondary: {
+              DEFAULT: "#D4AF37", // 400
+              foreground: "#FDF8E4", // contrast color 800
+              "900": "#FAF3D4",
+              "800": "#F3E7AE",
+              "700": "#E6CF73",
+              "600": "#D4AF37",
+              "500": "#C29D2A",
+              "400": "#A88B24",
+              "300": "#7F6A1A",
+              "200": "#554911",
+              "100": "#3E370C",
+              "50": "#29240A",
+            },
+            success: {
+              DEFAULT: "#85BB65", // 400
+              foreground: "#F3FAE6", // contrast color 800
+              "900": "#F9FCEF",
+              "800": "#F0F8DF",
+              "700": "#DFF3BF",
+              "600": "#CEE99F",
+              "500": "#BFE081",
+              "400": "#85BB65",
+              "300": "#62954B",
+              "200": "#436E35",
+              "100": "#304E25",
+              "50": "#1F3518",
+            },
+            warning: {
+              DEFAULT: "#FFC300", // 400
+              foreground: "#FFF7D4", // contrast color 800
+              "900": "#FFFBE6",
+              "800": "#FFF5B3",
+              "700": "#FFE680",
+              "600": "#FFD94D",
+              "500": "#FFC300",
+              "400": "#E6AC00",
+              "300": "#B38700",
+              "200": "#806200",
+              "100": "#4C3E00",
+              "50": "#332A00",
+            },
+            danger: {
+              DEFAULT: "#A35709", // 400
+              foreground: "#F8E2D4", // contrast color 800
+              "900": "#FAEFE6",
+              "800": "#F5DFCE",
+              "700": "#EBBF9E",
+              "600": "#E09E70",
+              "500": "#D37B42",
+              "400": "#A35709",
+              "300": "#7C4307",
+              "200": "#553002",
+              "100": "#3E2401",
+              "50": "#291801",
+            },
+          },
         },
         ceres: {
           colors: {},

@@ -4,7 +4,6 @@ import { signIn } from "next-auth/react";
 import { Tooltip, Button, ButtonGroup } from "@heroui/react";
 import { FaGoogle, FaFacebookF, FaGithub, FaDiscord } from "react-icons/fa";
 import { BsTwitterX } from "react-icons/bs";
-import TooltipContent from "@/components/ui/tooltip-content";
 
 interface OAuthProps {
   callbackUrl: string;
@@ -58,21 +57,17 @@ export default function OAuth({ callbackUrl }: OAuthProps) {
   };
 
   return (
-    <ButtonGroup>
+    <ButtonGroup color="default">
       {providers.map((provider) => {
         const Icon = provider.icon;
 
         return (
           <Tooltip
             key={provider.id}
+            showArrow
             placement="bottom"
-            className="bg-gradient-to-tr from-primary-300/20 backdrop-blur-sm border border-primary-50/75"
-            content={
-              <TooltipContent
-                label={provider.label}
-                description={provider.description}
-              />
-            }
+            color="secondary"
+            content={<p className="p-1">{provider.label}</p>}
           >
             <Button onPress={() => handleSignIn(provider.id)}>
               <Icon className="size-4" />
