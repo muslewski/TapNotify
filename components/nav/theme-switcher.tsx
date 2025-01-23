@@ -17,13 +17,13 @@ const themeOptions = [
     key: "dark",
     label: "Mercury",
     description: "Dark theme for low-light environments",
-    icon: "/planets/mercury.svg",
+    icon: "/planets/mercury.png",
   },
   {
     key: "light",
     label: "Saturn",
     description: "Light theme for bright environments",
-    icon: "/planets/mercury.svg",
+    icon: "/planets/saturn.png",
   },
   {
     key: "ceres",
@@ -113,8 +113,8 @@ export function ThemeSwitcher() {
       {/* Button that triggers the dropdown */}
       <DropdownTrigger>
         <Button
-          className="capitalize"
-          variant="bordered"
+          className="capitalize min-w-fit"
+          variant="light"
           color="primary"
           startContent={
             <Image
@@ -125,7 +125,7 @@ export function ThemeSwitcher() {
             />
           }
         >
-          {selectedTheme.label}
+          {/* {selectedTheme.label} */}
         </Button>
       </DropdownTrigger>
 

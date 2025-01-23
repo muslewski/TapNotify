@@ -10,5 +10,12 @@ import prisma from "@/lib/prisma";
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
   adapter: PrismaAdapter(prisma),
-  providers: [Google, Facebook, Twitter, GitHub, Discord, Resend],
+  providers: [
+    Google,
+    Facebook,
+    Twitter,
+    GitHub,
+    Discord,
+    Resend({ from: process.env.RESEND_EMAIL }),
+  ],
 });
