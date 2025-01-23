@@ -32,6 +32,7 @@ export default function MyAccount() {
         <Avatar
           color="primary"
           isBordered
+          size="sm"
           src={user.image ?? undefined}
           showFallback
           alt={user.name || "Avatar Image"}

@@ -29,7 +29,7 @@ const themeOptions = [
     key: "ceres",
     label: "Ceres",
     description: "Balanced dwarf planet theme",
-    icon: "/planets/mercury.svg",
+    icon: "/planets/ceres.png",
   },
   {
     key: "umbriel",
@@ -120,8 +120,8 @@ export function ThemeSwitcher() {
             <Image
               src={selectedTheme.icon}
               alt={selectedTheme.label}
-              width={20}
-              height={20}
+              width={24}
+              height={24}
             />
           }
         >
