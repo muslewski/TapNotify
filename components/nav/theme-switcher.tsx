@@ -13,6 +13,10 @@ import {
 } from "@heroui/react";
 import Image from "next/image";
 
+interface ThemeSwitcherProps {
+  showLabel?: boolean;
+}
+
 const themeOptions = [
   {
     key: "dark",
@@ -52,7 +56,7 @@ const themeOptions = [
   // },
 ];
 
-export function ThemeSwitcher() {
+export function ThemeSwitcher({ showLabel }: ThemeSwitcherProps) {
   const [mounted, setMounted] = useState(false);
   const { theme, setTheme } = useTheme();
   const [selectedKeys, setSelectedKeys] = useState<Selection>(
@@ -114,7 +118,7 @@ export function ThemeSwitcher() {
       {/* Button that triggers the dropdown */}
       <DropdownTrigger>
         <Button
-          className="capitalize min-w-fit"
+          className="capitalize min-w-fit flex-shrink-0"
           variant="light"
           color="primary"
           startContent={
@@ -126,7 +130,7 @@ export function ThemeSwitcher() {
             />
           }
         >
-          {/* {selectedTheme.label} */}
+          {showLabel && selectedTheme.label}
         </Button>
       </DropdownTrigger>
 

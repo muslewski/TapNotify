@@ -9,6 +9,7 @@ import {
   Dropdown,
   DropdownItem,
   DropdownMenu,
+  DropdownSection,
   DropdownTrigger,
   Link,
   User,
@@ -34,7 +35,8 @@ export default function MyAccount() {
       <DropdownTrigger>
         <User
           classNames={{
-            base: ["flex items-center gap-3 cursor-pointer"],
+            base: ["flex items-center gap-3 cursor-pointer flex-shrink-0"],
+            wrapper: "hidden md:flex",
           }}
           avatarProps={{
             src: user.image ?? undefined,
@@ -49,17 +51,22 @@ export default function MyAccount() {
         />
       </DropdownTrigger>
       <DropdownMenu aria-label="User Menu">
-        <DropdownItem
-          key="logout"
-          color="danger"
-          onPress={() => {
-            logout();
-            update();
-            reloadSession();
-          }}
+        <DropdownSection
+          classNames={{ heading: "flex md:hidden" }}
+          title={user?.name ?? "Settings"}
         >
-          Log Out
-        </DropdownItem>
+          <DropdownItem
+            key="logout"
+            color="danger"
+            onPress={() => {
+              logout();
+              update();
+              reloadSession();
+            }}
+          >
+            Log Out
+          </DropdownItem>
+        </DropdownSection>
       </DropdownMenu>
     </Dropdown>
   );

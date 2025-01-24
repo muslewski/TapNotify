@@ -2,6 +2,7 @@
 
 import MyAccount from "@/components/nav/my-account";
 import { ThemeSwitcher } from "@/components/nav/theme-switcher";
+import { cn } from "@/lib/utils";
 import {
   Navbar,
   NavbarBrand,
@@ -9,12 +10,18 @@ import {
   NavbarItem,
   Link,
   Button,
+  NavbarMenuToggle,
+  NavbarMenu,
+  NavbarMenuItem,
 } from "@heroui/react";
 import { MountainIcon } from "lucide-react";
 import { usePathname } from "next/navigation";
+import { useState } from "react";
 
 export default function PublicNav() {
   const pathname = usePathname();
+
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   const navItems = [
     { href: "/features", label: "Features" },
@@ -24,9 +31,12 @@ export default function PublicNav() {
 
   return (
     <Navbar
-      maxWidth="2xl"
+      maxWidth="full"
       classNames={{
-        wrapper: "h-20",
+        wrapper: "gap-16 px-12",
+        content: "flex gap-8 max-w-fit",
+        brand: "gap-2 flex items-center",
+        menu: "overflow-y-hidden gap-12",
         item: [
           "flex",
           "relative",
@@ -48,15 +58,20 @@ export default function PublicNav() {
         ],
       }}
       isBordered
+      onMenuOpenChange={setIsMenuOpen}
     >
-      <NavbarContent justify="start" className="flex gap-8 max-w-64">
-        <NavbarBrand as={Link} href="/" className="gap-2 flex items-center">
+      <NavbarContent justify="start">
+        <NavbarMenuToggle
+          aria-label={isMenuOpen ? "Close menu" : "Open menu"}
+          className="md:hidden"
+        />
+        <NavbarBrand as={Link} href="/">
           <MountainIcon className="size-5 text-foreground" />
           <p className="font-bold text-foreground">Mercurify</p>
         </NavbarBrand>
       </NavbarContent>
 
-      <NavbarContent justify="center">
+      <NavbarContent justify="start" className="hidden md:flex gap-6">
         {navItems.map((item) => (
           <NavbarItem
             key={item.label}
@@ -70,10 +85,34 @@ export default function PublicNav() {
         ))}
       </NavbarContent>
 
-      <NavbarContent justify="end" className="flex gap-10">
-        <ThemeSwitcher />
+      <NavbarContent justify="end">
         <MyAccount />
+        <div className="hidden md:flex">
+          <ThemeSwitcher />
+        </div>
       </NavbarContent>
+
+      {/* Mobile */}
+      <NavbarMenu>
+        {navItems.map((item) => (
+          <NavbarMenuItem key={item.label} isActive={pathname === item.href}>
+            <Button
+              as={Link}
+              href={item.href}
+              variant="light"
+              className={cn(
+                "transition-colors",
+                pathname === item.href && "border-b-2 border-primary"
+              )}
+            >
+              {item.label}
+            </Button>
+          </NavbarMenuItem>
+        ))}
+        <NavbarMenuItem className="mt-auto pb-6">
+          <ThemeSwitcher showLabel />
+        </NavbarMenuItem>
+      </NavbarMenu>
     </Navbar>
   );
 }
