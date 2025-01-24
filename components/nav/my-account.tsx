@@ -55,6 +55,9 @@ export default function MyAccount() {
           classNames={{ heading: "flex md:hidden" }}
           title={user?.name ?? "Settings"}
         >
+          <DropdownItem key="profile" color="primary" href={`/user/${user.id}`}>
+            Profile
+          </DropdownItem>
           <DropdownItem
             key="logout"
             color="danger"
