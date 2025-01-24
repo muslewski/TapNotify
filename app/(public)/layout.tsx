@@ -4,7 +4,7 @@ export default function PublicLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <div>
+    <div className="w-full">
       <PublicNav />
       {children}
     </div>

@@ -1,9 +1,6 @@
 import type { Metadata } from "next";
 import "./globals.css";
-import { HeroUIProvider } from "@heroui/system";
-import { ThemeProvider as NextThemesProvider } from "next-themes";
-import { SessionProvider } from "next-auth/react";
-import { auth } from "@/auth";
+import Providers from "@/providers/providers";
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -15,29 +12,12 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const session = await auth();
-
   return (
     <html lang="en" suppressHydrationWarning>
       <body>
-        <SessionProvider session={session}>
-          <HeroUIProvider>
-            <NextThemesProvider
-              attribute="class"
-              defaultTheme="dark"
-              themes={[
-                "dark",
-                "light",
-                "ceres",
-                "umbriel",
-                "neptune",
-                "callisto",
-              ]}
-            >
-              <main className="min-h-screen">{children}</main>
-            </NextThemesProvider>
-          </HeroUIProvider>
-        </SessionProvider>
+        <Providers>
+          <main className="min-h-screen">{children}</main>
+        </Providers>
       </body>
     </html>
   );

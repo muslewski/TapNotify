@@ -18,4 +18,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     Discord,
     Resend({ from: process.env.RESEND_EMAIL }),
   ],
+  pages: {
+    signIn: "/sign-in",
+  },
 });

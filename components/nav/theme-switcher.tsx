@@ -9,6 +9,7 @@ import {
   DropdownMenu,
   DropdownItem,
   Button,
+  Skeleton,
 } from "@heroui/react";
 import Image from "next/image";
 
@@ -31,24 +32,24 @@ const themeOptions = [
     description: "Balanced dwarf planet theme",
     icon: "/planets/ceres.png",
   },
-  {
-    key: "umbriel",
-    label: "Umbriel",
-    description: "Uranian moon inspired theme",
-    icon: "/planets/mercury.svg",
-  },
-  {
-    key: "neptune",
-    label: "Neptune",
-    description: "Deep blue ocean theme",
-    icon: "/planets/mercury.svg",
-  },
-  {
-    key: "callisto",
-    label: "Callisto",
-    description: "Jovian moon inspired theme",
-    icon: "/planets/mercury.svg",
-  },
+  // {
+  //   key: "umbriel",
+  //   label: "Umbriel",
+  //   description: "Uranian moon inspired theme",
+  //   icon: "/planets/mercury.svg",
+  // },
+  // {
+  //   key: "neptune",
+  //   label: "Neptune",
+  //   description: "Deep blue ocean theme",
+  //   icon: "/planets/mercury.svg",
+  // },
+  // {
+  //   key: "callisto",
+  //   label: "Callisto",
+  //   description: "Jovian moon inspired theme",
+  //   icon: "/planets/mercury.svg",
+  // },
 ];
 
 export function ThemeSwitcher() {
@@ -106,7 +107,7 @@ export function ThemeSwitcher() {
     }
   }, [selectedTheme, setTheme]);
 
-  if (!mounted) return null;
+  if (!mounted) return <Skeleton className="flex rounded-full w-6 h-6 mx-4" />;
 
   return (
     <Dropdown>

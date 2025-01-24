@@ -11,6 +11,7 @@ import {
   DropdownMenu,
   DropdownTrigger,
   Link,
+  User,
 } from "@heroui/react";
 import { useSession } from "next-auth/react";
 
@@ -18,6 +19,7 @@ export default function MyAccount() {
   const user = useCurrentUser(); // Client-side
   const { update } = useSession();
 
+  // If user is not signed in, show Sign In button
   if (!user) {
     return (
       <Button as={Link} color="primary" variant="bordered" href="/sign-in">
@@ -26,19 +28,27 @@ export default function MyAccount() {
     );
   }
 
+  // If user is signed in, show Avatar dropdown
   return (
     <Dropdown>
       <DropdownTrigger>
-        <Avatar
-          color="primary"
-          isBordered
-          size="sm"
-          src={user.image ?? undefined}
-          showFallback
-          alt={user.name || "Avatar Image"}
+        <User
+          classNames={{
+            base: ["flex items-center gap-3 cursor-pointer"],
+          }}
+          avatarProps={{
+            src: user.image ?? undefined,
+            alt: user.name ?? "Avatar Image",
+            showFallback: true,
+            isBordered: true,
+            size: "sm",
+            color: "primary",
+          }}
+          name={user.name}
+          description={<p className="text-primary">Manage Account</p>}
         />
       </DropdownTrigger>
-      <DropdownMenu aria-label="Static Actions">
+      <DropdownMenu aria-label="User Menu">
         <DropdownItem
           key="logout"
           color="danger"
