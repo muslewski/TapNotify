@@ -14,8 +14,13 @@ export default auth((req) => {
 
   const isApiAuthRoute = nextUrl.pathname.startsWith(apiAuthPrefix);
   const isPublicRoute = publicRoutes.includes(nextUrl.pathname);
-  const isProtectedRoute = protectedRoutes.includes(nextUrl.pathname);
   const isAuthRoute = authRoutes.includes(nextUrl.pathname);
+
+  // Check if the current path is under any protected route
+  const isProtectedRoute = protectedRoutes.some(
+    (route) =>
+      nextUrl.pathname === route || nextUrl.pathname.startsWith(`${route}/`)
+  );
 
   const isKnownRoute =
     isPublicRoute || isProtectedRoute || isAuthRoute || isApiAuthRoute;

@@ -18,7 +18,7 @@ export default async function UserPage(props: UserPageParams) {
     },
   });
 
-  // Check if current user is authenticated
+  // Check if current session user is authenticated
   if (!currentSessionUser) {
     return <div>Sign in to view this page</div>;
   }

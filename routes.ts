@@ -10,7 +10,7 @@ export const publicRoutes = ["/"];
  * These routes require authentication
  * @type {string[]}
  */
-export const protectedRoutes = ["/dashboard", "/settings"];
+export const protectedRoutes = ["/dashboard", "/settings", "/user"];
 
 /**
  * An array of routes that are used for authentication
