@@ -1,139 +1,91 @@
 "use client";
 
+import { useState } from "react";
 import { signInResend } from "@/actions/auth/signin-resend";
-import { Button, Input, Form } from "@heroui/react";
-import { useEffect, useState } from "react";
-import { useForm, Controller } from "react-hook-form";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { cn } from "@/lib/utils";
-import { CheckIcon } from "lucide-react";
-import { AnimatePresence, motion } from "framer-motion";
+import { toast } from "sonner";
+
+const schema = z.object({
+  email: z.string().email("Please enter a valid email address."),
+});
+
+type FormData = z.infer<typeof schema>;
 
 interface MagicLinkProps {
   callbackUrl: string;
 }
 
-// Define validation schema with Zod
-const schema = z.object({
-  email: z
-    .string()
-    .email("Invalid email address.")
-    .nonempty("Email is required."),
-});
-
-// This ensures type safety for the form data
-type FormData = z.infer<typeof schema>;
-
 export default function MagicLink({ callbackUrl }: MagicLinkProps) {
-  // Initialize React Hook Form
+  const [status, setStatus] = useState<"idle" | "sending" | "sent" | "error">(
+    "idle"
+  );
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+
   const {
-    control,
+    register,
     handleSubmit,
-    reset,
-    clearErrors,
-    formState: { errors, isSubmitting, isDirty, touchedFields },
+    formState: { errors },
   } = useForm<FormData>({
     resolver: zodResolver(schema),
-    mode: "onSubmit", // Validate fields when they lose focus
   });
 
-  // Track if the form is submitted and nothing changed
-  const [formSubmitted, setFormSubmitted] = useState(false);
-
-  const [isInvalid, setIsInvalid] = useState(false);
-
-  useEffect(() => {
-    setIsInvalid(!!errors.email && (touchedFields.email || isDirty));
-  }, [errors.email, touchedFields.email, isDirty]);
-
-  // Form submission handler
   const onSubmit = async (data: FormData) => {
+    setStatus("sending");
+    setErrorMessage(null);
+
     try {
-      await signInResend(data.email as string, callbackUrl);
-      setFormSubmitted(true);
+      await signInResend(data.email, callbackUrl);
+      setStatus("sent");
+      toast.success("Check your email for the magic link.");
     } catch (error) {
+      setStatus("error");
+      toast.error("Failed to send email. Please try again.");
+      setErrorMessage("Failed to send email. Please try again.");
       console.error(error);
     }
   };
 
   const handleInputChange = () => {
-    setFormSubmitted(false);
-    setIsInvalid(false);
-  };
-
-  const handleInputClear = () => {
-    setFormSubmitted(false);
-    setIsInvalid(false);
-    clearErrors("email");
-    reset({ email: "" });
+    if (status === "sent" || status === "error") {
+      setStatus("idle");
+      setErrorMessage(null);
+    }
   };
 
   return (
-    <Form
-      className="flex flex-col w-full items-end"
-      onSubmit={handleSubmit(onSubmit)}
-    >
-      <Controller
-        name="email"
-        control={control}
-        render={({ field }) => (
-          <Input
-            {...field}
-            label="Email"
-            type="email"
-            variant="bordered"
-            isDisabled={isSubmitting}
-            isInvalid={isInvalid}
-            errorMessage={isInvalid ? errors.email?.message : ""}
-            description={
-              formSubmitted
-                ? "Check your email for verification link."
-                : "Log in securely with a link sent to your email."
-            }
-            classNames={{
-              label: formSubmitted ? "text-success-500" : "text-secondary-500",
-            }}
-            color={formSubmitted ? "success" : "secondary"}
-            onClear={() => {
-              handleInputClear();
-              field.onChange("");
-            }}
-            onChange={(e) => {
-              handleInputChange();
-              field.onChange(e);
-              reset({ email: e.target.value });
-            }}
-          />
+    <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+      <div>
+        <Label htmlFor="email">Email</Label>
+        <Input
+          id="email"
+          type="email"
+          {...register("email", {
+            onChange: handleInputChange,
+          })}
+          disabled={status === "sending"}
+        />
+        {errors.email && (
+          <p className="text-red-500 text-sm mt-1">{errors.email.message}</p>
         )}
-      />
+      </div>
+
       <Button
         type="submit"
-        isDisabled={isInvalid || isSubmitting || formSubmitted}
-        className={cn(
-          "transition-colors",
-          isInvalid
-            ? "bg-danger-300 text-error-foreground"
-            : formSubmitted
-            ? "bg-success-300 text-success-foreground"
-            : "bg-secondary text-secondary-foreground"
-        )}
-        isLoading={isSubmitting}
-        startContent={
-          <AnimatePresence>
-            {formSubmitted && (
-              <motion.div
-                initial={{ opacity: 0, scale: 0 }}
-                animate={{ opacity: 1, scale: 1 }}
-              >
-                <CheckIcon />
-              </motion.div>
-            )}
-          </AnimatePresence>
-        }
+        variant="default"
+        disabled={status === "sending" || status === "sent"}
       >
-        {isSubmitting ? "Sending" : formSubmitted ? "Sent" : "Send"}
+        {status === "idle" && "Send Magic Link"}
+        {status === "sending" && "Sending..."}
+        {status === "sent" && "Email Sent"}
+        {status === "error" && "Try Again"}
       </Button>
-    </Form>
+
+      {errorMessage && <p className="text-red-500">{errorMessage}</p>}
+    </form>
   );
 }

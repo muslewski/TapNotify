@@ -1,7 +1,13 @@
 "use client";
 
 import { signIn } from "next-auth/react";
-import { Tooltip, Button, ButtonGroup } from "@heroui/react";
+import { Button } from "@/components/ui/button";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 import { FaGoogle, FaFacebookF, FaGithub, FaDiscord } from "react-icons/fa";
 import { BsTwitterX } from "react-icons/bs";
 
@@ -57,24 +63,32 @@ export default function OAuth({ callbackUrl }: OAuthProps) {
   };
 
   return (
-    <ButtonGroup color="default">
-      {providers.map((provider) => {
-        const Icon = provider.icon;
+    <TooltipProvider delayDuration={50}>
+      <div className="flex gap-6 flex-wrap justify-start max-w-xs w-fit-content">
+        {providers.map((provider) => {
+          const Icon = provider.icon;
 
-        return (
-          <Tooltip
-            key={provider.id}
-            showArrow
-            placement="bottom"
-            color="secondary"
-            content={<p className="p-1">{provider.label}</p>}
-          >
-            <Button onPress={() => handleSignIn(provider.id)}>
-              <Icon className="size-4" />
-            </Button>
-          </Tooltip>
-        );
-      })}
-    </ButtonGroup>
+          return (
+            <Tooltip key={provider.id}>
+              <TooltipTrigger asChild>
+                <Button
+                  variant="outline"
+                  size="lg"
+                  onClick={() => handleSignIn(provider.id)}
+                >
+                  <Icon className="h-4 w-4" />
+                </Button>
+              </TooltipTrigger>
+              <TooltipContent
+                color="primary"
+                className="p-2 rounded-lg bg-primary text-primary-foreground text text-sm"
+              >
+                <p>{provider.label}</p>
+              </TooltipContent>
+            </Tooltip>
+          );
+        })}
+      </div>
+    </TooltipProvider>
   );
 }

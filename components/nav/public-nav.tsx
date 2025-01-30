@@ -1,26 +1,23 @@
 "use client";
 
+import { useState } from "react";
+import { usePathname } from "next/navigation";
+import Link from "next/link";
+import { MountainIcon, Menu } from "lucide-react";
+
+import { cn } from "@/lib/utils";
+import { Button } from "@/components/ui/button";
+import {
+  Sheet,
+  SheetContent,
+  SheetTitle,
+  SheetTrigger,
+} from "@/components/ui/sheet";
 import MyAccount from "@/components/nav/my-account";
 import { ThemeSwitcher } from "@/components/nav/theme-switcher";
-import { cn } from "@/lib/utils";
-import {
-  Navbar,
-  NavbarBrand,
-  NavbarContent,
-  NavbarItem,
-  Link,
-  Button,
-  NavbarMenuToggle,
-  NavbarMenu,
-  NavbarMenuItem,
-} from "@heroui/react";
-import { MountainIcon } from "lucide-react";
-import { usePathname } from "next/navigation";
-import { useState } from "react";
 
 export default function PublicNav() {
   const pathname = usePathname();
-
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   const navItems = [
@@ -30,89 +27,67 @@ export default function PublicNav() {
   ];
 
   return (
-    <Navbar
-      maxWidth="full"
-      classNames={{
-        wrapper: "gap-16 px-12",
-        content: "flex gap-8 max-w-fit",
-        brand: "gap-2 flex items-center",
-        menu: "overflow-y-hidden gap-12",
-        item: [
-          "flex",
-          "relative",
-          "h-full",
-          "items-center",
-          "after:content-['']",
-          "after:absolute",
-          "after:bottom-0",
-          "after:left-1/2",
-          "after:h-[2px]",
-          "after:w-0",
-          "after:rounded-[2px]",
-          "after:bg-primary/20",
-          "after:transition-all",
-          "after:duration-300",
-          "data-[active=true]:after:bg-primary",
-          "data-[active=true]:after:left-0",
-          "data-[active=true]:after:w-full",
-        ],
-      }}
-      isBordered
-      onMenuOpenChange={setIsMenuOpen}
-    >
-      <NavbarContent justify="start">
-        <NavbarMenuToggle
-          aria-label={isMenuOpen ? "Close menu" : "Open menu"}
-          className="md:hidden"
-        />
-        <NavbarBrand as={Link} href="/">
-          <MountainIcon className="size-5 text-foreground" />
-          <p className="font-bold text-foreground">Mercurify</p>
-        </NavbarBrand>
-      </NavbarContent>
-
-      <NavbarContent justify="start" className="hidden md:flex gap-6">
-        {navItems.map((item) => (
-          <NavbarItem
-            key={item.label}
-            isActive={pathname === item.href}
-            className="transition-colors"
-          >
-            <Button as={Link} href={item.href} variant="light">
-              {item.label}
-            </Button>
-          </NavbarItem>
-        ))}
-      </NavbarContent>
-
-      <NavbarContent justify="end">
-        <MyAccount />
-        <div className="hidden md:flex">
-          <ThemeSwitcher />
+    <nav className="border-b">
+      <div className="flex items-center justify-between px-4 py-3 md:px-12 md:py-4">
+        <div className="flex items-center">
+          <Sheet open={isMenuOpen} onOpenChange={setIsMenuOpen}>
+            <SheetTrigger asChild>
+              <Button variant="ghost" size="icon" className="md:hidden">
+                <Menu className="h-6 w-6" />
+                <span className="sr-only">Toggle menu</span>
+              </Button>
+            </SheetTrigger>
+            <SheetContent side="left">
+              <SheetTitle>Menu</SheetTitle>
+              <div className="flex flex-col space-y-4 mt-4">
+                {navItems.map((item) => (
+                  <Button
+                    key={item.label}
+                    asChild
+                    variant="ghost"
+                    className={cn(
+                      "justify-start",
+                      pathname === item.href && "font-bold"
+                    )}
+                  >
+                    <Link href={item.href}>{item.label}</Link>
+                  </Button>
+                ))}
+                <div className="mt-auto pb-6">
+                  <ThemeSwitcher showLabel />
+                </div>
+              </div>
+            </SheetContent>
+          </Sheet>
+          <Link href="/" className="flex items-center gap-2">
+            <MountainIcon className="h-5 w-5 text-foreground" />
+            <span className="font-bold text-foreground">DopeClips</span>
+          </Link>
         </div>
-      </NavbarContent>
 
-      {/* Mobile */}
-      <NavbarMenu>
-        {navItems.map((item) => (
-          <NavbarMenuItem key={item.label} isActive={pathname === item.href}>
+        <div className="hidden md:flex items-center space-x-6">
+          {navItems.map((item) => (
             <Button
-              as={Link}
-              href={item.href}
-              variant="light"
+              key={item.label}
+              asChild
+              variant="ghost"
               className={cn(
-                "transition-colors",
-                pathname === item.href && "border-b-2 border-primary"
+                "relative after:absolute after:bottom-0 after:left-0 after:h-0.5 after:w-0 after:bg-background after:transition-all after:duration-500",
+                pathname === item.href && "after:bg-primary after:w-full"
               )}
             >
-              {item.label}
+              <Link href={item.href}>{item.label}</Link>
             </Button>
-          </NavbarMenuItem>
-        ))}
-        <NavbarMenuItem className="mt-auto pb-6">
-          <ThemeSwitcher showLabel />
-        </NavbarMenuItem>
-      </NavbarMenu>
-    </Navbar>
+          ))}
+        </div>
+
+        <div className="flex items-center space-x-6">
+          <MyAccount />
+          <div className="hidden md:block">
+            <ThemeSwitcher />
+          </div>
+        </div>
+      </div>
+    </nav>
   );
 }

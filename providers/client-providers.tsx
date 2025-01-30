@@ -1,26 +1,22 @@
 "use client";
 
-import { HeroUIProvider } from "@heroui/system";
 import { ThemeProvider as NextThemesProvider } from "next-themes";
-
-import { useRouter } from "next/navigation";
+import { Toaster } from "@/components/ui/sonner";
 
 export default function ClientProviders({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  const router = useRouter();
-
   return (
-    <HeroUIProvider navigate={router.push}>
-      <NextThemesProvider
-        attribute="class"
-        defaultTheme="dark"
-        themes={["dark", "light", "ceres", "umbriel", "neptune", "callisto"]}
-      >
-        {children}
-      </NextThemesProvider>
-    </HeroUIProvider>
+    <NextThemesProvider
+      attribute="class"
+      enableSystem
+      defaultTheme="system"
+      themes={["dark", "light", "system"]}
+    >
+      {children}
+      <Toaster richColors closeButton />
+    </NextThemesProvider>
   );
 }

@@ -1,17 +1,17 @@
 "use client";
 
 import { useTheme } from "next-themes";
-import { Selection } from "@react-types/shared";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { Button } from "@/components/ui/button";
 import {
-  Dropdown,
-  DropdownTrigger,
   DropdownMenu,
-  DropdownItem,
-  Button,
-  Skeleton,
-} from "@heroui/react";
-import Image from "next/image";
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { Skeleton } from "@/components/ui/skeleton";
+import { MoonIcon, SunIcon, MonitorCogIcon } from "lucide-react";
+import { cn } from "@/lib/utils";
 
 interface ThemeSwitcherProps {
   showLabel?: boolean;
@@ -20,55 +20,35 @@ interface ThemeSwitcherProps {
 const themeOptions = [
   {
     key: "dark",
-    label: "Mercury",
-    description: "Dark theme for low-light environments",
-    icon: "/planets/mercury.png",
+    label: "Dark",
+    description: "For low-light environments",
+    icon: MoonIcon,
   },
   {
     key: "light",
-    label: "Saturn",
-    description: "Light theme for bright environments",
-    icon: "/planets/saturn.png",
+    label: "Light",
+    description: "For bright environments",
+    icon: SunIcon,
   },
   {
-    key: "ceres",
-    label: "Ceres",
-    description: "Balanced dwarf planet theme",
-    icon: "/planets/ceres.png",
+    key: "system",
+    label: "System",
+    description: "Follow the system theme",
+    icon: MonitorCogIcon,
   },
-  // {
-  //   key: "umbriel",
-  //   label: "Umbriel",
-  //   description: "Uranian moon inspired theme",
-  //   icon: "/planets/mercury.svg",
-  // },
-  // {
-  //   key: "neptune",
-  //   label: "Neptune",
-  //   description: "Deep blue ocean theme",
-  //   icon: "/planets/mercury.svg",
-  // },
-  // {
-  //   key: "callisto",
-  //   label: "Callisto",
-  //   description: "Jovian moon inspired theme",
-  //   icon: "/planets/mercury.svg",
-  // },
 ];
 
 export function ThemeSwitcher({ showLabel }: ThemeSwitcherProps) {
   const [mounted, setMounted] = useState(false);
   const { theme, setTheme } = useTheme();
-  const [selectedKeys, setSelectedKeys] = useState<Selection>(
-    new Set([theme ?? "dark"])
-  );
+  const [selectedTheme, setSelectedTheme] = useState(theme ?? "dark");
   const channelRef = useRef<BroadcastChannel | null>(null); // used for syncing themes across tabs
 
   // Function to update the theme
   const updateTheme = useCallback(
     (newTheme: string) => {
       setTheme(newTheme); // Update the theme in the app.
-      setSelectedKeys(new Set([newTheme])); // Update the selectedKeys state.
+      setSelectedTheme(newTheme);
       channelRef.current?.postMessage({
         type: "THEME_CHANGE",
         theme: newTheme,
@@ -86,7 +66,7 @@ export function ThemeSwitcher({ showLabel }: ThemeSwitcherProps) {
     const handleMessage = (event: MessageEvent) => {
       if (event.data && event.data.type === "THEME_CHANGE") {
         setTheme(event.data.theme); // Update the theme.
-        setSelectedKeys(new Set([event.data.theme])); // Update the selected theme in the state.
+        setSelectedTheme(event.data.theme); // Update the selected theme in the state.
       }
     };
 
@@ -99,69 +79,57 @@ export function ThemeSwitcher({ showLabel }: ThemeSwitcherProps) {
   }, [setTheme]);
 
   // Memoized value for the selected theme option.
-  const selectedTheme = useMemo(() => {
-    const key = Array.from(selectedKeys)[0];
-    Array.from(selectedKeys).join(", ").replace(/_/g, "");
-    return themeOptions.find((option) => option.key === key) ?? themeOptions[0];
-  }, [selectedKeys]);
+  const currentTheme = useMemo(
+    () =>
+      themeOptions.find((option) => option.key === selectedTheme) ??
+      themeOptions[0],
+    [selectedTheme]
+  );
 
   useEffect(() => {
-    if (selectedTheme) {
-      setTheme(selectedTheme.key);
+    if (currentTheme) {
+      setTheme(currentTheme.key);
     }
-  }, [selectedTheme, setTheme]);
+  }, [currentTheme, setTheme]);
 
-  if (!mounted) return <Skeleton className="flex rounded-full w-6 h-6 mx-4" />;
+  const ThemeIcon = currentTheme.icon;
+
+  if (!mounted) return <Skeleton className="w-[49px] h-10 rounded-md" />;
 
   return (
-    <Dropdown>
-      {/* Button that triggers the dropdown */}
-      <DropdownTrigger>
+    <DropdownMenu>
+      <DropdownMenuTrigger asChild>
         <Button
-          className="capitalize min-w-fit flex-shrink-0"
-          variant="light"
-          color="primary"
-          startContent={
-            <Image
-              src={selectedTheme.icon}
-              alt={selectedTheme.label}
-              width={24}
-              height={24}
-            />
-          }
+          variant="outline"
+          size="default"
+          className="flex items-center justify-center"
         >
-          {showLabel && selectedTheme.label}
+          <ThemeIcon className="h-6 w-6" />
+          {showLabel && <span className="ml-2">{currentTheme.label}</span>}
         </Button>
-      </DropdownTrigger>
-
-      {/* Dropdown menu for theme options */}
-      <DropdownMenu
-        aria-label="Theme selection"
-        selectedKeys={selectedKeys}
-        selectionMode="single"
-        variant="flat"
-        onSelectionChange={(keys) => {
-          const newTheme = Array.from(keys)[0] as string; // Get the new theme from the selection.
-          updateTheme(newTheme); // Update the theme.
-        }}
-      >
-        {themeOptions.map((option) => (
-          <DropdownItem
-            key={option.key}
-            description={option.description}
-            startContent={
-              <Image
-                src={option.icon}
-                alt={option.label}
-                width={24}
-                height={24}
-              />
-            }
-          >
-            {option.label}
-          </DropdownItem>
-        ))}
-      </DropdownMenu>
-    </Dropdown>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent className="space-y-1" align="end">
+        {themeOptions.map((option) => {
+          const OptionIcon = option.icon;
+          return (
+            <DropdownMenuItem
+              key={option.key}
+              onClick={() => updateTheme(option.key)}
+              className={cn(option.key === selectedTheme && "text-primary-400")}
+            >
+              <div className="flex items-center gap-4">
+                <OptionIcon size={24} />
+                <div>
+                  <div>{option.label}</div>
+                  <p className="text-sm text-muted-foreground">
+                    {option.description}
+                  </p>
+                </div>
+              </div>
+            </DropdownMenuItem>
+          );
+        })}
+      </DropdownMenuContent>
+    </DropdownMenu>
   );
 }
