@@ -42,8 +42,6 @@ export default function ProtectedNav() {
     { href: "/user", label: "Billing", icon: CreditCardIcon },
   ];
 
-  const MotionLink = motion(Link);
-
   const navVariants = {
     hidden: { opacity: 0, x: -20 },
     visible: {
@@ -126,11 +124,8 @@ export default function ProtectedNav() {
               {navItems.map((item) => (
                 <Tooltip key={item.label}>
                   <TooltipTrigger asChild>
-                    <MotionLink
+                    <Link
                       href={item.href}
-                      variants={itemVariants}
-                      whileHover={{ scale: 1.02 }}
-                      whileTap={{ scale: 0.98 }}
                       className={cn(
                         "relative flex items-center px-4 py-2 rounded-md transition-colors",
                         pathname.startsWith(item.href)
@@ -149,7 +144,7 @@ export default function ProtectedNav() {
                           exit={{ opacity: 0 }}
                         />
                       )}
-                    </MotionLink>
+                    </Link>
                   </TooltipTrigger>
 
                   <TooltipContent side="right">
