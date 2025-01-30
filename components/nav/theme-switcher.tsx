@@ -15,6 +15,7 @@ import { cn } from "@/lib/utils";
 
 interface ThemeSwitcherProps {
   showLabel?: boolean;
+  alignContent?: "start" | "end" | "center";
 }
 
 const themeOptions = [
@@ -38,7 +39,7 @@ const themeOptions = [
   },
 ];
 
-export function ThemeSwitcher({ showLabel }: ThemeSwitcherProps) {
+export function ThemeSwitcher({ showLabel, alignContent }: ThemeSwitcherProps) {
   const [mounted, setMounted] = useState(false);
   const { theme, setTheme } = useTheme();
   const [selectedTheme, setSelectedTheme] = useState(theme ?? "dark");
@@ -108,7 +109,7 @@ export function ThemeSwitcher({ showLabel }: ThemeSwitcherProps) {
           {showLabel && <span className="ml-2">{currentTheme.label}</span>}
         </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent className="space-y-1" align="end">
+      <DropdownMenuContent className="space-y-1" align={alignContent}>
         {themeOptions.map((option) => {
           const OptionIcon = option.icon;
           return (

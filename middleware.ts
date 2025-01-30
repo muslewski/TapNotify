@@ -39,7 +39,9 @@ export default auth((req) => {
   if (isAuthRoute) {
     // If the user is logged in, redirect to the default login redirect, else return
     if (isLoggedIn) {
-      return NextResponse.redirect(new URL(DEFAULT_LOGIN_REDIRECT, nextUrl));
+      return NextResponse.redirect(
+        new URL(DEFAULT_LOGIN_REDIRECT, nextUrl.toString())
+      );
     } else {
       return;
     }
@@ -56,7 +58,7 @@ export default auth((req) => {
     callbackUrl = encodeURIComponent(callbackUrl); // Encode the URL
 
     return NextResponse.redirect(
-      new URL(authRoutes[0] + `?callbackUrl=${callbackUrl}`, nextUrl)
+      new URL(authRoutes[0] + `?callbackUrl=${callbackUrl}`, nextUrl.toString())
     );
   }
 

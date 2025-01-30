@@ -2,9 +2,9 @@ import { currentUser } from "@/lib/auth";
 import db from "@/lib/prisma";
 
 interface UserPageParams {
-  params: {
+  params: Promise<{
     userId: string;
-  };
+  }>;
 }
 
 export default async function UserPage(props: UserPageParams) {

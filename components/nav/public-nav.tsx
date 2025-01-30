@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { usePathname } from "next/navigation";
 import Link from "next/link";
-import { MountainIcon, Menu } from "lucide-react";
+import { Menu, ClapperboardIcon } from "lucide-react";
 
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
@@ -31,6 +31,7 @@ export default function PublicNav() {
       <div className="flex items-center justify-between px-4 py-3 md:px-12 md:py-4">
         <div className="flex items-center">
           <Sheet open={isMenuOpen} onOpenChange={setIsMenuOpen}>
+            {/* Mobile */}
             <SheetTrigger asChild>
               <Button variant="ghost" size="icon" className="md:hidden">
                 <Menu className="h-6 w-6" />
@@ -54,14 +55,14 @@ export default function PublicNav() {
                   </Button>
                 ))}
                 <div className="mt-auto pb-6">
-                  <ThemeSwitcher showLabel />
+                  <ThemeSwitcher showLabel alignContent="start" />
                 </div>
               </div>
             </SheetContent>
           </Sheet>
           <Link href="/" className="flex items-center gap-2">
-            <MountainIcon className="h-5 w-5 text-foreground" />
-            <span className="font-bold text-foreground">DopeClips</span>
+            <ClapperboardIcon className="size-5" />
+            <span className="font-bold">DopeClips</span>
           </Link>
         </div>
 
@@ -81,10 +82,10 @@ export default function PublicNav() {
           ))}
         </div>
 
-        <div className="flex items-center space-x-6">
-          <MyAccount />
+        <div className="flex items-center space-x-4">
+          <MyAccount alignContent="end" />
           <div className="hidden md:block">
-            <ThemeSwitcher />
+            <ThemeSwitcher alignContent="end" />
           </div>
         </div>
       </div>

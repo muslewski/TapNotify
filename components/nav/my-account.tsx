@@ -16,7 +16,11 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 
-export default function MyAccount() {
+interface MyAccountProps {
+  alignContent?: "start" | "end" | "center";
+}
+
+export default function MyAccount({ alignContent = "end" }: MyAccountProps) {
   const user = useCurrentUser(); // Client-side
   const { update } = useSession();
 
@@ -43,7 +47,7 @@ export default function MyAccount() {
           </Avatar>
         </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent className="w-56" align="end" forceMount>
+      <DropdownMenuContent className="w-56" align={alignContent} forceMount>
         <DropdownMenuLabel className="font-normal">
           <div className="flex flex-col space-y-1">
             <p className="text-sm font-medium leading-none">{user.name}</p>
@@ -54,7 +58,13 @@ export default function MyAccount() {
         </DropdownMenuLabel>
         <DropdownMenuSeparator />
         <DropdownMenuItem asChild>
+          <Link href="/dashboard">Dashboard</Link>
+        </DropdownMenuItem>
+        <DropdownMenuItem asChild>
           <Link href={`/user/${user.id}`}>Profile</Link>
+        </DropdownMenuItem>
+        <DropdownMenuItem asChild>
+          <Link href="/">Home Website</Link>
         </DropdownMenuItem>
         <DropdownMenuItem
           className="text-warning"
