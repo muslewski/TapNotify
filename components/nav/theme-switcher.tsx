@@ -101,12 +101,14 @@ export function ThemeSwitcher({ showLabel, alignContent }: ThemeSwitcherProps) {
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <Button
-          variant="outline"
-          size="default"
-          className="flex items-center justify-center"
+          variant="ghost"
+          size="sm"
+          className="flex items-center w-full px-2 justify-start"
         >
-          <ThemeIcon className="h-6 w-6" />
-          {showLabel && <span className="ml-2">{currentTheme.label}</span>}
+          <ThemeIcon size={16} />
+          {showLabel && (
+            <span className="font-normal">{currentTheme.label}</span>
+          )}
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent className="space-y-1" align={alignContent}>

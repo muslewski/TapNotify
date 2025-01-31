@@ -13,8 +13,9 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
-import MyAccount from "@/components/nav/my-account";
 import { ThemeSwitcher } from "@/components/nav/theme-switcher";
+import { NavUser } from "@/components/nav/sidebar/nav-user";
+import { SidebarProvider } from "@/components/ui/sidebar";
 
 export default function PublicNav() {
   const pathname = usePathname();
@@ -28,7 +29,7 @@ export default function PublicNav() {
 
   return (
     <nav className="border-b">
-      <div className="flex items-center justify-between px-4 py-3 md:px-12 md:py-4">
+      <div className="flex items-center gap-12 justify-between px-4 py-3 md:px-12 md:py-4">
         <div className="flex items-center">
           <Sheet open={isMenuOpen} onOpenChange={setIsMenuOpen}>
             {/* Mobile */}
@@ -83,7 +84,9 @@ export default function PublicNav() {
         </div>
 
         <div className="flex items-center space-x-4">
-          <MyAccount alignContent="end" />
+          <SidebarProvider className="min-h-fit">
+            <NavUser />
+          </SidebarProvider>
           <div className="hidden md:block">
             <ThemeSwitcher alignContent="end" />
           </div>
