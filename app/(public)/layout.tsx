@@ -6,7 +6,7 @@ export default function PublicLayout({
   children: React.ReactNode;
 }) {
   return (
-    <div className="w-full">
+    <div className="w-full min-h-screen flex flex-col justify-stretch">
       <PublicNav />
       {children}
     </div>

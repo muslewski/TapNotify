@@ -76,7 +76,7 @@ const plans = [
 export default function PricingPage() {
   return (
     <TooltipProvider>
-      <div className="py-12 bg-gray-50 dark:bg-gray-900 min-h-[90vh] flex justify-center items-center">
+      <div className="py-12 bg-gray-50 dark:bg-gray-900  flex-grow flex justify-center items-center">
         <div className="container px-4 md:px-6">
           <div className="mb-12 text-center">
             <h1 className="text-3xl font-bold tracking-tighter sm:text-5xl">
