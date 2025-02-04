@@ -1,155 +1,63 @@
-import { Check, Video, Zap, Star, Sparkles, Info } from "lucide-react";
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
+"use client";
 
-const plans = [
-  {
-    name: "Lite",
-    description: "Basic AI video generation",
-    price: "$0",
-    priceInfo: "1st month, then $9.99/mo",
-    features: [
-      "5 videos per month",
-      "720p resolution",
-      "Standard AI voices",
-      "Basic stock footage",
-    ],
-    icon: Video,
-  },
-  {
-    name: "Creator",
-    description: "For growing creators",
-    price: "$24.99",
-    features: [
-      "15 videos per month",
-      "1080p resolution",
-      "Enhanced AI voices",
-      "Editable scripts",
-      "Larger stock media library",
-    ],
-    icon: Zap,
-    popular: true,
-  },
-  {
-    name: "Premium",
-    description: "Advanced AI tools",
-    price: "$49.99",
-    features: [
-      "30 videos per month",
-      "4K resolution",
-      "Ultra-realistic AI voices",
-      "AI-generated summaries & shorts",
-      "Social media integration",
-    ],
-    icon: Star,
-  },
-  {
-    name: "Elite",
-    description: "Unlimited AI power",
-    price: "$99.99",
-    features: [
-      "60 videos per month",
-      "4K HDR quality",
-      "Most advanced AI voices",
-      "Automated editing & thumbnails",
-      "Full social media automation",
-      "API access",
-    ],
-    icon: Sparkles,
-  },
-];
+import { useState, useEffect } from "react";
+import { loadStripe } from "@stripe/stripe-js";
 
-export default function PricingPage() {
+const stripePromise = loadStripe(
+  process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY || ""
+);
+
+export default function Subscriptions() {
+  interface Plan {
+    id: string;
+    name: string;
+    description: string;
+    price: number;
+    interval: string;
+    price_id: string;
+  }
+
+  const [plans, setPlans] = useState<Plan[]>([]);
+
+  useEffect(() => {
+    // Fetch subscription plans from your API
+    fetch("/api/stripe/subscription-plans")
+      .then((res) => res.json())
+      .then((data) => setPlans(data));
+  }, []);
+
+  const handleSubscribe = async (priceId: string) => {
+    const stripe = await stripePromise;
+    const { sessionId } = await fetch("/api/stripe/create-checkout-session", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ priceId }),
+    }).then((res) => res.json());
+
+    const result = await stripe?.redirectToCheckout({ sessionId });
+
+    if (result?.error) {
+      console.error(result.error);
+    }
+  };
+
   return (
-    <TooltipProvider>
-      <div className="py-12 bg-gray-50 dark:bg-gray-900  flex-grow flex justify-center items-center">
-        <div className="container px-4 md:px-6">
-          <div className="mb-12 text-center">
-            <h1 className="text-3xl font-bold tracking-tighter sm:text-5xl">
-              Choose Your Plan
-            </h1>
-            <p className="mx-auto max-w-[600px] text-gray-500 md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed dark:text-gray-400">
-              Select the perfect plan for your AI video generation needs
-            </p>
-          </div>
-          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-            {plans.map((plan) => (
-              <Card
-                key={plan.name}
-                className={`flex flex-col ${
-                  plan.popular ? "border-primary shadow-lg" : ""
-                }`}
-              >
-                <CardHeader>
-                  <div className="flex items-center justify-between">
-                    <plan.icon className="h-6 w-6 text-primary" />
-                    {plan.popular && <Badge>Most Popular</Badge>}
-                  </div>
-                  <CardTitle className="text-2xl font-bold">
-                    {plan.name}
-                  </CardTitle>
-                  <CardDescription>{plan.description}</CardDescription>
-                </CardHeader>
-                <CardContent className="flex-grow">
-                  <div className="text-3xl font-bold">
-                    {plan.price}
-                    {!plan.priceInfo && (
-                      <span className="text-sm font-normal">/month</span>
-                    )}
-                  </div>
-                  {plan.priceInfo && (
-                    <div className="flex items-center mt-1">
-                      <p className="text-sm text-muted-foreground">
-                        {plan.priceInfo}
-                      </p>
-                      <Tooltip>
-                        <TooltipTrigger>
-                          <Info className="h-4 w-4 ml-1 text-muted-foreground" />
-                        </TooltipTrigger>
-                        <TooltipContent>
-                          <p>
-                            Free for the first month, no credit card required.
-                          </p>
-                        </TooltipContent>
-                      </Tooltip>
-                    </div>
-                  )}
-                  <ul className="mt-4 space-y-2">
-                    {plan.features.map((feature) => (
-                      <li key={feature} className="flex items-center">
-                        <Check className="mr-2 h-4 w-4 text-primary" />
-                        <span>{feature}</span>
-                      </li>
-                    ))}
-                  </ul>
-                </CardContent>
-                <CardFooter>
-                  <Button
-                    className="w-full"
-                    variant={plan.popular ? "default" : "outline"}
-                  >
-                    {plan.name === "Lite" ? "Start Free Trial" : "Choose Plan"}
-                  </Button>
-                </CardFooter>
-              </Card>
-            ))}
-          </div>
+    <div>
+      <h1>Choose a Subscription Plan</h1>
+      {plans.map((plan) => (
+        <div key={plan.id}>
+          <h2>{plan.name}</h2>
+          <p>{plan.description}</p>
+          <p>
+            Price: ${plan.price / 100} / {plan.interval}
+          </p>
+          <button onClick={() => handleSubscribe(plan.price_id)}>
+            Subscribe
+          </button>
         </div>
-      </div>
-    </TooltipProvider>
+      ))}
+    </div>
   );
 }
