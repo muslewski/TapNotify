@@ -104,14 +104,16 @@ export function NavUser() {
         <DropdownMenuSeparator />
         <DropdownMenuGroup>
           <DropdownMenuItem asChild>
-            <Link href="/dashboard">
+            <Link href="/app/dashboard">
               <HouseIcon />
               Dashboard
             </Link>
           </DropdownMenuItem>
-          <DropdownMenuItem>
-            <BadgeCheckIcon />
-            Account
+          <DropdownMenuItem asChild>
+            <Link href="/app/settings">
+              <BadgeCheckIcon />
+              Account
+            </Link>
           </DropdownMenuItem>
           <DropdownMenuItem>
             <CreditCardIcon />

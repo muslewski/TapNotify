@@ -15,6 +15,7 @@ import {
   SidebarProvider,
   SidebarTrigger,
 } from "@/components/ui/sidebar";
+import Link from "next/link";
 import { usePathname } from "next/navigation";
 import React from "react";
 
@@ -22,13 +23,16 @@ import React from "react";
 const routeConfig: { [key: string]: string } = {
   "/dashboard": "Dashboard",
   "/dashboard/analytics": "Dashboard Analytics",
-  "/app/settings": "Settings",
+  "/settings": "Settings",
   // Add more routes as needed
 };
 
 const getBreadcrumbs = (pathname: string) => {
-  // Split the pathname into an array of paths, removing any empty strings
-  const paths = pathname.split("/").filter(Boolean);
+  // Split the pathname into an array of paths, removing any empty strings and remove "/app" root segment
+  const paths = pathname
+    .replace(/^\/app/, "")
+    .split("/")
+    .filter(Boolean);
 
   // Map over the paths array to create breadcrumb objects
   return paths.map((path, index) => {
@@ -37,7 +41,7 @@ const getBreadcrumbs = (pathname: string) => {
 
     // Return the breadcrumb object
     return {
-      href,
+      href: `/app${href}`, // Add the "/app" segment back to the href
       label: routeConfig[href] || path.charAt(0).toUpperCase() + path.slice(1),
       isLast: index === paths.length - 1,
     };
@@ -59,7 +63,10 @@ export default function PublicLayout({
         <header className="flex h-16 shrink-0 items-center gap-2 transition-[width,height] ease-linear group-has-[[data-collapsible=icon]]/sidebar-wrapper:h-12">
           <div className="flex items-center gap-2 px-4">
             <SidebarTrigger className="-ml-1" />
-            <Separator orientation="vertical" className="mr-2 h-4" />
+            <Separator
+              orientation="vertical"
+              className="mr-2 h-4 hidden md:block"
+            />
 
             <Breadcrumb>
               <BreadcrumbList>
@@ -69,8 +76,8 @@ export default function PublicLayout({
                       {breadcrumb.isLast ? (
                         <BreadcrumbPage>{breadcrumb.label}</BreadcrumbPage>
                       ) : (
-                        <BreadcrumbLink href={breadcrumb.href}>
-                          {breadcrumb.label}
+                        <BreadcrumbLink asChild>
+                          <Link href={breadcrumb.href}>{breadcrumb.label}</Link>
                         </BreadcrumbLink>
                       )}
                     </BreadcrumbItem>

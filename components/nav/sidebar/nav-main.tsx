@@ -15,7 +15,10 @@ import {
   SidebarMenuSubButton,
   SidebarMenuSubItem,
 } from "@/components/ui/sidebar";
+import { cn } from "@/lib/utils";
 import { ChevronRightIcon, type LucideIcon } from "lucide-react";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
 
 interface NavMainProps {
   items: {
@@ -31,6 +34,8 @@ interface NavMainProps {
 }
 
 export function NavMain({ items }: NavMainProps) {
+  const pathname = usePathname();
+
   return (
     <SidebarGroup>
       <SidebarGroupLabel>Platform</SidebarGroupLabel>
@@ -56,9 +61,15 @@ export function NavMain({ items }: NavMainProps) {
                   {item.items?.map((subItem) => (
                     <SidebarMenuSubItem key={subItem.title}>
                       <SidebarMenuSubButton asChild>
-                        <a href={subItem.url}>
+                        <Link
+                          href={subItem.url}
+                          className={cn(
+                            "transition-all",
+                            subItem.url === pathname && "font-medium"
+                          )}
+                        >
                           <span>{subItem.title}</span>
-                        </a>
+                        </Link>
                       </SidebarMenuSubButton>
                     </SidebarMenuSubItem>
                   ))}

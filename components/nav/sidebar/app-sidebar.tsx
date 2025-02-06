@@ -8,6 +8,7 @@ import {
   SidebarFooter,
   SidebarHeader,
   SidebarRail,
+  useSidebar,
 } from "@/components/ui/sidebar";
 
 import {
@@ -15,7 +16,6 @@ import {
   Users,
   BarChart,
   Settings2,
-  BookOpen,
   Smartphone,
   Building,
   ShoppingBag,
@@ -27,123 +27,126 @@ const data = {
   navMain: [
     {
       title: "Dashboard",
-      url: "/dashboard",
+      url: "/app/dashboard",
       icon: BarChart,
       isActive: true,
       items: [
         {
           title: "Overview",
-          url: "/dashboard/overview",
+          url: "/app/dashboard",
         },
         {
           title: "Analytics",
-          url: "/dashboard/analytics",
+          url: "/app/dashboard/analytics",
         },
       ],
     },
     {
       title: "Campaigns",
-      url: "/campaigns",
+      url: "/app/campaigns",
       icon: MessageSquare,
+      isActive: true,
       items: [
         {
+          title: "All Campaigns",
+          url: "/app/campaigns",
+        },
+        {
           title: "Create Campaign",
-          url: "/campaigns/create",
+          url: "/app/campaigns/create",
         },
         // {
         //   title: "Scheduled",
         //   url: "/campaigns/scheduled",
         // },
         {
-          title: "All Campaigns",
-          url: "/campaigns/create",
-        },
-        {
           title: "Message Templates",
-          url: "/campaigns/templates",
+          url: "/app/campaigns/message-templates",
         },
       ],
     },
     {
       title: "Contacts",
-      url: "/contacts",
+      url: "/app/contacts",
       icon: Users,
+      isActive: true,
       items: [
         {
-          title: "Add Contact",
-          url: "/contacts/all",
+          title: "All Contacts",
+          url: "/app/contacts",
         },
         {
-          title: "All Contacts",
-          url: "/contacts/all",
+          title: "Add Contact",
+          url: "/app/contacts/add",
         },
         // {
         //   title: "Groups",
         //   url: "/contacts/groups",
         // },
-        {
-          title: "Import",
-          url: "/contacts/import",
-        },
+        // {
+        //   title: "Import",
+        //   url: "/app/contacts/import",
+        // },
       ],
     },
-    {
-      title: "Documentation",
-      url: "/docs",
-      icon: BookOpen,
-      items: [
-        {
-          title: "Getting Started",
-          url: "/docs/getting-started",
-        },
-        {
-          title: "API Reference",
-          url: "/docs/api",
-        },
-        {
-          title: "Best Practices",
-          url: "/docs/best-practices",
-        },
-      ],
-    },
+    // {
+    //   title: "Documentation",
+    //   url: "/docs",
+    //   icon: BookOpen,
+    //   items: [
+    //     {
+    //       title: "Getting Started",
+    //       url: "/docs/getting-started",
+    //     },
+    //     {
+    //       title: "API Reference",
+    //       url: "/docs/api",
+    //     },
+    //     {
+    //       title: "Best Practices",
+    //       url: "/docs/best-practices",
+    //     },
+    //   ],
+    // },
     {
       title: "Settings",
-      url: "/settings",
+      url: "/app/settings",
       icon: Settings2,
+      isActive: true,
       items: [
         {
           title: "Account",
-          url: "/settings/account",
+          url: "/app/settings",
         },
         {
           title: "Billing",
-          url: "/settings/billing",
+          url: "/app/settings/billing",
         },
         // {
         //   title: "Integrations",
         //   url: "/settings/integrations",
         // },
-        {
-          title: "API Keys",
-          url: "/settings/api-keys",
-        },
+        // {
+        //   title: "API Keys",
+        //   url: "/app/settings/api-keys",
+        // },
       ],
     },
   ],
   projects: [
     {
       name: "E-commerce Notifications",
-      url: "/projects/ecommerce",
+      url: "/app/projects/ecommerce",
       icon: ShoppingBag,
     },
     {
       name: "Appointment Reminders",
-      url: "/projects/appointments",
+      url: "/app/projects/appointments",
       icon: Smartphone,
     },
     {
       name: "Corporate Communications",
-      url: "/projects/corporate",
+      url: "/app/projects/corporate",
       icon: Building,
     },
   ],
@@ -152,11 +155,17 @@ const data = {
 export default function AppSidebar({
   ...props
 }: React.ComponentProps<typeof Sidebar>) {
+  const { open, setOpen } = useSidebar();
+
   return (
-    <Sidebar collapsible="icon" {...props}>
+    <Sidebar
+      collapsible="icon"
+      onClick={() => open === false && setOpen(true)}
+      {...props}
+    >
       <SidebarHeader>
         <Link
-          href="/dashboard"
+          href="/app/dashboard"
           className="flex flex-row items-center gap-2 px-2 py-4"
         >
           <Image
