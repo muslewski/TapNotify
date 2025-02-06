@@ -1,0 +1,50 @@
+model Campaign {
+  id          String          @id @default(cuid())
+  name        String
+  createdAt   DateTime        @default(now())
+  updatedAt   DateTime        @updatedAt
+  status      String          @default("DRAFT")
+  scheduledAt DateTime?
+  templateId  String
+  userId      String
+  template    MessageTemplate @relation(fields: [templateId], references: [id])
+  user        User            @relation(fields: [userId], references: [id], onDelete: Cascade)
+  messages    Message[]
+}
+
+model MessageTemplate {
+  id        String     @id @default(cuid())
+  name      String
+  content   String
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+  userId    String
+  campaigns Campaign[]
+  user      User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model Message {
+  id           String      @id @default(cuid())
+  message      String
+  status       String      @default("PENDING")
+  createdAt    DateTime    @default(now())
+  updatedAt    DateTime    @updatedAt
+  sentAt       DateTime?
+  errorMessage String?
+  campaignId   String
+  phoneId      String
+  campaign     Campaign    @relation(fields: [campaignId], references: [id], onDelete: Cascade)
+  phone        PhoneNumber @relation(fields: [phoneId], references: [id], onDelete: Cascade)
+}
+
+model PhoneNumber {
+  id        String    @id @default(cuid())
+  number    String
+  name      String?
+  createdAt DateTime  @default(now())
+  userId    String
+  messages  Message[]
+  user      User      @relation(fields: [userId], references: [id])
+
+  @@unique([userId, number])
+}

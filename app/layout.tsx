@@ -16,7 +16,7 @@ export default async function RootLayout({
     <html lang="en" suppressHydrationWarning>
       <body>
         <Providers>
-          <main className="min-h-screen">{children}</main>
+          <main>{children}</main>
         </Providers>
       </body>
     </html>

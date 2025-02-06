@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { usePathname } from "next/navigation";
 import Link from "next/link";
-import { Menu, ClapperboardIcon } from "lucide-react";
+import { Menu } from "lucide-react";
 
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
@@ -16,6 +16,7 @@ import {
 import { ThemeSwitcher } from "@/components/nav/theme-switcher";
 import { NavUser } from "@/components/nav/sidebar/nav-user";
 import { SidebarProvider } from "@/components/ui/sidebar";
+import Image from "next/image";
 
 export default function PublicNav() {
   const pathname = usePathname();
@@ -28,7 +29,7 @@ export default function PublicNav() {
   ];
 
   return (
-    <nav className="border-b">
+    <nav className="border-b fixed z-10 w-full backdrop-blur-md">
       <div className="flex items-center gap-12 justify-between px-4 py-3 md:px-12 md:py-4">
         <div className="flex items-center">
           <Sheet open={isMenuOpen} onOpenChange={setIsMenuOpen}>
@@ -62,8 +63,13 @@ export default function PublicNav() {
             </SheetContent>
           </Sheet>
           <Link href="/" className="flex items-center gap-2">
-            <ClapperboardIcon className="size-5" />
-            <span className="font-bold">DopeClips</span>
+            <Image
+              src="/tapnotify-logo.png"
+              alt="TapNotify Logo"
+              width={24}
+              height={24}
+            />
+            <span className="font-bold">TapNotify</span>
           </Link>
         </div>
 

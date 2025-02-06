@@ -1,7 +1,6 @@
 "use client";
 
 import { NavMain } from "@/components/nav/sidebar/nav-main";
-import { NavProjects } from "@/components/nav/sidebar/nav-projects";
 import { NavUser } from "@/components/nav/sidebar/nav-user";
 import {
   Sidebar,
@@ -10,120 +9,142 @@ import {
   SidebarHeader,
   SidebarRail,
 } from "@/components/ui/sidebar";
+
 import {
-  BookOpen,
-  Bot,
-  ClapperboardIcon,
-  Frame,
-  MapIcon,
-  PieChart,
+  MessageSquare,
+  Users,
+  BarChart,
   Settings2,
-  SquareTerminal,
+  BookOpen,
+  Smartphone,
+  Building,
+  ShoppingBag,
 } from "lucide-react";
+import Image from "next/image";
+import Link from "next/link";
 
 const data = {
   navMain: [
     {
-      title: "Playground",
-      url: "#",
-      icon: SquareTerminal,
+      title: "Dashboard",
+      url: "/dashboard",
+      icon: BarChart,
       isActive: true,
       items: [
         {
-          title: "History",
-          url: "#",
+          title: "Overview",
+          url: "/dashboard/overview",
         },
         {
-          title: "Starred",
-          url: "#",
-        },
-        {
-          title: "Settings",
-          url: "#",
+          title: "Analytics",
+          url: "/dashboard/analytics",
         },
       ],
     },
     {
-      title: "Models",
-      url: "#",
-      icon: Bot,
+      title: "Campaigns",
+      url: "/campaigns",
+      icon: MessageSquare,
       items: [
         {
-          title: "Genesis",
-          url: "#",
+          title: "Create Campaign",
+          url: "/campaigns/create",
+        },
+        // {
+        //   title: "Scheduled",
+        //   url: "/campaigns/scheduled",
+        // },
+        {
+          title: "All Campaigns",
+          url: "/campaigns/create",
         },
         {
-          title: "Explorer",
-          url: "#",
+          title: "Message Templates",
+          url: "/campaigns/templates",
+        },
+      ],
+    },
+    {
+      title: "Contacts",
+      url: "/contacts",
+      icon: Users,
+      items: [
+        {
+          title: "Add Contact",
+          url: "/contacts/all",
         },
         {
-          title: "Quantum",
-          url: "#",
+          title: "All Contacts",
+          url: "/contacts/all",
+        },
+        // {
+        //   title: "Groups",
+        //   url: "/contacts/groups",
+        // },
+        {
+          title: "Import",
+          url: "/contacts/import",
         },
       ],
     },
     {
       title: "Documentation",
-      url: "#",
+      url: "/docs",
       icon: BookOpen,
       items: [
         {
-          title: "Introduction",
-          url: "#",
+          title: "Getting Started",
+          url: "/docs/getting-started",
         },
         {
-          title: "Get Started",
-          url: "#",
+          title: "API Reference",
+          url: "/docs/api",
         },
         {
-          title: "Tutorials",
-          url: "#",
-        },
-        {
-          title: "Changelog",
-          url: "#",
+          title: "Best Practices",
+          url: "/docs/best-practices",
         },
       ],
     },
     {
       title: "Settings",
-      url: "#",
+      url: "/settings",
       icon: Settings2,
       items: [
         {
-          title: "General",
-          url: "#",
-        },
-        {
-          title: "Team",
-          url: "#",
+          title: "Account",
+          url: "/settings/account",
         },
         {
           title: "Billing",
-          url: "#",
+          url: "/settings/billing",
         },
+        // {
+        //   title: "Integrations",
+        //   url: "/settings/integrations",
+        // },
         {
-          title: "Limits",
-          url: "#",
+          title: "API Keys",
+          url: "/settings/api-keys",
         },
       ],
     },
   ],
   projects: [
     {
-      name: "Design Engineering",
-      url: "#",
-      icon: Frame,
+      name: "E-commerce Notifications",
+      url: "/projects/ecommerce",
+      icon: ShoppingBag,
     },
     {
-      name: "Sales & Marketing",
-      url: "#",
-      icon: PieChart,
+      name: "Appointment Reminders",
+      url: "/projects/appointments",
+      icon: Smartphone,
     },
     {
-      name: "Travel",
-      url: "#",
-      icon: MapIcon,
+      name: "Corporate Communications",
+      url: "/projects/corporate",
+      icon: Building,
     },
   ],
 };
@@ -133,16 +154,26 @@ export default function AppSidebar({
 }: React.ComponentProps<typeof Sidebar>) {
   return (
     <Sidebar collapsible="icon" {...props}>
-      <SidebarHeader className="flex flex-row items-center gap-2 px-4 py-6 text-primary-900">
-        <ClapperboardIcon className="size-5" />
-        <span className="font-bold group-data-[collapsible=icon]:hidden">
-          DopeClips
-        </span>
+      <SidebarHeader>
+        <Link
+          href="/dashboard"
+          className="flex flex-row items-center gap-2 px-2 py-4"
+        >
+          <Image
+            src="/tapnotify-logo.png"
+            alt="TapNotify Logo"
+            width={24}
+            height={24}
+          />
+          <span className="font-bold group-data-[collapsible=icon]:hidden">
+            TapNotify
+          </span>
+        </Link>
       </SidebarHeader>
 
       <SidebarContent>
         <NavMain items={data.navMain} />
-        <NavProjects projects={data.projects} />
+        {/* <NavProjects projects={data.projects} /> */}
       </SidebarContent>
 
       <SidebarFooter>
