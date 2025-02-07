@@ -16,9 +16,9 @@ import {
 import { SidebarMenuButton, useSidebar } from "@/components/ui/sidebar";
 import { useCurrentUser } from "@/hooks/use-current-user";
 import { reloadSession } from "@/lib/reload-session";
+import { useTeamStore } from "@/store/use-team-store";
 import {
   BadgeCheckIcon,
-  BellIcon,
   ChevronsUpDownIcon,
   CreditCardIcon,
   HouseIcon,
@@ -28,26 +28,57 @@ import {
 } from "lucide-react";
 import { useSession } from "next-auth/react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
 
 export function NavUser() {
   const user = useCurrentUser();
   const { update } = useSession();
   const { isMobile } = useSidebar();
+  const { fetchTeams, getActiveTeamSlug } = useTeamStore();
+  const router = useRouter();
+  const [isLoading, setIsLoading] = useState(false);
 
-  const handleLogout = () => {
-    // Logout user
-    logout();
-    update();
-    reloadSession();
+  // Function to get the base URL with team slug
+  const getBaseUrl = async () => {
+    // First try to get the active team slug from the store
+    let teamSlug = getActiveTeamSlug();
+
+    // If no team slug is available, try to fetch teams
+    if (!teamSlug && user?.id) {
+      await fetchTeams(user.id);
+      teamSlug = getActiveTeamSlug();
+    }
+
+    return teamSlug ? `/app/${teamSlug}` : "/app";
   };
 
-  if (!user) {
+  // Handle navigation with proper team context
+  const handleNavigation = async (path: string) => {
+    try {
+      setIsLoading(true);
+      const baseUrl = await getBaseUrl();
+      router.push(`${baseUrl}${path}`);
+    } catch (error) {
+      console.error("Navigation error:", error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  if (!user || !user.id) {
     return (
       <Button variant="outline" asChild>
         <Link href="/sign-in">Sign In</Link>
       </Button>
     );
   }
+
+  const handleLogout = () => {
+    logout();
+    update();
+    reloadSession();
+  };
 
   return (
     <DropdownMenu>
@@ -103,25 +134,26 @@ export function NavUser() {
         </DropdownMenuGroup>
         <DropdownMenuSeparator />
         <DropdownMenuGroup>
-          <DropdownMenuItem asChild>
-            <Link href="/app/dashboard">
-              <HouseIcon />
-              Dashboard
-            </Link>
+          <DropdownMenuItem
+            disabled={isLoading}
+            onClick={() => handleNavigation("/dashboard")}
+          >
+            <HouseIcon />
+            Dashboard
           </DropdownMenuItem>
-          <DropdownMenuItem asChild>
-            <Link href="/app/settings">
-              <BadgeCheckIcon />
-              Account
-            </Link>
+          <DropdownMenuItem
+            disabled={isLoading}
+            onClick={() => handleNavigation("/settings/account")}
+          >
+            <BadgeCheckIcon />
+            Account
           </DropdownMenuItem>
-          <DropdownMenuItem>
+          <DropdownMenuItem
+            disabled={isLoading}
+            onClick={() => handleNavigation("/settings/account/billing")}
+          >
             <CreditCardIcon />
             Billing
-          </DropdownMenuItem>
-          <DropdownMenuItem>
-            <BellIcon />
-            Notifications
           </DropdownMenuItem>
           <DropdownMenuItem asChild>
             <Link href="/">

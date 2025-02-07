@@ -74,7 +74,7 @@ export default function CreateTeamPage() {
 
   return (
     <div className="flex justify-center items-center min-h-screen">
-      <Card className="w-full max-w-md">
+      <Card className="w-full max-w-lg">
         <CardHeader>
           <CardTitle>Create Team</CardTitle>
           <CardDescription>
@@ -83,7 +83,7 @@ export default function CreateTeamPage() {
         </CardHeader>
         <CardContent>
           <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
               <FormField
                 control={form.control}
                 name="name"
