@@ -19,46 +19,67 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import React from "react";
 
-// Define your route configuration
-const routeConfig: { [key: string]: string } = {
-  "/dashboard": "Dashboard",
-  "/dashboard/analytics": "Dashboard Analytics",
-  "/settings": "Settings",
-  // Add more routes as needed
+import { sidebarData } from "@/data/sidebar-data";
+
+/**
+ * Generates breadcrumb navigation based on the current pathname and team slug.
+ *
+ * @param {string} pathname - The current URL path (e.g., "/teamSlug/dashboard/overview").
+ * @param {string} teamSlug - The unique identifier for the team.
+ * @returns {Array<{ href: string; label: string; isLast: boolean }>}
+ *          An array of breadcrumb objects containing:
+ *          - `href`: The breadcrumb link.
+ *          - `label`: The display title of the breadcrumb.
+ *          - `isLast`: A boolean indicating if it's the last breadcrumb in the path.
+ */
+const getBreadcrumbs = (pathname: string, teamSlug: string) => {
+  // Retrieve the navigation structure for the given team
+  const navData = sidebarData(teamSlug).navMain;
+
+  // Split the pathname into an array of segments, removing empty strings
+  const paths = pathname.split("/").filter(Boolean);
+
+  // Initialize an array to store breadcrumb items
+  const breadcrumbs = [];
+
+  let currentPath = "";
+
+  // Iterate through each segment of the path to build breadcrumbs
+  for (const path of paths) {
+    currentPath += `/${path}`;
+
+    // Find a matching navigation item (either main or sub-item)
+    const navItem =
+      navData.find((item) => item.url === currentPath) ||
+      navData
+        .flatMap((item) => item.items)
+        .find((subItem) => subItem?.url === currentPath);
+
+    if (navItem) {
+      breadcrumbs.push({
+        href: navItem.url, // The breadcrumb link
+        label: navItem.title, // Display text for the breadcrumb
+        isLast: currentPath === pathname, // True if it's the last breadcrumb
+      });
+    }
+  }
+
+  return breadcrumbs;
 };
 
-const getBreadcrumbs = (pathname: string) => {
-  // Split the pathname into an array of paths, removing any empty strings and remove "/app" root segment
-  const paths = pathname
-    .replace(/^\/app/, "")
-    .split("/")
-    .filter(Boolean);
-
-  // Map over the paths array to create breadcrumb objects
-  return paths.map((path, index) => {
-    // Create the href for the breadcrumb by joining the paths up to the current index
-    const href = "/" + paths.slice(0, index + 1).join("/");
-
-    // Return the breadcrumb object
-    return {
-      href: `/app${href}`, // Add the "/app" segment back to the href
-      label: routeConfig[href] || path.charAt(0).toUpperCase() + path.slice(1),
-      isLast: index === paths.length - 1,
-    };
-  });
-};
-
-export default function PublicLayout({
+export default function ClientLayout({
   children,
+  teamSlug,
 }: {
   children: React.ReactNode;
+  teamSlug: string;
 }) {
   const pathname = usePathname();
-  const breadcrumbs = getBreadcrumbs(pathname);
+  const breadcrumbs = getBreadcrumbs(pathname, teamSlug);
 
   return (
     <SidebarProvider>
-      <AppSidebar />
+      <AppSidebar teamSlug={teamSlug} />
       <SidebarInset>
         <header className="flex h-16 shrink-0 items-center gap-2 transition-[width,height] ease-linear group-has-[[data-collapsible=icon]]/sidebar-wrapper:h-12">
           <div className="flex items-center gap-2 px-4">

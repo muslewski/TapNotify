@@ -5,6 +5,7 @@ model User {
   emailVerified    DateTime?
   image            String?
   accounts         Account[]
+  teamMembers      TeamMember[] 
   campaigns        Campaign[]
   messageTemplates MessageTemplate[]
   phoneNumbers     PhoneNumber[]

@@ -1,6 +1,6 @@
 "use client";
 
-import HomeHero from "@/components/home-hero";
+import HomeHero from "@/app/(public)/_components/home-hero";
 import { Button } from "@/components/ui/button";
 import {
   Card,

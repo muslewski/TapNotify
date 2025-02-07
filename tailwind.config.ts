@@ -1,5 +1,8 @@
 /** @type {import('tailwindcss').Config} */
-const config = {
+import { withUt } from "uploadthing/tw";
+import tailwindcssAnimate from "tailwindcss-animate";
+
+const config = withUt({
   darkMode: ["class"],
   content: ["app/**/*.{ts,tsx}", "components/**/*.{ts,tsx}"],
   theme: {
@@ -71,8 +74,8 @@ const config = {
         sm: "calc(var(--radius) - 4px)",
       },
     },
+    plugins: [tailwindcssAnimate],
   },
-  plugins: [import("tailwindcss-animate")],
-};
+});
 
 export default config;

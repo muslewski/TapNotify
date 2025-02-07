@@ -1,3 +1,29 @@
+model Team {
+  id                String           @id @default(cuid())
+  name              String
+  slug              String           @unique
+  logoUrl           String?
+  createdAt         DateTime         @default(now())
+  updatedAt         DateTime         @updatedAt
+  members           TeamMember[]     // Relation to team memberships
+  campaigns         Campaign[]       // Teams can now own campaigns
+  messageTemplates  MessageTemplate[] // Teams can now own message templates
+  phoneNumbers      PhoneNumber[]    // Teams can now own phone numbers
+}
+
+model TeamMember {
+  id        String   @id @default(cuid())
+  role      String   @default("MEMBER") // e.g., "ADMIN", "MEMBER"
+  userId    String
+  teamId    String
+  joinedAt  DateTime @default(now())
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  team      Team     @relation(fields: [teamId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, teamId])
+}
+
+
 model Campaign {
   id          String          @id @default(cuid())
   name        String
@@ -5,10 +31,12 @@ model Campaign {
   updatedAt   DateTime        @updatedAt
   status      String          @default("DRAFT")
   scheduledAt DateTime?
+  teamId      String
   templateId  String
   userId      String
+  team        Team            @relation(fields: [teamId], references: [id], onDelete: Cascade)
   template    MessageTemplate @relation(fields: [templateId], references: [id])
-  user        User            @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user        User            @relation(fields: [userId], references: [id])
   messages    Message[]
 }
 
@@ -18,9 +46,11 @@ model MessageTemplate {
   content   String
   createdAt DateTime   @default(now())
   updatedAt DateTime   @updatedAt
+  teamId    String
   userId    String
   campaigns Campaign[]
-  user      User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user      User       @relation(fields: [userId], references: [id])
+  team      Team      @relation(fields: [teamId], references: [id], onDelete: Cascade)
 }
 
 model Message {
@@ -43,8 +73,10 @@ model PhoneNumber {
   name      String?
   createdAt DateTime  @default(now())
   userId    String
+  teamId    String
   messages  Message[]
   user      User      @relation(fields: [userId], references: [id])
+  team      Team      @relation(fields: [teamId], references: [id])
 
   @@unique([userId, number])
 }
