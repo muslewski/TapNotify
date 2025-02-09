@@ -39,7 +39,12 @@ Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/bui
 
 - [x] Add working team switcher
 - [x] Get rid of redundantion in create new or edit existing element
+- [x] Take care of proper table display https://ui.shadcn.com/docs/components/data-table
 - [ ] Add API for contacts and campaigns
 - [ ] manage custom fields like contact search or template select with proper design
 - [ ] Add template form and api
-- [ ] Take care of proper table display https://ui.shadcn.com/docs/components/data-table
+
+## Feature:
+
+- [ ] Upgrade data-table to something like this https://ui.shadcn.com/examples/tasks
+- [ ] When team is deleted prevent the double loading bug

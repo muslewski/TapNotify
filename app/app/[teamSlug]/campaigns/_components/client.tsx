@@ -25,7 +25,7 @@ export default function CampaignClient({
           icon: PlusIcon,
         }}
       />
-      <DataTable columns={columns} data={initialData} />
+      <DataTable searchKey="name" columns={columns} data={initialData} />
     </>
   );
 }
