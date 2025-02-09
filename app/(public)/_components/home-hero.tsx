@@ -2,8 +2,8 @@
 
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { MessageSquare } from "lucide-react";
+import Link from "next/link";
 
 export default function HomeHero() {
   return (
@@ -49,12 +49,14 @@ export default function HomeHero() {
           transition={{ delay: 0.8, duration: 0.8 }}
           className="mt-10 flex flex-col sm:flex-row justify-center items-center space-y-4 sm:space-y-0 sm:space-x-4"
         >
-          <Input
+          {/* <Input
             type="email"
             placeholder="Enter your email"
             className="max-w-xs"
-          />
-          <Button size="lg">Get Started</Button>
+          /> */}
+          <Button size="lg" asChild>
+            <Link href="sign-in">Get Started</Link>
+          </Button>
         </motion.div>
       </motion.div>
       <motion.div
@@ -64,7 +66,7 @@ export default function HomeHero() {
         className="mt-16"
       >
         <p className="text-sm text-muted-foreground">
-          Trusted by over 1,000+ businesses worldwide
+          {/* Trusted by over 1,000+ businesses worldwide */}
         </p>
       </motion.div>
     </div>

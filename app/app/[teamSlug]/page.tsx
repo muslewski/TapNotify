@@ -1,19 +1,28 @@
-import { currentUser } from "@/lib/auth";
-import { redirect } from "next/navigation";
+"use client";
+
+import { useCurrentUser } from "@/hooks/use-current-user";
+import { useRouter } from "next/navigation";
+import { use, useEffect } from "react";
 
 // This page is to redirect user to the correct team section
-export default async function TeamRedirectPage({
+export default function TeamRedirectPage({
   params,
 }: {
   params: Promise<{ teamSlug: string }>;
 }) {
-  const authUser = await currentUser();
-  const { teamSlug } = await params;
+  const authUser = useCurrentUser();
+  const { teamSlug } = use(params);
+  const router = useRouter();
+
+  useEffect(() => {
+    if (authUser) {
+      router.push(`/app/${teamSlug}/dashboard`);
+    }
+  }, [authUser, teamSlug, router]);
 
   if (!authUser) {
     return <div>Sign in to view this page</div>;
   }
 
-  // Redirect to the team page
-  redirect(`/app/${teamSlug}/dashboard`);
+  return null;
 }

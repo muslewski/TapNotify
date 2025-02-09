@@ -1,28 +1,18 @@
-"use client";
-
+import { getCampaignsByTeamSlug } from "@/actions/campaigns";
+import CampaignClient from "@/app/app/[teamSlug]/campaigns/_components/client";
 import Container from "@/app/app/_components/container";
-import Heading from "@/app/app/_components/heading";
-import { PlusIcon } from "lucide-react";
-import { use } from "react";
 
-export default function CampaignsPage({
+export default async function CampaignsPage({
   params,
 }: {
   params: Promise<{ teamSlug: string }>;
 }) {
-  const { teamSlug } = use(params);
+  const { teamSlug } = await params;
+  const campaigns = await getCampaignsByTeamSlug(teamSlug);
 
   return (
     <Container>
-      <Heading
-        title={`Campaigns (${0})`}
-        description="List of your campaigns"
-        redirect={{
-          label: "Create New",
-          href: `/app/${teamSlug}/campaigns/create`,
-          icon: PlusIcon,
-        }}
-      />
+      <CampaignClient initialData={campaigns} />
     </Container>
   );
 }

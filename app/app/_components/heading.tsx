@@ -2,8 +2,17 @@
 
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
-import type { LucideIcon } from "lucide-react";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+  DialogFooter,
+} from "@/components/ui/dialog";
+import { Trash2, type LucideIcon } from "lucide-react";
 import Link from "next/link";
+import { useState } from "react";
 
 interface HeadingProps {
   title: string;
@@ -13,13 +22,24 @@ interface HeadingProps {
     href: string;
     icon: LucideIcon;
   };
+  deleteButton?: {
+    label: string;
+    onClick: () => void;
+    confirmModal?: {
+      heading: string;
+      description: string;
+    };
+  };
 }
 
 export default function Heading({
   title,
   description,
   redirect,
+  deleteButton,
 }: HeadingProps) {
+  const [open, setOpen] = useState(false);
+
   return (
     <>
       <div className="flex items-end justify-between">
@@ -35,6 +55,53 @@ export default function Heading({
               {redirect.label}
             </Link>
           </Button>
+        )}
+
+        {deleteButton && (
+          <>
+            <Button
+              className="bg-red-600 hover:bg-red-700"
+              onClick={() => {
+                if (deleteButton.confirmModal) {
+                  setOpen(true);
+                } else {
+                  deleteButton.onClick();
+                }
+              }}
+            >
+              <Trash2 className="mr-2 h-4 w-4" />
+              {deleteButton.label}
+            </Button>
+
+            {deleteButton.confirmModal && (
+              <Dialog open={open} onOpenChange={setOpen}>
+                <DialogContent>
+                  <DialogHeader>
+                    <DialogTitle>
+                      {deleteButton.confirmModal.heading}
+                    </DialogTitle>
+                    <DialogDescription>
+                      {deleteButton.confirmModal.description}
+                    </DialogDescription>
+                  </DialogHeader>
+                  <DialogFooter>
+                    <Button variant="outline" onClick={() => setOpen(false)}>
+                      Cancel
+                    </Button>
+                    <Button
+                      className="bg-red-600 hover:bg-red-700"
+                      onClick={() => {
+                        deleteButton.onClick();
+                        setOpen(false);
+                      }}
+                    >
+                      Confirm
+                    </Button>
+                  </DialogFooter>
+                </DialogContent>
+              </Dialog>
+            )}
+          </>
         )}
       </div>
       <Separator />

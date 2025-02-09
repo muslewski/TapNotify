@@ -66,7 +66,7 @@ export function NavUser() {
     }
   };
 
-  if (!user || !user.id) {
+  if (!user) {
     return (
       <Button variant="outline" asChild>
         <Link href="/sign-in">Sign In</Link>

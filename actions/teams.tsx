@@ -15,3 +15,13 @@ export async function getUserTeamsById(userId: string) {
 
   return teams;
 }
+
+export async function getTeamBySlug(slug: string) {
+  const team = await db.team.findFirst({
+    where: {
+      slug,
+    },
+  });
+
+  return team;
+}

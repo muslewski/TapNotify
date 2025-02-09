@@ -17,6 +17,7 @@ import {
 } from "@/components/ui/sidebar";
 import { ChevronsUpDown, Loader2, Plus } from "lucide-react";
 import { useEffect } from "react";
+import { cn } from "@/lib/utils"; // Adjust the import path as necessary
 import { Team } from "@prisma/client";
 import Image from "next/image";
 import { useCurrentUser } from "@/hooks/use-current-user";
@@ -131,12 +132,13 @@ export default function TeamSwitcher() {
             >
               {activeTeam ? (
                 <>
-                  <div className="flex aspect-square size-8 items-center justify-center rounded-lg overflow-hidden bg-sidebar-primary text-sidebar-primary-foreground">
+                  <div className="flex aspect-square size-8 items-center justify-center rounded-lg overflow-hidden  text-sidebar-primary-foreground">
                     <Image
                       src={activeTeam.logoUrl || "/fallbacks/user.png"}
                       alt={activeTeam.name}
                       width={32}
                       height={32}
+                      className="h-full w-auto object-cover"
                     />
                   </div>
                   <div className="grid flex-1 text-left text-sm leading-tight">
@@ -170,14 +172,18 @@ export default function TeamSwitcher() {
               <DropdownMenuItem
                 key={team.id}
                 onClick={() => handleTeamSwitch(team)}
-                className="gap-2 p-2"
+                className={cn(
+                  "gap-2 p-2",
+                  activeTeam?.id === team.id && " bg-gray-700/5"
+                )}
               >
-                <div className="flex size-6 items-center justify-center rounded-sm overflow-hidden border">
+                <div className="flex size-6 items-center justify-center rounded-sm overflow-hidden">
                   <Image
                     src={team.logoUrl || "/fallbacks/user.png"}
                     alt={team.name}
                     width={24}
                     height={24}
+                    className="h-full w-auto object-cover"
                   />
                 </div>
                 {team.name}
@@ -186,7 +192,7 @@ export default function TeamSwitcher() {
             <DropdownMenuSeparator />
             <DropdownMenuItem
               className="gap-2 p-2"
-              onClick={() => router.push("/app/create")}
+              onClick={() => router.push("/app/create-team")}
             >
               <div className="flex size-6 items-center justify-center rounded-md border bg-background">
                 <Plus className="size-4" />

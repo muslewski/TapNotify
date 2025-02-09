@@ -17,6 +17,7 @@ interface TeamState {
   setError: (error: string | null) => void;
   fetchTeams: (userId: string) => Promise<Team[]>;
   getActiveTeamSlug: () => string | null;
+  updateTeam: (updatedTeam: Partial<Team>) => void;
 }
 
 export const useTeamStore = create<TeamState>()(
@@ -66,6 +67,18 @@ export const useTeamStore = create<TeamState>()(
         } finally {
           set({ isInitialLoading: false });
         }
+      },
+
+      updateTeam: (updatedTeam: Partial<Team>) => {
+        set((state) => ({
+          teams: state.teams.map((team) =>
+            team.id === updatedTeam.id ? { ...team, ...updatedTeam } : team
+          ),
+          activeTeam:
+            state.activeTeam && state.activeTeam.id === updatedTeam.id
+              ? { ...state.activeTeam, ...updatedTeam }
+              : state.activeTeam,
+        }));
       },
     }),
     {

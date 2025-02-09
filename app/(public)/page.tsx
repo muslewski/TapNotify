@@ -1,16 +1,6 @@
 "use client";
 
 import HomeHero from "@/app/(public)/_components/home-hero";
-import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import { CheckCircle, Zap, Globe, Shield } from "lucide-react";
 
 export default function Home() {
   return (
@@ -18,7 +8,7 @@ export default function Home() {
       <HomeHero />
 
       {/* Features Section */}
-      <section className="py-16 bg-background flex items-center min-h-screen">
+      {/* <section className="py-16 bg-background flex items-center min-h-screen">
         <div className="container mx-auto px-4">
           <h2 className="text-3xl font-bold text-center mb-12">
             Why Choose Our SMS Platform?
@@ -58,10 +48,10 @@ export default function Home() {
             ))}
           </div>
         </div>
-      </section>
+      </section> */}
 
       {/* Pricing Section */}
-      <section className="py-16 min-h-screen flex items-center bg-secondary/20">
+      {/* <section className="py-16 min-h-screen flex items-center bg-secondary/20">
         <div className="container mx-auto px-4">
           <h2 className="text-3xl font-bold text-center mb-12">
             Simple, Transparent Pricing
@@ -120,7 +110,7 @@ export default function Home() {
             ))}
           </div>
         </div>
-      </section>
+      </section> */}
     </div>
   );
 }

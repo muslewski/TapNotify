@@ -23,16 +23,28 @@ export async function POST(req: Request) {
       return new NextResponse("Name is required", { status: 400 });
     }
 
-    // Create tean in database
+    // Create base slug from name
+    let slug = slugify(name, {
+      remove: /[*+~.()'"!:@]/g,
+      lower: true,
+      strict: true,
+      trim: true,
+    });
+
+    // Ensure slug is unique by appending a number if necessary
+    let uniqueSlug = slug;
+    let counter = 1;
+    while (await db.team.findUnique({ where: { slug: uniqueSlug } })) {
+      uniqueSlug = `${slug}-${counter}`;
+      counter++;
+    }
+    slug = uniqueSlug;
+
+    // Create team in database
     const team = await db.team.create({
       data: {
         name: name,
-        slug: slugify(name, {
-          remove: /[*+~.()'"!:@]/g,
-          lower: true,
-          strict: true,
-          trim: true,
-        }),
+        slug: slug,
         logoUrl: logoUrl,
       },
     });

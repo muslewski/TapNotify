@@ -1,30 +1,45 @@
-import { currentUser } from "@/lib/auth";
-import db from "@/lib/prisma";
-import { redirect } from "next/navigation";
+"use client";
 
-// This page is used to redirect users to the correct team page
-export default async function AppRedirectPage() {
-  const authUser = await currentUser();
+import Loading from "@/app/app/_components/loading";
+import { useCurrentUser } from "@/hooks/use-current-user";
+import { useTeamStore } from "@/store/use-team-store";
+import { useRouter } from "next/navigation"; // Changed from next/router
+import { useEffect, useState } from "react";
 
-  if (!authUser) {
+export default function AppRedirectPage() {
+  const router = useRouter();
+  const authUser = useCurrentUser();
+  const { activeTeam, fetchTeams } = useTeamStore();
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<Error | null>(null);
+
+  useEffect(() => {
+    // Handle team fetching
+    if (authUser && authUser.id && !activeTeam) {
+      fetchTeams(authUser.id)
+        .catch(setError)
+        .finally(() => setIsLoading(false));
+    }
+  }, [authUser, activeTeam, fetchTeams]);
+
+  useEffect(() => {
+    // Handle navigation
+    if (activeTeam) {
+      router.push(`/app/${activeTeam.slug}/dashboard`);
+    }
+  }, [activeTeam, router]);
+
+  if (!authUser || !authUser.id) {
     return <div>Sign in to view this page</div>;
   }
 
-  // Find first Team Member record for the authenticated user
-  const teamMember = await db.teamMember.findFirst({
-    where: {
-      userId: authUser.id,
-    },
-    include: {
-      team: true,
-    },
-  });
-
-  // If user is not a member of any team, redirect to create team
-  if (!teamMember || !teamMember.team?.slug) {
-    redirect("/app/create");
+  if (error) {
+    return <div>Error loading teams: {error.message}</div>;
   }
 
-  // Redirect to the team page dashboard
-  redirect(`/app/${teamMember.team.slug}/dashboard`);
+  if (isLoading || activeTeam) {
+    return <Loading />;
+  }
+
+  router.push(`/app/create-team`);
 }

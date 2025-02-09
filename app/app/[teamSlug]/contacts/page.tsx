@@ -1,30 +1,19 @@
-"use client";
-
-import { use } from "react";
-
 import Container from "@/app/app/_components/container";
-import Heading from "@/app/app/_components/heading";
-import { PlusIcon } from "lucide-react";
+import ContactClient from "@/app/app/[teamSlug]/contacts/_components/client";
+import { getPhoneNumbersByTeamSlug } from "@/actions/contacts";
 
-export default function ContactsPage({
+export default async function ContactsPage({
   params,
 }: {
   params: Promise<{ teamSlug: string }>;
 }) {
-  const { teamSlug } = use(params);
-  console.log(teamSlug);
+  const { teamSlug } = await params;
+
+  const contacts = await getPhoneNumbersByTeamSlug(teamSlug);
 
   return (
     <Container>
-      <Heading
-        title={`Contacts (${0})`}
-        description="Manage your contacts"
-        redirect={{
-          label: "Add Contact",
-          href: `/app/${teamSlug}/contacts/add`,
-          icon: PlusIcon,
-        }}
-      />
+      <ContactClient initialData={contacts} />
     </Container>
   );
 }

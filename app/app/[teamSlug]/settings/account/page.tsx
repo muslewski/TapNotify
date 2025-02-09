@@ -1,25 +1,24 @@
-"use client";
-
-import { use } from "react";
-
 import Container from "@/app/app/_components/container";
-import Heading from "@/app/app/_components/heading";
+import AccountForm from "@/app/app/[teamSlug]/settings/account/_components/account-form";
+import { getUserById } from "@/actions/users";
+import { currentUserId } from "@/lib/auth";
 
-export default function SettingsPage({
-  params,
-}: {
-  params: Promise<{ teamSlug: string }>;
-}) {
-  const { teamSlug } = use(params);
-  console.log(teamSlug);
+export default async function SettingsPage() {
+  const userId = await currentUserId();
+
+  if (!userId) {
+    return <div>Not authenticated</div>;
+  }
+
+  const user = await getUserById(userId);
+
+  if (!user) {
+    return <div>User not found</div>;
+  }
 
   return (
     <Container>
-      <Heading
-        title="Account Settings"
-        description="Manage your account settings (independent of the team)"
-      />
-      Add Billing Section
+      <AccountForm initialData={user} />
     </Container>
   );
 }

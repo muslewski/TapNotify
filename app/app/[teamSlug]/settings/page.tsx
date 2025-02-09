@@ -1,21 +1,23 @@
-"use client";
-
-import { use } from "react";
-
+import { getTeamBySlug } from "@/actions/teams";
+import SettingsForm from "@/app/app/[teamSlug]/settings/_components/settings-form";
 import Container from "@/app/app/_components/container";
-import Heading from "@/app/app/_components/heading";
 
-export default function SettingsPage({
+export default async function SettingsPage({
   params,
 }: {
   params: Promise<{ teamSlug: string }>;
 }) {
-  const { teamSlug } = use(params);
-  console.log(teamSlug);
+  const { teamSlug } = await params;
+
+  const team = await getTeamBySlug(teamSlug);
+
+  if (!team) {
+    return <div>Team not found</div>;
+  }
 
   return (
     <Container>
-      <Heading title="Team Settings" description="Manage your team settings" />
+      <SettingsForm initialData={team} />
     </Container>
   );
 }
