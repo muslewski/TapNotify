@@ -48,7 +48,7 @@ export default function AppSidebar({ teamSlug, ...props }: AppSidebarProps) {
 
       <SidebarContent>
         <TeamSwitcher />
-        <NavMain items={data(teamSlug).navMain} />
+        <NavMain navMain={data(teamSlug).navMain} />
         {/* <NavProjects projects={data(teamSlug).projects} /> */}
       </SidebarContent>
 

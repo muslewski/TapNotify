@@ -9,6 +9,15 @@ export default async function CreateCampaignPage({
   const { teamSlug } = await params;
   console.log(teamSlug);
 
+  // // If campaign is not found and campaignId is not "create", show 404
+  // if (!contact && contactId !== "add") {
+  //   return (
+  //     <Container>
+  //       <NotFound />
+  //     </Container>
+  //   );
+  // }
+
   return (
     <Container>
       <CampaignForm />

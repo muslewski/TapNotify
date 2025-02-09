@@ -13,12 +13,7 @@ import {
   Send,
 } from "lucide-react";
 
-export interface SidebarDataInterface {
-  teams: {
-    name: string;
-    logo: React.ElementType;
-    plan: string;
-  }[];
+export interface navMainProps {
   navMain: {
     title: string;
     url: string;
@@ -27,8 +22,21 @@ export interface SidebarDataInterface {
     items?: {
       title: string;
       url: string;
+      /** Hide item from sidebar */
+      hidden?: boolean;
+      /** Dynamic item for breadcrumb */
+      dynamic?: boolean;
     }[];
   }[];
+}
+
+export interface SidebarDataInterface extends navMainProps {
+  teams: {
+    name: string;
+    logo: React.ElementType;
+    plan: string;
+  }[];
+
   projects: {
     name: string;
     url: string;
@@ -85,6 +93,12 @@ export const sidebarData = (teamSlug: string): SidebarDataInterface => ({
           title: "Create Campaign",
           url: `/app/${teamSlug}/campaigns/create`,
         },
+        {
+          title: "Edit Campaign",
+          url: `/app/${teamSlug}/campaigns/{{dynamic}}`,
+          hidden: true,
+          dynamic: true,
+        },
         // {
         //   title: "Scheduled",
         //   url: `/app/${teamSlug}/campaigns/scheduled`,
@@ -105,6 +119,12 @@ export const sidebarData = (teamSlug: string): SidebarDataInterface => ({
           title: "Create Template",
           url: `/app/${teamSlug}/message-templates/create`,
         },
+        {
+          title: "Edit Template",
+          url: `/app/${teamSlug}/message-templates/{{dynamic}}`,
+          hidden: true,
+          dynamic: true,
+        },
       ],
     },
     {
@@ -120,6 +140,12 @@ export const sidebarData = (teamSlug: string): SidebarDataInterface => ({
         {
           title: "Add Contact",
           url: `/app/${teamSlug}/contacts/add`,
+        },
+        {
+          title: "Edit Contact",
+          url: `/app/${teamSlug}/contacts/{{dynamic}}`,
+          hidden: true,
+          dynamic: true,
         },
         // {
         //   title: "Groups",

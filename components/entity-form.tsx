@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import {
   Form,
   FormControl,
+  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -64,9 +65,7 @@ export default function EntityForm<T>({ config }: { config: EntityConfig<T> }) {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const onSubmit = async (data: any) => {
     try {
-      const baseUrl = `/api/teams/${
-        params.teamSlug
-      }/${config.entityNamePlural.toLowerCase()}`;
+      const baseUrl = `/api/teams/${params.teamSlug}/${config.entityPath}`;
       const url = config.initialData ? `${baseUrl}/${entityId}` : baseUrl;
 
       const response = await fetch(url, {
@@ -78,9 +77,7 @@ export default function EntityForm<T>({ config }: { config: EntityConfig<T> }) {
       if (!response.ok) throw new Error(await response.text());
 
       toast.success(toastMessage);
-      router.push(
-        `/app/${params.teamSlug}/${config.entityNamePlural.toLowerCase()}`
-      );
+      router.push(`/app/${params.teamSlug}/${config.entityPath}`);
       router.refresh();
     } catch (error) {
       console.log(error);
@@ -93,25 +90,21 @@ export default function EntityForm<T>({ config }: { config: EntityConfig<T> }) {
       setLoading(true);
 
       const confirmed = await confirmModal({
-        heading: "Delete Contact",
-        description: "Are you sure you want to delete this contact?",
+        heading: `Delete  ${config.entityName}`,
+        description: `Are you sure you want to delete this ${config.entityName.toLowerCase()}?`,
         confirmLabel: "Delete",
         confirmVariant: "destructive",
       });
 
       if (confirmed) {
         const response = await fetch(
-          `/api/teams/${
-            params.teamSlug
-          }/${config.entityNamePlural.toLowerCase()}/${entityId}`,
+          `/api/teams/${params.teamSlug}/${config.entityPath}/${entityId}`,
           { method: "DELETE" }
         );
 
         if (!response.ok) throw new Error(`Error: ${response.status}`);
         toast.success(`${config.entityName} deleted successfully.`);
-        router.push(
-          `/app/${params.teamSlug}/${config.entityNamePlural.toLowerCase()}`
-        );
+        router.push(`/app/${params.teamSlug}/${config.entityPath}`);
         router.refresh();
       }
     } catch (error) {
@@ -195,6 +188,9 @@ export default function EntityForm<T>({ config }: { config: EntityConfig<T> }) {
                     {field.label}
                   </FormLabel>
                   <FormControl>{renderField(field, formField)}</FormControl>
+                  {field.description && (
+                    <FormDescription>{field.description}</FormDescription>
+                  )}
                   <FormMessage />
                 </FormItem>
               )}

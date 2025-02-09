@@ -9,10 +9,8 @@ import { z } from "zod";
 
 const campaignSchema = z.object({
   name: z.string().min(1, "Name is required"),
-  phone: z
-    .string()
-    .max(13, "Incorrect phone number")
-    .regex(/^\d+$/, "Phone number must contain only digits"),
+  contactIds: z.array(z.string()),
+  templateId: z.string(),
 });
 
 const campaignFields = [
@@ -54,6 +52,7 @@ export default function CampaignForm({
   const config = {
     entityName: "Campaign",
     entityNamePlural: "Campaigns",
+    entityPath: "campaigns",
     entityParam: "campaignId",
     schema: campaignSchema,
     initialData: initialData,

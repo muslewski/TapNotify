@@ -97,9 +97,9 @@ export default function CreateTeamPage() {
                         {...field}
                       />
                     </FormControl>
-                    <CardDescription>
+                    <FormDescription>
                       Set a name to represent your team.
-                    </CardDescription>
+                    </FormDescription>
                     <FormMessage />
                   </FormItem>
                 )}

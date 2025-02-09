@@ -15,25 +15,13 @@ import {
   SidebarMenuSubButton,
   SidebarMenuSubItem,
 } from "@/components/ui/sidebar";
+import { navMainProps } from "@/data/sidebar-data";
 import { cn } from "@/lib/utils";
-import { ChevronRightIcon, type LucideIcon } from "lucide-react";
+import { ChevronRightIcon } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
-interface NavMainProps {
-  items: {
-    title: string;
-    url: string;
-    icon?: LucideIcon;
-    isActive?: boolean;
-    items?: {
-      title: string;
-      url: string;
-    }[];
-  }[];
-}
-
-export function NavMain({ items }: NavMainProps) {
+export function NavMain({ navMain: items }: navMainProps) {
   const pathname = usePathname();
 
   return (
@@ -58,21 +46,24 @@ export function NavMain({ items }: NavMainProps) {
 
               <CollapsibleContent>
                 <SidebarMenuSub>
-                  {item.items?.map((subItem) => (
-                    <SidebarMenuSubItem key={subItem.title}>
-                      <SidebarMenuSubButton asChild>
-                        <Link
-                          href={subItem.url}
-                          className={cn(
-                            "transition-all",
-                            subItem.url === pathname && "font-medium"
-                          )}
-                        >
-                          <span>{subItem.title}</span>
-                        </Link>
-                      </SidebarMenuSubButton>
-                    </SidebarMenuSubItem>
-                  ))}
+                  {item.items?.map(
+                    (subItem) =>
+                      !subItem.hidden && (
+                        <SidebarMenuSubItem key={subItem.title}>
+                          <SidebarMenuSubButton asChild>
+                            <Link
+                              href={subItem.url}
+                              className={cn(
+                                "transition-all",
+                                subItem.url === pathname && "font-medium"
+                              )}
+                            >
+                              <span>{subItem.title}</span>
+                            </Link>
+                          </SidebarMenuSubButton>
+                        </SidebarMenuSubItem>
+                      )
+                  )}
                 </SidebarMenuSub>
               </CollapsibleContent>
             </SidebarMenuItem>

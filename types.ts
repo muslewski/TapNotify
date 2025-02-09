@@ -12,6 +12,8 @@ export type EntityConfig<T> = {
   entityName: string;
   /** Plural name of the entity (e.g., "Users"). */
   entityNamePlural: string;
+  /** Path to the entity's API endpoint (e.g., "/users"). */
+  entityPath: string;
   /**
    * URL parameter name that represents the entity ID in the route.
    * Example: 'contactId' for `/contacts/:contactId`
@@ -33,6 +35,8 @@ export type BaseFieldConfig = {
   name: string;
   /** Label displayed for the field. */
   label: string;
+  /** Optional description displayed below the field. */
+  description?: string;
   /** Placeholder text inside the input field. */
   placeholder?: string;
   /** Optional class name for styling the FormItem container. */

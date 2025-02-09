@@ -1,28 +1,19 @@
-"use client";
-
+import { getMessageTemplatesByTeamSlug } from "@/actions/message-templates";
+import ContactClient from "@/app/app/[teamSlug]/message-templates/_components/client";
 import Container from "@/app/app/_components/container";
-import Heading from "@/app/app/_components/heading";
-import { PlusIcon } from "lucide-react";
-import { use } from "react";
 
-export default function MessageTemplatesPage({
+export default async function MessageTemplatesPage({
   params,
 }: {
   params: Promise<{ teamSlug: string }>;
 }) {
-  const { teamSlug } = use(params);
+  const { teamSlug } = await params;
+
+  const templates = await getMessageTemplatesByTeamSlug(teamSlug);
 
   return (
     <Container>
-      <Heading
-        title={`Message Templates (${0})`}
-        description="Manage your message templates"
-        redirect={{
-          label: "Create New",
-          href: `/app/${teamSlug}/campaigns/message-templates/create`,
-          icon: PlusIcon,
-        }}
-      />
+      <ContactClient initialData={templates} />
     </Container>
   );
 }

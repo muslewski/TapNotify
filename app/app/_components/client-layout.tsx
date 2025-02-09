@@ -78,6 +78,28 @@ function useTeamAccess(userId: string, teamSlug: string) {
   };
 }
 
+// Helper function to check if a path segment matches a dynamic pattern
+function isPathMatchingDynamicPattern(
+  pathSegment: string,
+  patternSegment: string
+): boolean {
+  return (
+    patternSegment.includes("{{dynamic}}") || pathSegment === patternSegment
+  );
+}
+
+// Helper function to match URL patterns
+function matchUrlPattern(currentPath: string, pattern: string): boolean {
+  const currentSegments = currentPath.split("/").filter(Boolean);
+  const patternSegments = pattern.split("/").filter(Boolean);
+
+  if (currentSegments.length !== patternSegments.length) return false;
+
+  return currentSegments.every((segment, index) =>
+    isPathMatchingDynamicPattern(segment, patternSegments[index])
+  );
+}
+
 // Moved breadcrumb generation to a custom hook
 function useBreadcrumbs(pathname: string, teamSlug: string) {
   return React.useMemo(() => {
@@ -86,19 +108,50 @@ function useBreadcrumbs(pathname: string, teamSlug: string) {
     const breadcrumbs = [];
     let currentPath = "";
 
-    for (const path of paths) {
+    for (let i = 0; i < paths.length; i++) {
+      const path = paths[i];
       currentPath += `/${path}`;
-      const navItem =
-        navData.find((item) => item.url === currentPath) ||
-        navData
-          .flatMap((item) => item.items)
-          .find((subItem) => subItem?.url === currentPath);
+
+      // First try to find exact match
+      let navItem = navData.find((item) => item.url === currentPath);
+
+      if (!navItem) {
+        // Then check main nav items with dynamic routes
+        navItem = navData.find((item) =>
+          matchUrlPattern(currentPath, item.url)
+        );
+      }
+
+      if (!navItem) {
+        // Check subitems, including dynamic routes
+        const subItem = navData
+          .flatMap((item) => item.items || [])
+          .find((subItem) => {
+            if (!subItem) return false;
+            if (subItem.dynamic) {
+              return matchUrlPattern(currentPath, subItem.url);
+            }
+            return subItem.url === currentPath;
+          });
+
+        if (subItem) {
+          // For dynamic routes, use the actual path segment as the label
+          breadcrumbs.push({
+            href: currentPath,
+            label: subItem.title,
+            isLast: currentPath === pathname,
+            isDynamic: subItem.dynamic,
+          });
+          continue;
+        }
+      }
 
       if (navItem) {
         breadcrumbs.push({
           href: navItem.url,
           label: navItem.title,
           isLast: currentPath === pathname,
+          isDynamic: false,
         });
       }
     }

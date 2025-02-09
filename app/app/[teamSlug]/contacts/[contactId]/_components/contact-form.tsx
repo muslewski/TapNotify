@@ -18,6 +18,7 @@ const contactFields = [
     name: "name",
     label: "Name",
     placeholder: "John Doe",
+    description: "The name as it should appear in messages.",
     className: "max-w-xs",
     type: "text",
   },
@@ -25,6 +26,7 @@ const contactFields = [
     name: "phone",
     label: "Phone",
     placeholder: "123 456 789",
+    description: "Used for SMS notifications.",
     className: "max-w-xs",
     type: "tel",
   },
@@ -38,6 +40,7 @@ export default function ContactForm({
   const config = {
     entityName: "Contact",
     entityNamePlural: "Contacts",
+    entityPath: "contacts",
     entityParam: "contactId",
     schema: contactSchema,
     initialData: initialData,
