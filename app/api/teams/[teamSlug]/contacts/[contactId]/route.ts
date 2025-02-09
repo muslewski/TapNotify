@@ -1,6 +1,6 @@
 // GET, PATCH, DELETE specific contact
 
-import { doesContactExistInTeam } from "@/actions/contacts";
+import { doesContactExistAndNotSameContact } from "@/actions/contacts";
 import { isTeamMember } from "@/actions/teamMembers";
 import { currentUserId } from "@/lib/auth";
 import db from "@/lib/prisma";
@@ -101,7 +101,11 @@ export async function PATCH(req: Request, { params }: ContactFunctionParams) {
     }
 
     // Check if contact with the same phone number already exists in the team
-    const existingContact = await doesContactExistInTeam(phone, teamSlug);
+    const existingContact = await doesContactExistAndNotSameContact(
+      phone,
+      teamSlug,
+      contactId
+    );
 
     if (existingContact) {
       return new NextResponse(

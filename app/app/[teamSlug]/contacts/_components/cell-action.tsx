@@ -83,7 +83,7 @@ export function CellAction({ data }: CellActionProps) {
           <DropdownMenuLabel>Actions</DropdownMenuLabel>
           <DropdownMenuItem onClick={() => handleCopy(data.phone)}>
             <CopyIcon className="size-4 mr-2" />
-            Copy Phone Number
+            Copy Number
           </DropdownMenuItem>
           <DropdownMenuItem
             onClick={() =>

@@ -19,11 +19,16 @@ import Heading from "@/app/app/_components/heading";
 import { EntityConfig, FormFieldConfig } from "@/types";
 import { Textarea } from "@/components/ui/textarea";
 import { cn } from "@/lib/utils";
+import { useConfirmModal } from "@/providers/confirm-modal-context";
 
 export default function EntityForm<T>({ config }: { config: EntityConfig<T> }) {
   const router = useRouter();
   const params = useParams();
   const [loading, setLoading] = useState(false);
+  const { confirmModal } = useConfirmModal();
+
+  // Get the entity ID from the URL
+  const entityId = params[config.entityParam];
 
   const title = config.initialData
     ? `Edit ${config.entityName}`
@@ -62,7 +67,6 @@ export default function EntityForm<T>({ config }: { config: EntityConfig<T> }) {
       const baseUrl = `/api/teams/${
         params.teamSlug
       }/${config.entityNamePlural.toLowerCase()}`;
-      const entityId = params[config.entityParam];
       const url = config.initialData ? `${baseUrl}/${entityId}` : baseUrl;
 
       const response = await fetch(url, {
@@ -87,24 +91,34 @@ export default function EntityForm<T>({ config }: { config: EntityConfig<T> }) {
   const onDelete = async () => {
     try {
       setLoading(true);
-      const response = await fetch(
-        `/api/teams/${
-          params.teamSlug
-        }/${config.entityNamePlural.toLowerCase()}/${params.entityId}`,
-        { method: "DELETE" }
-      );
 
-      if (!response.ok) throw new Error(`Error: ${response.status}`);
-      toast.success(`${config.entityName} deleted successfully.`);
+      const confirmed = await confirmModal({
+        heading: "Delete Contact",
+        description: "Are you sure you want to delete this contact?",
+        confirmLabel: "Delete",
+        confirmVariant: "destructive",
+      });
+
+      if (confirmed) {
+        const response = await fetch(
+          `/api/teams/${
+            params.teamSlug
+          }/${config.entityNamePlural.toLowerCase()}/${entityId}`,
+          { method: "DELETE" }
+        );
+
+        if (!response.ok) throw new Error(`Error: ${response.status}`);
+        toast.success(`${config.entityName} deleted successfully.`);
+        router.push(
+          `/app/${params.teamSlug}/${config.entityNamePlural.toLowerCase()}`
+        );
+        router.refresh();
+      }
     } catch (error) {
       console.error(error);
       toast.error("Something went wrong.");
     } finally {
       setLoading(false);
-      router.push(
-        `/app/${params.teamSlug}/${config.entityNamePlural.toLowerCase()}`
-      );
-      router.refresh();
     }
   };
 
