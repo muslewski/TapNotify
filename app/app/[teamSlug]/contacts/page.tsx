@@ -1,6 +1,6 @@
 import Container from "@/app/app/_components/container";
 import ContactClient from "@/app/app/[teamSlug]/contacts/_components/client";
-import { getPhoneNumbersByTeamSlug } from "@/actions/contacts";
+import { getContactsByTeamSlug } from "@/actions/contacts";
 
 export default async function ContactsPage({
   params,
@@ -9,7 +9,7 @@ export default async function ContactsPage({
 }) {
   const { teamSlug } = await params;
 
-  const contacts = await getPhoneNumbersByTeamSlug(teamSlug);
+  const contacts = await getContactsByTeamSlug(teamSlug);
 
   return (
     <Container>

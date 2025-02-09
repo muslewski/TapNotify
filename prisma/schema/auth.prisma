@@ -8,7 +8,7 @@ model User {
   teamMembers      TeamMember[] 
   campaigns        Campaign[]
   messageTemplates MessageTemplate[]
-  phoneNumbers     PhoneNumber[]
+  contacts         Contact[]
   sessions         Session[]
 }
 

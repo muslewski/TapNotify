@@ -17,7 +17,7 @@ import {
 } from "@/components/ui/popover";
 import { useState } from "react";
 import { CustomFieldProps } from "@/types";
-import { PhoneNumber } from "@prisma/client";
+import { Contact } from "@prisma/client";
 
 export function ContactSearchField({
   field,
@@ -26,7 +26,7 @@ export function ContactSearchField({
 }: // customProps,
 CustomFieldProps) {
   const [open, setOpen] = useState(false);
-  const [contacts, setContacts] = useState<PhoneNumber[]>([]);
+  const [contacts, setContacts] = useState<Contact[]>([]);
 
   const searchContacts = async (search: string) => {
     try {

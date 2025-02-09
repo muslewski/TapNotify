@@ -12,7 +12,7 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { PhoneNumber } from "@prisma/client";
+import { Contact } from "@prisma/client";
 import { useParams, useRouter } from "next/navigation";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
@@ -30,7 +30,7 @@ const formSchema = z.object({
 type ContactFormValues = z.infer<typeof formSchema>;
 
 interface ContactFormProps {
-  initialData?: PhoneNumber;
+  initialData?: Contact;
 }
 
 export default function ContactForm({ initialData }: ContactFormProps) {

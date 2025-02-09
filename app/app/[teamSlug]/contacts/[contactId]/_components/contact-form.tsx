@@ -1,8 +1,8 @@
 "use client";
 
 import EntityForm from "@/components/entity-form";
-import { FormFieldConfig } from "@/types";
-import { PhoneNumber } from "@prisma/client";
+import { EntityConfig, FormFieldConfig } from "@/types";
+import { Contact } from "@prisma/client";
 import { z } from "zod";
 
 const contactSchema = z.object({
@@ -24,7 +24,7 @@ const contactFields = [
   {
     name: "phone",
     label: "Phone",
-    placeholder: "+48 123 456 789",
+    placeholder: "123 456 789",
     className: "max-w-xs",
     type: "tel",
   },
@@ -33,15 +33,16 @@ const contactFields = [
 export default function ContactForm({
   initialData,
 }: {
-  initialData?: PhoneNumber;
+  initialData?: Contact;
 }) {
   const config = {
     entityName: "Contact",
     entityNamePlural: "Contacts",
+    entityParam: "contactId",
     schema: contactSchema,
-    initialData,
+    initialData: initialData,
     fields: contactFields,
-  };
+  } satisfies EntityConfig<Contact>;
 
   return <EntityForm config={config} />;
 }

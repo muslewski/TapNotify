@@ -17,7 +17,7 @@ export default function CampaignClient({
   return (
     <>
       <Heading
-        title={`Campaigns (${0})`}
+        title={`Campaigns (${initialData.length})`}
         description="Manage your campaigns"
         redirect={{
           label: "Add Campaign",

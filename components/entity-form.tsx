@@ -62,9 +62,8 @@ export default function EntityForm<T>({ config }: { config: EntityConfig<T> }) {
       const baseUrl = `/api/teams/${
         params.teamSlug
       }/${config.entityNamePlural.toLowerCase()}`;
-      const url = config.initialData
-        ? `${baseUrl}/${params.entityId}`
-        : baseUrl;
+      const entityId = params[config.entityParam];
+      const url = config.initialData ? `${baseUrl}/${entityId}` : baseUrl;
 
       const response = await fetch(url, {
         method: config.initialData ? "PATCH" : "POST",
@@ -72,16 +71,16 @@ export default function EntityForm<T>({ config }: { config: EntityConfig<T> }) {
         body: JSON.stringify(data),
       });
 
-      if (!response.ok) throw new Error(`Error: ${response.status}`);
+      if (!response.ok) throw new Error(await response.text());
+
       toast.success(toastMessage);
-    } catch (error) {
-      console.error(error);
-      toast.error("Something went wrong.");
-    } finally {
       router.push(
         `/app/${params.teamSlug}/${config.entityNamePlural.toLowerCase()}`
       );
       router.refresh();
+    } catch (error) {
+      console.log(error);
+      if (error instanceof Error) toast.error(error.message);
     }
   };
 

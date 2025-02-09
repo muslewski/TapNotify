@@ -3,7 +3,7 @@
 import EntityForm from "@/components/entity-form";
 import { ContactSearchField } from "@/components/fields/contact-search";
 import { TemplateSelectField } from "@/components/fields/template-select";
-import { FormFieldConfig } from "@/types";
+import { EntityConfig, FormFieldConfig } from "@/types";
 import { Campaign } from "@prisma/client";
 import { z } from "zod";
 
@@ -37,7 +37,7 @@ const campaignFields = [
   {
     name: "templateId",
     label: "Message Template",
-    type: "custom" as const,
+    type: "custom",
     className: "max-w-2xl",
     component: TemplateSelectField,
     customProps: {
@@ -54,10 +54,11 @@ export default function CampaignForm({
   const config = {
     entityName: "Campaign",
     entityNamePlural: "Campaigns",
+    entityParam: "campaignId",
     schema: campaignSchema,
-    initialData,
+    initialData: initialData,
     fields: campaignFields,
-  };
+  } satisfies EntityConfig<Campaign>;
 
   return <EntityForm config={config} />;
 }

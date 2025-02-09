@@ -2,6 +2,7 @@
 
 import { ThemeProvider as NextThemesProvider } from "next-themes";
 import { Toaster } from "@/components/ui/sonner";
+import { ConfirmModalProvider } from "@/providers/confirm-modal-provider";
 
 export default function ClientProviders({
   children,
@@ -15,8 +16,10 @@ export default function ClientProviders({
       defaultTheme="system"
       themes={["dark", "light", "system"]}
     >
-      {children}
-      <Toaster richColors closeButton />
+      <ConfirmModalProvider>
+        {children}
+        <Toaster richColors closeButton />
+      </ConfirmModalProvider>
     </NextThemesProvider>
   );
 }

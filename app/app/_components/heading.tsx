@@ -2,17 +2,9 @@
 
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogDescription,
-  DialogFooter,
-} from "@/components/ui/dialog";
 import { Trash2, type LucideIcon } from "lucide-react";
 import Link from "next/link";
-import { useState } from "react";
+import { useConfirmModal } from "@/providers/confirm-modal-context";
 
 interface HeadingProps {
   title: string;
@@ -38,7 +30,24 @@ export default function Heading({
   redirect,
   deleteButton,
 }: HeadingProps) {
-  const [open, setOpen] = useState(false);
+  const { confirmModal } = useConfirmModal();
+
+  const handleDelete = async () => {
+    if (deleteButton?.confirmModal) {
+      const confirmed = await confirmModal({
+        heading: deleteButton.confirmModal.heading,
+        description: deleteButton.confirmModal.description,
+        confirmLabel: "Delete",
+        confirmVariant: "destructive",
+      });
+
+      if (confirmed) {
+        deleteButton.onClick();
+      }
+    } else {
+      deleteButton?.onClick();
+    }
+  };
 
   return (
     <>
@@ -61,46 +70,11 @@ export default function Heading({
           <>
             <Button
               className="bg-red-600 hover:bg-red-700"
-              onClick={() => {
-                if (deleteButton.confirmModal) {
-                  setOpen(true);
-                } else {
-                  deleteButton.onClick();
-                }
-              }}
+              onClick={handleDelete}
             >
               <Trash2 className="mr-2 h-4 w-4" />
               {deleteButton.label}
             </Button>
-
-            {deleteButton.confirmModal && (
-              <Dialog open={open} onOpenChange={setOpen}>
-                <DialogContent>
-                  <DialogHeader>
-                    <DialogTitle>
-                      {deleteButton.confirmModal.heading}
-                    </DialogTitle>
-                    <DialogDescription>
-                      {deleteButton.confirmModal.description}
-                    </DialogDescription>
-                  </DialogHeader>
-                  <DialogFooter>
-                    <Button variant="outline" onClick={() => setOpen(false)}>
-                      Cancel
-                    </Button>
-                    <Button
-                      className="bg-red-600 hover:bg-red-700"
-                      onClick={() => {
-                        deleteButton.onClick();
-                        setOpen(false);
-                      }}
-                    >
-                      Confirm
-                    </Button>
-                  </DialogFooter>
-                </DialogContent>
-              </Dialog>
-            )}
           </>
         )}
       </div>

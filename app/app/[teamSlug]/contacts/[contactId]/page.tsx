@@ -1,4 +1,4 @@
-import { getPhoneNumberByPhoneId } from "@/actions/contacts";
+import { getContactByContactId } from "@/actions/contacts";
 import ContactForm from "@/app/app/[teamSlug]/contacts/[contactId]/_components/contact-form";
 // import ContactForm from "@/app/app/[teamSlug]/contacts/[phoneId]/_components/contact-form";
 import Container from "@/app/app/_components/container";
@@ -10,7 +10,7 @@ export default async function AddContactPage({
 }) {
   const { contactId } = await params;
 
-  const contact = await getPhoneNumberByPhoneId(contactId);
+  const contact = await getContactByContactId(contactId);
 
   return (
     <Container>
