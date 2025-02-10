@@ -106,6 +106,40 @@ export function CellAction({ data }: CellActionProps) {
     }
   };
 
+  const handleReopen = async () => {
+    try {
+      setLoading(true);
+      const confirmed = await confirmModal({
+        heading: "Reopen Campaign",
+        description:
+          "This will move your campaign back to draft state. Are you sure?",
+        confirmLabel: "Reopen",
+        confirmVariant: "default",
+      });
+
+      if (confirmed) {
+        const response = await fetch(
+          `/api/teams/${params.teamSlug}/campaigns/${data.id}/reopen`,
+          {
+            method: "POST",
+          }
+        );
+
+        if (!response.ok) {
+          throw new Error(`Error: ${response.status} ${response.statusText}`);
+        }
+
+        toast.success("Campaign reopened successfully.");
+        router.refresh(); // Refresh the page to reflect changes
+      }
+    } catch (error) {
+      console.error(error);
+      toast.error("Failed to reopen campaign.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <div className="flex items-center gap-2">
       <TooltipProvider delayDuration={50}>
@@ -139,11 +173,7 @@ export function CellAction({ data }: CellActionProps) {
           <DropdownMenuLabel>Actions</DropdownMenuLabel>
           {data.status === "FAILED" || data.status === "COMPLETED" ? (
             // Add revoke action if campaign status is failed or completed
-            <DropdownMenuItem
-              onClick={() => {
-                // Handle revoke action
-              }}
-            >
+            <DropdownMenuItem onClick={handleReopen} disabled={loading}>
               <Undo2 className="size-4 mr-2" />
               Reopen
             </DropdownMenuItem>

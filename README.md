@@ -40,9 +40,10 @@ Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/bui
 - [x] Add working team switcher
 - [x] Get rid of redundantion in create new or edit existing element
 - [x] Take care of proper table display https://ui.shadcn.com/docs/components/data-table
-- [ ] Add API for contacts and campaigns
-- [ ] manage custom fields like contact search or template select with proper design
-- [ ] Add template form and api
+- [x] Add API for contacts and campaigns
+- [x] manage custom fields like contact search or template select with proper design
+- [x] Add template form and api
+- [ ] Add reopen campaign button for setting used campaign as draft
 
 ## Feature:
 

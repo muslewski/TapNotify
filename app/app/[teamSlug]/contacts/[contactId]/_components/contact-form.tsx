@@ -9,8 +9,8 @@ const contactSchema = z.object({
   name: z.string().min(1, "Name is required"),
   phone: z
     .string()
-    .max(13, "Incorrect phone number")
-    .regex(/^\d+$/, "Phone number must contain only digits"),
+    .max(15, "Incorrect phone number")
+    .regex(/^\+?[1-9]\d{1,14}$/, "Phone number must be in E.164 format"),
 });
 
 const contactFields = [
@@ -25,7 +25,7 @@ const contactFields = [
   {
     name: "phone",
     label: "Phone",
-    placeholder: "123 456 789",
+    placeholder: "123456789",
     description: "Used for SMS notifications.",
     className: "max-w-xs",
     type: "tel",

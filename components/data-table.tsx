@@ -36,12 +36,14 @@ interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
   searchKey: string;
+  pageSize?: number;
 }
 
 export function DataTable<TData, TValue>({
   columns,
   data,
   searchKey,
+  pageSize = 8,
 }: DataTableProps<TData, TValue>) {
   const [sorting, setSorting] = useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
@@ -63,7 +65,7 @@ export function DataTable<TData, TValue>({
       columnFilters,
       columnVisibility,
     },
-    initialState: { pagination: { pageSize: 8 } },
+    initialState: { pagination: { pageSize: pageSize } },
   });
 
   return (
