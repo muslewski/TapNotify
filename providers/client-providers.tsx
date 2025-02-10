@@ -13,7 +13,7 @@ export default function ClientProviders({
     <NextThemesProvider
       attribute="class"
       enableSystem
-      defaultTheme="system"
+      defaultTheme="light"
       themes={["dark", "light", "system"]}
     >
       <ConfirmModalProvider>

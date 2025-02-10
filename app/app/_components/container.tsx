@@ -9,8 +9,6 @@ interface ContainerProps {
 
 export default function Container({ children, className }: ContainerProps) {
   return (
-    <div className={cn("space-y-4 p-8 pt-6 h-full overflow-auto", className)}>
-      {children}
-    </div>
+    <div className={cn("space-y-4 p-8 pt-6 h-full", className)}>{children}</div>
   );
 }

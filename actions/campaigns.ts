@@ -23,6 +23,12 @@ export async function getCampaignByCampaignId(campaignId: string) {
     where: {
       id: campaignId,
     },
+    include: {
+      messages: {
+        include: { recipient: true },
+      },
+      template: true,
+    },
   });
 
   return campaign;

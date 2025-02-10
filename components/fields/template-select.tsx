@@ -12,24 +12,20 @@ import {
 import { MessageTemplate } from "@prisma/client";
 import { Loader2 } from "lucide-react";
 import { formatTemplateContent } from "@/components/format-template-content";
-
-interface TemplateSelectFieldProps {
-  field: {
-    value: string;
-    onChange: (value: string) => void;
-  };
-  disabled?: boolean;
-}
+import { CustomFieldProps } from "@/types";
 
 export function TemplateSelectField({
   field,
   disabled,
-}: TemplateSelectFieldProps) {
+  customProps,
+}: CustomFieldProps) {
   const { teamSlug } = useParams();
   const [templates, setTemplates] = useState<MessageTemplate[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [selectedTemplate, setSelectedTemplate] =
-    useState<MessageTemplate | null>(null);
+    useState<MessageTemplate | null>(
+      customProps?.initialSelectedTemplate || null
+    );
 
   useEffect(() => {
     const fetchTemplates = async () => {
@@ -78,7 +74,7 @@ export function TemplateSelectField({
         defaultValue={field.value}
       >
         <SelectTrigger className="w-full min-h-fit bg-background border-2 py-2 hover:bg-accent/10 transition-all duration-200 ease-in-out">
-          <div className="flex items-start text-start gap-2 w-full">
+          <div className="flex items-start text-start gap-2 w-full font-medium">
             {isLoading ? (
               <Loader2 className="h-4 w-4 animate-spin" />
             ) : (
@@ -88,7 +84,7 @@ export function TemplateSelectField({
                     <span className="text-sm font-medium pb-2">
                       {selectedTemplate.title}
                     </span>
-                    <div className="text-xs text-muted-foreground">
+                    <div className="text-xs text-muted-foreground font-normal">
                       {formatTemplateContent(selectedTemplate.content)}
                     </div>
                   </>

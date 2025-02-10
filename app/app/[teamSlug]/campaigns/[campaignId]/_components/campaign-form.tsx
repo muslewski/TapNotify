@@ -4,8 +4,14 @@ import EntityForm from "@/components/entity-form";
 import { ContactSearchField } from "@/components/fields/contact-search";
 import { TemplateSelectField } from "@/components/fields/template-select";
 import { EntityConfig, FormFieldConfig } from "@/types";
-import { Campaign } from "@prisma/client";
+import { Campaign, Contact, Message, MessageTemplate } from "@prisma/client";
 import { z } from "zod";
+
+// Extend the Campaign type to include related data
+interface CampaignWithRelations extends Campaign {
+  messages?: Array<Message & { recipient: Contact }>;
+  template?: MessageTemplate;
+}
 
 const campaignSchema = z.object({
   title: z.string().min(1, "Name is required"),
@@ -13,7 +19,15 @@ const campaignSchema = z.object({
   templateId: z.string(),
 });
 
-const campaignFields = [
+// Create a function to extract contact IDs from campaign messages
+const getInitialContacts = (campaign: CampaignWithRelations): Contact[] => {
+  if (!campaign.messages) return [];
+  return campaign.messages.map((message) => message.recipient);
+};
+
+const getCampaignFields = (
+  initialData?: CampaignWithRelations
+): FormFieldConfig[] => [
   {
     name: "title",
     label: "Title",
@@ -29,6 +43,11 @@ const campaignFields = [
     type: "custom",
     className: "max-w-md",
     component: ContactSearchField,
+    customProps: initialData
+      ? {
+          initialSelectedContacts: getInitialContacts(initialData),
+        }
+      : undefined,
   },
   {
     name: "templateId",
@@ -37,8 +56,13 @@ const campaignFields = [
     type: "custom",
     className: "max-w-2xl",
     component: TemplateSelectField,
+    customProps: initialData
+      ? {
+          initialSelectedTemplate: initialData.template,
+        }
+      : undefined,
   },
-] satisfies FormFieldConfig[];
+];
 
 export default function CampaignForm({
   initialData,
@@ -52,7 +76,7 @@ export default function CampaignForm({
     entityParam: "campaignId",
     schema: campaignSchema,
     initialData: initialData,
-    fields: campaignFields,
+    fields: getCampaignFields(initialData),
   } satisfies EntityConfig<Campaign>;
 
   return <EntityForm config={config} />;

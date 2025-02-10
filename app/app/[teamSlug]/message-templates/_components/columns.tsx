@@ -11,7 +11,7 @@ export type MessageTemplateColumn = MessageTemplate & {
   // Add any additional properties if needed
 };
 
-export const columns: ColumnDef<MessageTemplate>[] = [
+export const columns: ColumnDef<MessageTemplateColumn>[] = [
   {
     accessorKey: "title",
     header: ({ column }) => <SortButton column={column} label="Title" />,

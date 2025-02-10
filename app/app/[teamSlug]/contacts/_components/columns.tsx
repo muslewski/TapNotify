@@ -10,7 +10,7 @@ export type ContactColumn = Contact & {
   // Add any additional properties if needed
 };
 
-export const columns: ColumnDef<Contact>[] = [
+export const columns: ColumnDef<ContactColumn>[] = [
   {
     accessorKey: "name",
     header: ({ column }) => <SortButton column={column} label="Name" />,

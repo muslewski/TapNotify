@@ -65,11 +65,14 @@ export function ContactSearchField({
   field,
   form,
   disabled,
+  customProps,
 }: CustomFieldProps) {
   const [open, setOpen] = useState(false);
   const [contacts, setContacts] = useState<Contact[]>([]);
   const [inputValue, setInputValue] = useState("");
-  const [selectedContacts, setSelectedContacts] = useState<Contact[]>([]);
+  const [selectedContacts, setSelectedContacts] = useState<Contact[]>(
+    customProps?.initialSelectedContacts || []
+  );
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const params = useParams();
