@@ -58,7 +58,10 @@ export default function Heading({
         </div>
 
         {redirect && (
-          <Button className="bg-foreground hover:bg-muted-foreground" asChild>
+          <Button
+            className="bg-foreground text-background hover:bg-muted-foreground"
+            asChild
+          >
             <Link href={redirect.href}>
               <redirect.icon className="mr-2 h-4 w-4" />
               {redirect.label}

@@ -2,6 +2,7 @@
 
 import { CellAction } from "@/app/app/[teamSlug]/message-templates/_components/cell-action";
 import SortButton from "@/app/app/_components/sort-button";
+import { formatTemplateContent } from "@/components/format-template-content";
 import { MessageTemplate } from "@prisma/client";
 import { ColumnDef } from "@tanstack/react-table";
 import { format } from "date-fns";
@@ -18,6 +19,9 @@ export const columns: ColumnDef<MessageTemplate>[] = [
   {
     accessorKey: "content",
     header: "Content",
+    cell: ({ row }) => (
+      <div className="">{formatTemplateContent(row.original.content)}</div>
+    ),
   },
   {
     accessorKey: "createdAt",

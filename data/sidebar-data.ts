@@ -90,8 +90,8 @@ export const sidebarData = (teamSlug: string): SidebarDataInterface => ({
           url: `/app/${teamSlug}/campaigns`,
         },
         {
-          title: "Create Campaign",
-          url: `/app/${teamSlug}/campaigns/create`,
+          title: "Add Campaign",
+          url: `/app/${teamSlug}/campaigns/add`,
         },
         {
           title: "Edit Campaign",

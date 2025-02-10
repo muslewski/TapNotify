@@ -23,7 +23,7 @@ const messageTemplateFields = [
     name: "content",
     label: "Message Content",
     placeholder: "Hello {{name}}, Hot summer deals! Up to 50% OFF - shop now!",
-    description: "Use {{name}} to personalize the message.",
+    description: "Use {{name}} or {{phone}} to personalize the message.",
     className: "max-w-5xl",
     type: "textarea",
   },

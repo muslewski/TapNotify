@@ -8,15 +8,16 @@ import { Campaign } from "@prisma/client";
 import { z } from "zod";
 
 const campaignSchema = z.object({
-  name: z.string().min(1, "Name is required"),
+  title: z.string().min(1, "Name is required"),
   contactIds: z.array(z.string()),
   templateId: z.string(),
 });
 
 const campaignFields = [
   {
-    name: "name",
-    label: "Campaign Name",
+    name: "title",
+    label: "Title",
+    description: "The title of the campaign.",
     type: "text",
     className: "max-w-xl",
     placeholder: "Summer Sale 2025",
@@ -24,23 +25,18 @@ const campaignFields = [
   {
     name: "contactIds",
     label: "Select Contacts",
+    description: "Select contacts to include in the campaign.",
     type: "custom",
     className: "max-w-md",
     component: ContactSearchField,
-    customProps: {
-      // Any additional props you want to pass to the component
-      maxSelections: 10,
-    },
   },
   {
     name: "templateId",
     label: "Message Template",
+    description: "Select a message template for the campaign.",
     type: "custom",
     className: "max-w-2xl",
     component: TemplateSelectField,
-    customProps: {
-      templates: [], // You'll need to fetch and pass templates here
-    },
   },
 ] satisfies FormFieldConfig[];
 

@@ -11,15 +11,17 @@ export const columns: ColumnDef<Campaign>[] = [
     header: "Status",
   },
   {
-    accessorKey: "name",
-    header: ({ column }) => <SortButton column={column} label="Name" />,
+    accessorKey: "title",
+    header: ({ column }) => <SortButton column={column} label="Title" />,
   },
   {
-    accessorKey: "numbers",
+    // TODO: This should be redirection to manage contacts
+    accessorKey: "messages.length",
     header: "Contacts",
   },
   {
-    accessorKey: "template",
+    // TODO: This should display the preview of the message with edit button
+    accessorKey: "template.title",
     header: "Message Template",
   },
   {

@@ -9,6 +9,10 @@ export async function getCampaignsByTeamSlug(teamSlug: string) {
         slug: teamSlug,
       },
     },
+    include: {
+      template: true,
+      messages: true,
+    },
   });
 
   return campaigns;

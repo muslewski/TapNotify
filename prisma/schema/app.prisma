@@ -26,7 +26,7 @@ model TeamMember {
 
 model Campaign {
   id          String          @id @default(cuid())
-  name        String
+  title       String
   createdAt   DateTime        @default(now())
   updatedAt   DateTime        @updatedAt
   status      String          @default("DRAFT")
@@ -56,15 +56,15 @@ model MessageTemplate {
 model Message {
   id           String      @id @default(cuid())
   message      String
-  status       String      @default("PENDING")
+  status       String      @default("DRAFT")
   createdAt    DateTime    @default(now())
   updatedAt    DateTime    @updatedAt
   sentAt       DateTime?
   errorMessage String?
   campaignId   String
-  phoneId      String
+  recipientId  String
   campaign     Campaign    @relation(fields: [campaignId], references: [id], onDelete: Cascade)
-  recipient    Contact     @relation(fields: [phoneId], references: [id], onDelete: Cascade)
+  recipient    Contact     @relation(fields: [recipientId], references: [id], onDelete: Cascade)
 }
 
 model Contact {

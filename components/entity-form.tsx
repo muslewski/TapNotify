@@ -80,7 +80,7 @@ export default function EntityForm<T>({ config }: { config: EntityConfig<T> }) {
       router.push(`/app/${params.teamSlug}/${config.entityPath}`);
       router.refresh();
     } catch (error) {
-      console.log(error);
+      console.error(error);
       if (error instanceof Error) toast.error(error.message);
     }
   };
@@ -199,7 +199,7 @@ export default function EntityForm<T>({ config }: { config: EntityConfig<T> }) {
 
           <Button
             type="submit"
-            className="w-fit bg-foreground hover:bg-muted-foreground"
+            className="w-fit bg-foreground text-background hover:bg-muted-foreground"
             disabled={isSubmitting || loading}
           >
             {isSubmitting ? "Saving..." : action}
