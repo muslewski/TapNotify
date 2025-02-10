@@ -21,6 +21,7 @@ import {
   MoreHorizontalIcon,
   SendIcon,
   TrashIcon,
+  Undo2,
 } from "lucide-react";
 import { useParams, useRouter } from "next/navigation";
 import { useState } from "react";
@@ -48,9 +49,20 @@ export function CellAction({ data }: CellActionProps) {
       });
 
       if (confirmed) {
-        // For now just console log, but this is where you would add the API call
-        console.log("Starting");
-        toast.success("Campaign started successfully.");
+        // Send request to send campaign
+        const response = await fetch(
+          `/api/teams/${params.teamSlug}/campaigns/${data.id}/send`,
+          {
+            method: "POST",
+          }
+        );
+
+        if (!response.ok) {
+          throw new Error(`Error: ${response.status} ${response.statusText}`);
+        }
+
+        toast.success("Campaign sent messages successfully.");
+        router.refresh(); // Refresh the page to reflect changes
       }
     } catch (error) {
       console.error(error);
@@ -104,7 +116,7 @@ export function CellAction({ data }: CellActionProps) {
               size="icon"
               className="size-8 p-0"
               onClick={startCampaign}
-              disabled={loading}
+              disabled={loading || data.status !== "DRAFT"}
             >
               <SendIcon className="size-4" />
             </Button>
@@ -125,14 +137,28 @@ export function CellAction({ data }: CellActionProps) {
 
         <DropdownMenuContent align="end">
           <DropdownMenuLabel>Actions</DropdownMenuLabel>
-          <DropdownMenuItem
-            onClick={() =>
-              router.push(`/app/${params.teamSlug}/campaigns/${data.id}`)
-            }
-          >
-            <EditIcon className="size-4 mr-2" />
-            Edit
-          </DropdownMenuItem>
+          {data.status === "FAILED" || data.status === "COMPLETED" ? (
+            // Add revoke action if campaign status is failed or completed
+            <DropdownMenuItem
+              onClick={() => {
+                // Handle revoke action
+              }}
+            >
+              <Undo2 className="size-4 mr-2" />
+              Reopen
+            </DropdownMenuItem>
+          ) : null}
+
+          {data.status === "FAILED" || data.status === "COMPLETED" ? null : (
+            <DropdownMenuItem
+              onClick={() =>
+                router.push(`/app/${params.teamSlug}/campaigns/${data.id}`)
+              }
+            >
+              <EditIcon className="size-4 mr-2" />
+              Edit
+            </DropdownMenuItem>
+          )}
           <DropdownMenuItem onClick={handleDelete} disabled={loading}>
             <TrashIcon className="size-4 mr-2" />
             Delete

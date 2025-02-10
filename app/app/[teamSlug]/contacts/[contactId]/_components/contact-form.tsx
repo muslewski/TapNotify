@@ -1,7 +1,7 @@
 "use client";
 
 import EntityForm from "@/components/entity-form";
-import { EntityConfig, FormFieldConfig } from "@/types";
+import { EntityConfig, FormFieldConfig } from "@/types/entity-form";
 import { Contact } from "@prisma/client";
 import { z } from "zod";
 

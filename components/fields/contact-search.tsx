@@ -18,7 +18,7 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { useCallback, useEffect, useMemo, useState } from "react";
-import type { CustomFieldProps } from "@/types";
+import type { CustomFieldProps } from "@/types/entity-form";
 import type { Contact } from "@prisma/client";
 import { useParams } from "next/navigation";
 import { Badge } from "@/components/ui/badge";

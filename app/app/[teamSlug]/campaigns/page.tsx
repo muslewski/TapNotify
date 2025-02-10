@@ -1,4 +1,4 @@
-import { getCampaignsByTeamSlug } from "@/actions/campaigns";
+import { getCampaignsByTeamSlug } from "@/actions/database/campaigns";
 import CampaignClient from "@/app/app/[teamSlug]/campaigns/_components/client";
 import Container from "@/app/app/_components/container";
 

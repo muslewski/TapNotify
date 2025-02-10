@@ -1,4 +1,4 @@
-import { getMessageTemplateByTemplateId } from "@/actions/message-templates";
+import { getMessageTemplateByTemplateId } from "@/actions/database/message-templates";
 import MessageTemplateForm from "@/app/app/[teamSlug]/message-templates/[templateId]/_components/message-template-form";
 import Container from "@/app/app/_components/container";
 import NotFound from "@/app/app/_components/not-found";

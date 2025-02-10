@@ -17,7 +17,7 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import Heading from "@/app/app/_components/heading";
-import { EntityConfig, FormFieldConfig } from "@/types";
+import { EntityConfig, FormFieldConfig } from "@/types/entity-form";
 import { Textarea } from "@/components/ui/textarea";
 import { cn } from "@/lib/utils";
 import { useConfirmModal } from "@/providers/confirm-modal-context";

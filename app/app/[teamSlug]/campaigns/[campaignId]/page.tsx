@@ -1,4 +1,4 @@
-import { getCampaignByCampaignId } from "@/actions/campaigns";
+import { getCampaignByCampaignId } from "@/actions/database/campaigns";
 import CampaignForm from "@/app/app/[teamSlug]/campaigns/[campaignId]/_components/campaign-form";
 import Container from "@/app/app/_components/container";
 import NotFound from "@/app/app/_components/not-found";

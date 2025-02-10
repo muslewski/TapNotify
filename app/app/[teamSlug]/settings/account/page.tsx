@@ -1,6 +1,6 @@
 import Container from "@/app/app/_components/container";
 import AccountForm from "@/app/app/[teamSlug]/settings/account/_components/account-form";
-import { getUserById } from "@/actions/users";
+import { getUserById } from "@/actions/database/users";
 import { currentUserId } from "@/lib/auth";
 
 export default async function SettingsPage() {

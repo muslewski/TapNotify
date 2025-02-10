@@ -1,4 +1,4 @@
-import { getContactByContactId } from "@/actions/contacts";
+import { getContactByContactId } from "@/actions/database/contacts";
 import ContactForm from "@/app/app/[teamSlug]/contacts/[contactId]/_components/contact-form";
 import Container from "@/app/app/_components/container";
 import NotFound from "@/app/app/_components/not-found";

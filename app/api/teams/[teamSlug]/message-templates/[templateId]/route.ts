@@ -1,6 +1,6 @@
 // GET, PATCH, DELETE specific template
 
-import { isTeamMember } from "@/actions/teamMembers";
+import { isTeamMember } from "@/actions/database/teamMembers";
 import { currentUserId } from "@/lib/auth";
 import db from "@/lib/prisma";
 import { NextResponse } from "next/server";

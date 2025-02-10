@@ -1,4 +1,4 @@
-import { getTeamBySlug } from "@/actions/teams";
+import { getTeamBySlug } from "@/actions/database/teams";
 import SettingsForm from "@/app/app/[teamSlug]/settings/_components/settings-form";
 import Container from "@/app/app/_components/container";
 

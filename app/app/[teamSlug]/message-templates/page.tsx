@@ -1,4 +1,4 @@
-import { getMessageTemplatesByTeamSlug } from "@/actions/message-templates";
+import { getMessageTemplatesByTeamSlug } from "@/actions/database/message-templates";
 import ContactClient from "@/app/app/[teamSlug]/message-templates/_components/client";
 import Container from "@/app/app/_components/container";
 

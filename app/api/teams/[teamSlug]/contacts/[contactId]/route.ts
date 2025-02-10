@@ -1,7 +1,7 @@
 // GET, PATCH, DELETE specific contact
 
-import { doesContactExistAndNotSameContact } from "@/actions/contacts";
-import { isTeamMember } from "@/actions/teamMembers";
+import { doesContactExistAndNotSameContact } from "@/actions/database/contacts";
+import { isTeamMember } from "@/actions/database/teamMembers";
 import { currentUserId } from "@/lib/auth";
 import db from "@/lib/prisma";
 import { NextResponse } from "next/server";

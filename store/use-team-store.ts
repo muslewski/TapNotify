@@ -1,7 +1,7 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 import { Team } from "@prisma/client";
-import { getUserTeamsById } from "@/actions/teams";
+import { getUserTeamsById } from "@/actions/database/teams";
 
 interface TeamState {
   teams: Team[];

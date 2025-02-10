@@ -1,3 +1,22 @@
+enum Role {
+  ADMIN
+  MEMBER
+}
+
+enum MessageStatus {
+  DRAFT
+  PENDING
+  SENT
+  FAILED
+}
+
+enum CampaignStatus {
+  DRAFT
+  SCHEDULED
+  COMPLETED
+  FAILED
+}
+
 model Team {
   id                String           @id @default(cuid())
   name              String
@@ -13,7 +32,7 @@ model Team {
 
 model TeamMember {
   id        String   @id @default(cuid())
-  role      String   @default("MEMBER") // e.g., "ADMIN", "MEMBER"
+  role      Role     @default(MEMBER)
   userId    String
   teamId    String
   joinedAt  DateTime @default(now())
@@ -29,8 +48,9 @@ model Campaign {
   title       String
   createdAt   DateTime        @default(now())
   updatedAt   DateTime        @updatedAt
-  status      String          @default("DRAFT")
+  status      CampaignStatus  @default(DRAFT)
   scheduledAt DateTime?
+  completedAt DateTime?
   teamId      String
   templateId  String
   userId      String
@@ -54,18 +74,18 @@ model MessageTemplate {
 }
 
 model Message {
-  id           String      @id @default(cuid())
+  id           String         @id @default(cuid())
   message      String
-  status       String      @default("DRAFT")
-  createdAt    DateTime    @default(now())
-  updatedAt    DateTime    @updatedAt
+  status       MessageStatus  @default(DRAFT)
+  createdAt    DateTime       @default(now())
+  updatedAt    DateTime       @updatedAt
   sentAt       DateTime?
   errorMessage String?
   campaignId   String
   recipientId  String
-  campaign     Campaign    @relation(fields: [campaignId], references: [id], onDelete: Cascade)
-  recipient    Contact     @relation(fields: [recipientId], references: [id], onDelete: Cascade)
-}
+  campaign     Campaign       @relation(fields: [campaignId], references: [id], onDelete: Cascade)
+  recipient    Contact        @relation(fields: [recipientId], references: [id], onDelete: Cascade)
+} 
 
 model Contact {
   id        String    @id @default(cuid())

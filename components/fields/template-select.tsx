@@ -12,7 +12,7 @@ import {
 import { MessageTemplate } from "@prisma/client";
 import { Loader2 } from "lucide-react";
 import { formatTemplateContent } from "@/components/format-template-content";
-import { CustomFieldProps } from "@/types";
+import { CustomFieldProps } from "@/types/entity-form";
 
 export function TemplateSelectField({
   field,

@@ -3,7 +3,7 @@
 import EntityForm from "@/components/entity-form";
 import { ContactSearchField } from "@/components/fields/contact-search";
 import { TemplateSelectField } from "@/components/fields/template-select";
-import { EntityConfig, FormFieldConfig } from "@/types";
+import { EntityConfig, FormFieldConfig } from "@/types/entity-form";
 import { Campaign, Contact, Message, MessageTemplate } from "@prisma/client";
 import { z } from "zod";
 
