@@ -1,11 +1,11 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { AlertCircle } from "lucide-react";
+import { Construction } from "lucide-react";
 import Link from "next/link";
 import { useParams } from "next/navigation";
 
-export default function NotFound() {
+export default function UnderDevelopment() {
   const params = useParams();
 
   let redirectPath = "/app";
@@ -21,14 +21,14 @@ export default function NotFound() {
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.8, ease: "easeOut" }}
       >
-        Page Not Found
+        Under Development
       </motion.h1>
       <motion.div
         initial={{ scale: 0 }}
         animate={{ scale: 1 }}
         transition={{ duration: 0.5, delay: 0.2 }}
       >
-        <AlertCircle className="h-12 w-12 text-destructive" />
+        <Construction className="h-12 w-12 text-warning" />
       </motion.div>
       <motion.p
         className="mt-4 text-lg text-muted-foreground text-center"
@@ -36,7 +36,7 @@ export default function NotFound() {
         animate={{ opacity: 1 }}
         transition={{ duration: 0.5, delay: 0.5 }}
       >
-        Oops! The page you&apos;re looking for doesnt exist.
+        This feature is currently under development and will be available soon!
       </motion.p>
       <motion.div
         initial={{ opacity: 0, y: 20 }}

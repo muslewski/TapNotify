@@ -24,12 +24,13 @@ import {
   HouseIcon,
   LogOutIcon,
   PanelTopIcon,
-  SparklesIcon,
+  // SparklesIcon,
 } from "lucide-react";
 import { useSession } from "next-auth/react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { motion } from "framer-motion";
 
 export function NavUser() {
   const user = useCurrentUser();
@@ -68,9 +69,15 @@ export function NavUser() {
 
   if (!user) {
     return (
-      <Button variant="outline" asChild>
-        <Link href="/sign-in">Sign In</Link>
-      </Button>
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.3 }}
+      >
+        <Button variant="outline" asChild>
+          <Link href="/sign-in">Sign In</Link>
+        </Button>
+      </motion.div>
     );
   }
 
@@ -85,7 +92,7 @@ export function NavUser() {
       <DropdownMenuTrigger asChild>
         <SidebarMenuButton
           size="lg"
-          className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
+          className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground group/button"
         >
           <Avatar className="h-8 w-8 rounded-lg">
             <AvatarImage
@@ -98,7 +105,9 @@ export function NavUser() {
             <span className="truncate font-semibold">{user.name}</span>
             <span className="truncate text-xs">{user.email}</span>
           </div>
-          <ChevronsUpDownIcon className="ml-auto size-4" />
+          <div className="transition-transform duration-200 group-hover/button:rotate-180">
+            <ChevronsUpDownIcon className="ml-auto size-4" />
+          </div>
         </SidebarMenuButton>
       </DropdownMenuTrigger>
 
@@ -124,14 +133,14 @@ export function NavUser() {
           </div>
         </DropdownMenuLabel>
 
-        <DropdownMenuSeparator />
+        {/* <DropdownMenuSeparator />
 
         <DropdownMenuGroup>
           <DropdownMenuItem>
             <SparklesIcon />
             Upgrade to Pro
           </DropdownMenuItem>
-        </DropdownMenuGroup>
+        </DropdownMenuGroup> */}
         <DropdownMenuSeparator />
         <DropdownMenuGroup>
           <DropdownMenuItem

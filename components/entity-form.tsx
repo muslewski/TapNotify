@@ -44,6 +44,8 @@ export default function EntityForm<T>({ config }: { config: EntityConfig<T> }) {
     ? `${config.entityName} updated successfully.`
     : `${config.entityName} created successfully.`;
 
+  const HeadingIcon = config.entityHeadingIcon;
+
   // Create initial default values from fields configuration
   const defaultValues = config.fields.reduce(
     (acc, field) => ({
@@ -157,6 +159,7 @@ export default function EntityForm<T>({ config }: { config: EntityConfig<T> }) {
       <Heading
         title={title}
         description={description}
+        mainIcon={HeadingIcon}
         deleteButton={
           config.initialData
             ? {

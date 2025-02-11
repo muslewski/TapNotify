@@ -1,5 +1,5 @@
 import { isTeamMember } from "@/actions/database/teamMembers";
-import sendSMS from "@/actions/send-sms";
+import sendSMS from "@/actions/twilio/send-sms";
 import { currentUserId } from "@/lib/auth";
 import db from "@/lib/prisma";
 import { NextResponse } from "next/server";
@@ -53,6 +53,11 @@ export async function POST(_req: Request, { params }: SendFunctionParams) {
             recipient: true,
           },
         },
+        team: {
+          select: {
+            alphaSenderId: true,
+          },
+        },
       },
     });
 
@@ -63,6 +68,7 @@ export async function POST(_req: Request, { params }: SendFunctionParams) {
 
     // Prepare messages for sending
     const messagesToSend = campaign.messages.map((message) => ({
+      alphanumericSenderId: campaign.team.alphaSenderId,
       phoneNumber: message.recipient.phone,
       message: message.message,
       messageId: message.id,
@@ -80,7 +86,11 @@ export async function POST(_req: Request, { params }: SendFunctionParams) {
 
     for (const messageData of messagesToSend) {
       try {
-        await sendSMS(messageData.phoneNumber, messageData.message);
+        await sendSMS(
+          messageData.alphanumericSenderId || "",
+          messageData.phoneNumber,
+          messageData.message
+        );
 
         await db.message.update({
           where: {

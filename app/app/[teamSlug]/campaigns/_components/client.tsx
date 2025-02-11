@@ -6,7 +6,7 @@ import {
 } from "@/app/app/[teamSlug]/campaigns/_components/columns";
 import Heading from "@/app/app/_components/heading";
 import { DataTable } from "@/components/data-table";
-import { PlusIcon } from "lucide-react";
+import { PlusIcon, Waypoints } from "lucide-react";
 import { useParams } from "next/navigation";
 
 export default function CampaignClient({
@@ -19,7 +19,9 @@ export default function CampaignClient({
   return (
     <>
       <Heading
-        title={`Campaigns (${initialData.length})`}
+        title={`Campaigns`}
+        mainIcon={Waypoints}
+        number={initialData.length}
         description="Manage your campaigns"
         redirect={{
           label: "Add Campaign",

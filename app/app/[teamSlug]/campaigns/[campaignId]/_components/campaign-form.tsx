@@ -5,6 +5,7 @@ import { ContactSearchField } from "@/components/fields/contact-search";
 import { TemplateSelectField } from "@/components/fields/template-select";
 import { EntityConfig, FormFieldConfig } from "@/types/entity-form";
 import { Campaign, Contact, Message, MessageTemplate } from "@prisma/client";
+import { FolderPenIcon, FolderPlusIcon } from "lucide-react";
 import { z } from "zod";
 
 // Extend the Campaign type to include related data
@@ -74,6 +75,7 @@ export default function CampaignForm({
     entityNamePlural: "Campaigns",
     entityPath: "campaigns",
     entityParam: "campaignId",
+    entityHeadingIcon: initialData ? FolderPenIcon : FolderPlusIcon,
     schema: campaignSchema,
     initialData: initialData,
     fields: getCampaignFields(initialData),

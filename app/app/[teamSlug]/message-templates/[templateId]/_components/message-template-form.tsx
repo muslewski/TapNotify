@@ -3,6 +3,7 @@
 import EntityForm from "@/components/entity-form";
 import { EntityConfig, FormFieldConfig } from "@/types/entity-form";
 import { MessageTemplate } from "@prisma/client";
+import { MessageSquareCodeIcon, MessageSquareDiffIcon } from "lucide-react";
 import { z } from "zod";
 
 const messageTemplateSchema = z.object({
@@ -39,6 +40,9 @@ export default function MessageTemplateForm({
     entityNamePlural: "Message Templates",
     entityPath: "message-templates",
     entityParam: "templateId",
+    entityHeadingIcon: initialData
+      ? MessageSquareCodeIcon
+      : MessageSquareDiffIcon,
     schema: messageTemplateSchema,
     initialData: initialData,
     fields: messageTemplateFields,

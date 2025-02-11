@@ -1,7 +1,9 @@
 "use client";
 
 import Heading from "@/app/app/_components/heading";
+import UnderDevelopment from "@/app/app/_components/under-development";
 import { User } from "@prisma/client";
+import { UserCog } from "lucide-react";
 
 interface AccountFormProps {
   initialData: User;
@@ -23,6 +25,7 @@ export default function AccountForm({ initialData }: AccountFormProps) {
       <Heading
         title="Account Settings"
         description="Manage your account settings (independent of the team)"
+        mainIcon={UserCog}
         deleteButton={{
           label: "Delete Account",
           onClick: onDelete,
@@ -32,7 +35,7 @@ export default function AccountForm({ initialData }: AccountFormProps) {
           },
         }}
       />
-      <div className="h-full text-xl"> Coming Soon...</div>
+      <UnderDevelopment />
     </>
   );
 }

@@ -16,6 +16,7 @@ import { UploadDropzone } from "@/lib/utils";
 import { useTeamStore } from "@/store/use-team-store";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Team } from "@prisma/client";
+import { CogIcon } from "lucide-react";
 import Image from "next/image";
 import { useParams, useRouter } from "next/navigation";
 import { useState } from "react";
@@ -31,7 +32,11 @@ const formSchema = z.object({
 
 type SettingsFormValues = z.infer<typeof formSchema>;
 
-export default function SettingsForm({ initialData }: { initialData: Team }) {
+export default function TeamSettingsForm({
+  initialData,
+}: {
+  initialData: Team;
+}) {
   const params = useParams();
   const router = useRouter();
   const { updateTeam } = useTeamStore();
@@ -122,6 +127,7 @@ export default function SettingsForm({ initialData }: { initialData: Team }) {
     <>
       <Heading
         title="Team Settings"
+        mainIcon={CogIcon}
         description="Manage your team settings"
         deleteButton={{
           label: "Delete Team",

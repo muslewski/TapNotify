@@ -5,9 +5,9 @@ import { use } from "react";
 import Container from "@/app/app/_components/container";
 import Heading from "@/app/app/_components/heading";
 import UnderDevelopment from "@/app/app/_components/under-development";
-import { ChartSplineIcon } from "lucide-react";
+import { ImportIcon } from "lucide-react";
 
-export default function AnalyticsPage({
+export default function ImportContactsPage({
   params,
 }: {
   params: Promise<{ teamSlug: string }>;
@@ -18,9 +18,9 @@ export default function AnalyticsPage({
   return (
     <Container>
       <Heading
-        title="Analytics"
-        mainIcon={ChartSplineIcon}
-        description="View detailed insights"
+        title="Import Contacts"
+        mainIcon={ImportIcon}
+        description="Import your contacts from external sources"
       />
       <UnderDevelopment />
     </Container>

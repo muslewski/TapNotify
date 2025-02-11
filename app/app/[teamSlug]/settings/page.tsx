@@ -1,5 +1,5 @@
 import { getTeamBySlug } from "@/actions/database/teams";
-import SettingsForm from "@/app/app/[teamSlug]/settings/_components/settings-form";
+import TeamSettingsForm from "@/app/app/[teamSlug]/settings/_components/team-settings-form";
 import Container from "@/app/app/_components/container";
 
 export default async function SettingsPage({
@@ -17,7 +17,7 @@ export default async function SettingsPage({
 
   return (
     <Container>
-      <SettingsForm initialData={team} />
+      <TeamSettingsForm initialData={team} />
     </Container>
   );
 }

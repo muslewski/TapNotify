@@ -6,9 +6,6 @@ import {
   Smartphone,
   Building,
   ShoppingBag,
-  GalleryVerticalEnd,
-  AudioWaveform,
-  Command,
   type LucideIcon,
   Send,
 } from "lucide-react";
@@ -26,17 +23,12 @@ export interface navMainProps {
       hidden?: boolean;
       /** Dynamic item for breadcrumb */
       dynamic?: boolean;
+      underDevelopment?: boolean;
     }[];
   }[];
 }
 
 export interface SidebarDataInterface extends navMainProps {
-  teams: {
-    name: string;
-    logo: React.ElementType;
-    plan: string;
-  }[];
-
   projects: {
     name: string;
     url: string;
@@ -45,23 +37,6 @@ export interface SidebarDataInterface extends navMainProps {
 }
 
 export const sidebarData = (teamSlug: string): SidebarDataInterface => ({
-  teams: [
-    {
-      name: "Acme Inc",
-      logo: GalleryVerticalEnd,
-      plan: "Enterprise",
-    },
-    {
-      name: "Acme Corp.",
-      logo: AudioWaveform,
-      plan: "Startup",
-    },
-    {
-      name: "Evil Corp.",
-      logo: Command,
-      plan: "Free",
-    },
-  ],
   navMain: [
     {
       title: "Dashboard",
@@ -76,6 +51,7 @@ export const sidebarData = (teamSlug: string): SidebarDataInterface => ({
         {
           title: "Analytics",
           url: `/app/${teamSlug}/dashboard/analytics`,
+          underDevelopment: true,
         },
       ],
     },
@@ -99,10 +75,11 @@ export const sidebarData = (teamSlug: string): SidebarDataInterface => ({
           hidden: true,
           dynamic: true,
         },
-        // {
-        //   title: "Scheduled",
-        //   url: `/app/${teamSlug}/campaigns/scheduled`,
-        // },
+        {
+          title: "Schedule",
+          url: `/app/${teamSlug}/campaigns/schedule`,
+          underDevelopment: true,
+        },
       ],
     },
     {
@@ -151,10 +128,11 @@ export const sidebarData = (teamSlug: string): SidebarDataInterface => ({
         //   title: "Groups",
         //   url: `/app/${teamSlug}/contacts/groups`,
         // },
-        // {
-        //   title: "Import",
-        //   url: `/app/${teamSlug}/contacts/import`,
-        // },
+        {
+          title: "Import",
+          url: `/app/${teamSlug}/contacts/import`,
+          underDevelopment: true,
+        },
       ],
     },
     // {
@@ -187,21 +165,23 @@ export const sidebarData = (teamSlug: string): SidebarDataInterface => ({
           url: `/app/${teamSlug}/settings`,
         },
         {
-          title: "Account Settings",
+          title: "Account",
           url: `/app/${teamSlug}/settings/account`,
+          underDevelopment: true,
         },
-        {
-          title: "Billing",
-          url: `/app/${teamSlug}/settings/account/billing`,
-        },
+        // {
+        //   title: "Billing",
+        //   url: `/app/${teamSlug}/settings/account/billing`,
+        // },
         // {
         //   title: "Integrations",
         //   url: `/app/${teamSlug}/settings/integrations`,
         // },
-        // {
-        //   title: "API Keys",
-        //   url: `/app/${teamSlug}/settings/api-keys`,
-        // },
+        {
+          title: "API Keys",
+          url: `/app/${teamSlug}/settings/api-keys`,
+          underDevelopment: true,
+        },
       ],
     },
   ],

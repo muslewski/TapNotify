@@ -23,6 +23,7 @@ import Image from "next/image";
 import { useCurrentUser } from "@/hooks/use-current-user";
 import { useTeamStore } from "@/store/use-team-store";
 import { useTeamNavigation } from "@/hooks/use-team-navigation";
+import CustomSidebarGroupLabel from "@/components/nav/sidebar/sidebar-group-label";
 
 export default function TeamSwitcher() {
   const { isMobile } = useSidebar();
@@ -122,7 +123,7 @@ export default function TeamSwitcher() {
 
   return (
     <SidebarGroup>
-      <SidebarGroupLabel>Team</SidebarGroupLabel>
+      <CustomSidebarGroupLabel>Team</CustomSidebarGroupLabel>
       <SidebarMenu>
         <DropdownMenu>
           <DropdownMenuTrigger asChild>

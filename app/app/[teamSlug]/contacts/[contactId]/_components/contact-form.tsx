@@ -3,6 +3,7 @@
 import EntityForm from "@/components/entity-form";
 import { EntityConfig, FormFieldConfig } from "@/types/entity-form";
 import { Contact } from "@prisma/client";
+import { UserPenIcon, UserPlusIcon } from "lucide-react";
 import { z } from "zod";
 
 const contactSchema = z.object({
@@ -42,6 +43,7 @@ export default function ContactForm({
     entityNamePlural: "Contacts",
     entityPath: "contacts",
     entityParam: "contactId",
+    entityHeadingIcon: initialData ? UserPenIcon : UserPlusIcon,
     schema: contactSchema,
     initialData: initialData,
     fields: contactFields,

@@ -1,5 +1,6 @@
 /* eslint-disable  @typescript-eslint/no-explicit-any */
 
+import { type LucideIcon } from "lucide-react";
 import { ComponentType } from "react";
 import { UseFormReturn } from "react-hook-form";
 import { z } from "zod";
@@ -19,6 +20,8 @@ export type EntityConfig<T> = {
    * Example: 'contactId' for `/contacts/:contactId`
    */
   entityParam: string;
+  /** Icon component for the heading. */
+  entityHeadingIcon?: LucideIcon;
   /** Zod schema for form validation. */
   schema: z.ZodObject<any>;
   /** Initial data for editing an entity. If not provided, a new entity is created. */

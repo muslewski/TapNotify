@@ -4,6 +4,7 @@ import { isTeamMember } from "@/actions/database/teamMembers";
 import { currentUserId } from "@/lib/auth";
 import db from "@/lib/prisma";
 import { replaceTemplateVariables } from "@/lib/replace-template-variables";
+import { validateAlphanumericSenderId } from "@/lib/validate-alpha-sender";
 import { NextResponse } from "next/server";
 
 interface CampaignsFunctionParams {
@@ -81,11 +82,29 @@ export async function POST(req: Request, { params }: CampaignsFunctionParams) {
 
     // Get body from request
     const body = await req.json();
-    const { title, contactIds, templateId } = body;
+    const { title, alphanumericSenderId, contactIds, templateId } = body;
 
     // Check if name is provided
     if (!title) {
       return new NextResponse("Title is required", { status: 400 });
+    }
+
+    // Check if alphanumericSenderId is provided and valid
+    if (!alphanumericSenderId) {
+      return new NextResponse("Alphanumeric Sender ID is required", {
+        status: 400,
+      });
+    }
+
+    const isValidAlphaSender =
+      validateAlphanumericSenderId(alphanumericSenderId);
+    if (!isValidAlphaSender.isValid) {
+      return new NextResponse(
+        isValidAlphaSender.error || "Invalid Alphanumeric Sender ID",
+        {
+          status: 400,
+        }
+      );
     }
 
     // Check if contact Ids is provided

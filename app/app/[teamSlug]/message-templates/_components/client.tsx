@@ -4,7 +4,7 @@ import { columns } from "@/app/app/[teamSlug]/message-templates/_components/colu
 import Heading from "@/app/app/_components/heading";
 import { DataTable } from "@/components/data-table";
 import { MessageTemplate } from "@prisma/client";
-import { PlusIcon } from "lucide-react";
+import { MessageSquareDashed, PlusIcon } from "lucide-react";
 import { useParams } from "next/navigation";
 
 export default function ContactClient({
@@ -17,7 +17,9 @@ export default function ContactClient({
   return (
     <>
       <Heading
-        title={`Message Templates (${initialData.length})`}
+        title={`Message Templates`}
+        number={initialData.length}
+        mainIcon={MessageSquareDashed}
         description="Manage your message templates"
         redirect={{
           label: "Create New",

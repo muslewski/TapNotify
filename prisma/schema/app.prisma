@@ -18,16 +18,17 @@ enum CampaignStatus {
 }
 
 model Team {
-  id                String           @id @default(cuid())
-  name              String
-  slug              String           @unique
-  logoUrl           String?
-  createdAt         DateTime         @default(now())
-  updatedAt         DateTime         @updatedAt
-  members           TeamMember[]     // Relation to team memberships
-  campaigns         Campaign[]       // Teams can now own campaigns
-  messageTemplates  MessageTemplate[] // Teams can now own message templates
-  contacts      Contact[]    // Teams can now own phone numbers
+  id                    String           @id @default(cuid())
+  name                  String
+  slug                  String           @unique
+  logoUrl               String?
+  MessagingServiceSID   String?     // Twilio messaging service SID for this team
+  createdAt             DateTime         @default(now())
+  updatedAt             DateTime         @updatedAt
+  members               TeamMember[]     // Relation to team memberships
+  campaigns             Campaign[]       // Teams can now own campaigns
+  messageTemplates      MessageTemplate[] // Teams can now own message templates
+  contacts              Contact[]    // Teams can now own phone numbers
 }
 
 model TeamMember {
@@ -54,6 +55,7 @@ model Campaign {
   teamId      String
   templateId  String
   userId      String
+  AlphanumericSenderId        String? @db.VarChar(11) // Twilio alphanumeric sender ID eg. "PizzaShop"
   team        Team            @relation(fields: [teamId], references: [id], onDelete: Cascade)
   template    MessageTemplate @relation(fields: [templateId], references: [id])
   user        User            @relation(fields: [userId], references: [id])

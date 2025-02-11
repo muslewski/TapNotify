@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { currentUserId } from "@/lib/auth";
 import db from "@/lib/prisma";
 import slugify from "slugify";
+import { createMessageService } from "@/actions/twilio/twilio-service";
 
 // This function handles POST requests to create new team
 export async function POST(req: Request) {
@@ -21,6 +22,18 @@ export async function POST(req: Request) {
     // Check if name is provided
     if (!name) {
       return new NextResponse("Name is required", { status: 400 });
+    }
+
+    // Create message service before creating team
+    // We will use this message service to send SMS messages
+    let messageServiceSid;
+    try {
+      messageServiceSid = await createMessageService(name);
+    } catch (error) {
+      console.error("[CREATE_MESSAGE_SERVICE_ERROR]", error);
+      return new NextResponse("Failed to create message service", {
+        status: 500,
+      });
     }
 
     // Create base slug from name
@@ -46,6 +59,7 @@ export async function POST(req: Request) {
         name: name,
         slug: slug,
         logoUrl: logoUrl,
+        MessagingServiceSID: messageServiceSid,
       },
     });
 
