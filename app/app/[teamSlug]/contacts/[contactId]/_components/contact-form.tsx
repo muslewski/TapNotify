@@ -44,6 +44,9 @@ export default function ContactForm({
     entityPath: "contacts",
     entityParam: "contactId",
     entityHeadingIcon: initialData ? UserPenIcon : UserPlusIcon,
+    entityDescription: initialData
+      ? "Update details for an existing contact."
+      : "Add a new recipient to your contact list.",
     schema: contactSchema,
     initialData: initialData,
     fields: contactFields,

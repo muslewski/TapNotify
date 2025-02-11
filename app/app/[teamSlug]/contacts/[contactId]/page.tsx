@@ -25,7 +25,10 @@ export default async function AddContactPage({
   }
 
   // Check if contact belongs to the team
-  if (!(await checkIfContactBelongsToTeam(contactId, teamSlug))) {
+  if (
+    !(await checkIfContactBelongsToTeam(contactId, teamSlug)) &&
+    contactId !== "add"
+  ) {
     return (
       <Container>
         <NotFound />

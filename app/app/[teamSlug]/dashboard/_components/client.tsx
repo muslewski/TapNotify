@@ -14,8 +14,12 @@ import { formatTemplateContent } from "@/components/format-template-content";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import SentMessagesGraph from "@/app/app/[teamSlug]/dashboard/_components/sent-messages-graph";
 import Heading from "@/app/app/_components/heading";
+import { useParams, useRouter } from "next/navigation";
 
 export default function DashboardClient() {
+  const router = useRouter();
+  const params = useParams();
+
   return (
     <>
       <Heading
@@ -42,6 +46,7 @@ export default function DashboardClient() {
               value={12}
               subtitle="Total campaigns"
               buttonText="View all campaigns" // Custom button text
+              onSeeAll={() => router.push(`/app/${params.teamSlug}/campaigns`)}
             >
               <div className="space-y-4">
                 {/* Campaign Status Indicators */}
@@ -119,6 +124,7 @@ export default function DashboardClient() {
               value={96}
               subtitle="Total contacts"
               buttonText="Browse contact list" // Custom button text
+              onSeeAll={() => router.push(`/app/${params.teamSlug}/contacts`)}
             >
               <div className="space-y-4">
                 {/* Contact Statistics */}
@@ -213,6 +219,9 @@ export default function DashboardClient() {
               value={5}
               subtitle="Total templates"
               buttonText="Manage message templates" // Custom button text
+              onSeeAll={() =>
+                router.push(`/app/${params.teamSlug}/message-templates`)
+              }
             >
               <div className="space-y-4">
                 {/* Template Statistics */}

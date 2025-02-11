@@ -34,9 +34,11 @@ export default function EntityForm<T>({ config }: { config: EntityConfig<T> }) {
   const title = config.initialData
     ? `Edit ${config.entityName}`
     : `Add ${config.entityName}`;
-  const description = config.initialData
-    ? `Edit an existing ${config.entityName.toLowerCase()}`
-    : `Create a new ${config.entityName.toLowerCase()}`;
+  const description =
+    config.entityDescription ??
+    (config.initialData
+      ? `Edit an existing ${config.entityName.toLowerCase()}`
+      : `Create a new ${config.entityName.toLowerCase()}`);
   const action = config.initialData
     ? "Save changes"
     : `Create ${config.entityName.toLowerCase()}`;

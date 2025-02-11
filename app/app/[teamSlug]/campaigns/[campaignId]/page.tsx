@@ -25,7 +25,10 @@ export default async function CreateCampaignPage({
   }
 
   // Check if campaign belongs to the team
-  if (!(await checkIfCampaignBelongsToTeam(campaignId, teamSlug))) {
+  if (
+    !(await checkIfCampaignBelongsToTeam(campaignId, teamSlug)) &&
+    campaignId !== "add"
+  ) {
     return (
       <Container>
         <NotFound />

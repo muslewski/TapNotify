@@ -117,9 +117,9 @@ export function NavMain({ navMain: items }: navMainProps) {
                                   className={cn(
                                     "block px-4 py-2 text-sm rounded-md transition-all duration-200",
                                     "hover:bg-gray-100 dark:hover:bg-gray-800",
-                                    "text-gray-600 dark:text-gray-400",
+                                    "text-gray-600 dark:text-gray-400 font-normal",
                                     subItem.url === pathname &&
-                                      "bg-gray-100 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400 font-medium",
+                                      "bg-gray-100 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400",
                                     subItem.underDevelopment &&
                                       "opacity-30 hover:opacity-90 after:content-['(WIP)'] after:ml-2 after:text-xs after:font-normal"
                                   )}

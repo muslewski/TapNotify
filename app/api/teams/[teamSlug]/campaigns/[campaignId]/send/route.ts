@@ -1,3 +1,4 @@
+import { checkIfCampaignBelongsToTeam } from "@/actions/database/campaigns";
 import { isTeamMember } from "@/actions/database/teamMembers";
 import sendSMS from "@/actions/twilio/send-sms";
 import { currentUserId } from "@/lib/auth";
@@ -37,6 +38,11 @@ export async function POST(_req: Request, { params }: SendFunctionParams) {
     // Check if campaignId is provided
     if (!campaignId) {
       return new NextResponse("Campaign ID is required", { status: 400 });
+    }
+
+    // Check if campaign belongs to the team
+    if (!(await checkIfCampaignBelongsToTeam(campaignId, teamSlug))) {
+      return new NextResponse("Campaign not found", { status: 404 });
     }
 
     // Get campaign with messages and recipients

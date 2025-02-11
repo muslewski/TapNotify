@@ -40,6 +40,9 @@ export default function MessageTemplateForm({
     entityNamePlural: "Message Templates",
     entityPath: "message-templates",
     entityParam: "templateId",
+    entityDescription: initialData
+      ? "Update an existing message template to fit your needs."
+      : "Design a new message template for your campaigns.",
     entityHeadingIcon: initialData
       ? MessageSquareCodeIcon
       : MessageSquareDiffIcon,

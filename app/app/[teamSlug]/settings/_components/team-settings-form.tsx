@@ -12,7 +12,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { UploadDropzone } from "@/lib/utils";
+import { UploadDropzone } from "@/lib/uploadthing-components";
 import { useTeamStore } from "@/store/use-team-store";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Team } from "@prisma/client";
@@ -128,7 +128,7 @@ export default function TeamSettingsForm({
       <Heading
         title="Team Settings"
         mainIcon={CogIcon}
-        description="Manage your team settings"
+        description="Add and manage team members, roles, and permissions for collaboration."
         deleteButton={{
           label: "Delete Team",
           onClick: onDelete,

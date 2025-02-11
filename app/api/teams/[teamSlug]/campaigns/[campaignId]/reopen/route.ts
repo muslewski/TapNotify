@@ -1,3 +1,4 @@
+import { checkIfCampaignBelongsToTeam } from "@/actions/database/campaigns";
 import { isTeamMember } from "@/actions/database/teamMembers";
 import { currentUserId } from "@/lib/auth";
 import db from "@/lib/prisma";
@@ -35,6 +36,11 @@ export async function POST(_req: Request, { params }: ReopenFunctionParams) {
     // Check if campaignId is provided
     if (!campaignId) {
       return new NextResponse("Campaign ID is required", { status: 400 });
+    }
+
+    // Check if campaign belongs to the team
+    if (!(await checkIfCampaignBelongsToTeam(campaignId, teamSlug))) {
+      return new NextResponse("Campaign not found", { status: 404 });
     }
 
     // Get campaign to verify it exists and belongs to the team

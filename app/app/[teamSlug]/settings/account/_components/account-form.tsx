@@ -24,7 +24,7 @@ export default function AccountForm({ initialData }: AccountFormProps) {
     <>
       <Heading
         title="Account Settings"
-        description="Manage your account settings (independent of the team)"
+        description="Control your personal profile, security, and preferences."
         mainIcon={UserCog}
         deleteButton={{
           label: "Delete Account",

@@ -22,7 +22,7 @@ export default function CampaignClient({
         title={`Campaigns`}
         mainIcon={Waypoints}
         number={initialData.length}
-        description="Manage your campaigns"
+        description="Create, manage, and track your notification campaigns."
         redirect={{
           label: "Add Campaign",
           href: `/app/${params.teamSlug}/campaigns/add`,

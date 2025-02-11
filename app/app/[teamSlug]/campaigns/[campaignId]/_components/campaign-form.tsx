@@ -76,6 +76,9 @@ export default function CampaignForm({
     entityPath: "campaigns",
     entityParam: "campaignId",
     entityHeadingIcon: initialData ? FolderPenIcon : FolderPlusIcon,
+    entityDescription: initialData
+      ? "Modify an existing campaign's details."
+      : "Launch a new campaign by selecting contacts and a message template.",
     schema: campaignSchema,
     initialData: initialData,
     fields: getCampaignFields(initialData),

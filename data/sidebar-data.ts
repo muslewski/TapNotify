@@ -93,8 +93,8 @@ export const sidebarData = (teamSlug: string): SidebarDataInterface => ({
           url: `/app/${teamSlug}/message-templates`,
         },
         {
-          title: "Create Template",
-          url: `/app/${teamSlug}/message-templates/create`,
+          title: "Add Template",
+          url: `/app/${teamSlug}/message-templates/add`,
         },
         {
           title: "Edit Template",
@@ -169,10 +169,11 @@ export const sidebarData = (teamSlug: string): SidebarDataInterface => ({
           url: `/app/${teamSlug}/settings/account`,
           underDevelopment: true,
         },
-        // {
-        //   title: "Billing",
-        //   url: `/app/${teamSlug}/settings/account/billing`,
-        // },
+        {
+          title: "Billing",
+          url: `/app/${teamSlug}/settings/account/billing`,
+          hidden: true,
+        },
         // {
         //   title: "Integrations",
         //   url: `/app/${teamSlug}/settings/integrations`,

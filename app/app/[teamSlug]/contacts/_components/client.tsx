@@ -20,7 +20,7 @@ export default function ContactClient({
         title={`Contacts`}
         number={initialData.length}
         mainIcon={ContactIcon}
-        description="Manage your contacts"
+        description="Build and manage your contact list to power your campaigns."
         redirect={{
           label: "Add Contact",
           href: `/app/${params.teamSlug}/contacts/add`,

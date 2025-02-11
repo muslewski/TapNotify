@@ -20,10 +20,10 @@ export default function ContactClient({
         title={`Message Templates`}
         number={initialData.length}
         mainIcon={MessageSquareDashed}
-        description="Manage your message templates"
+        description="Create and organize reusable message templates for your campaigns."
         redirect={{
-          label: "Create New",
-          href: `/app/${params.teamSlug}/message-templates/create`,
+          label: "Add New",
+          href: `/app/${params.teamSlug}/message-templates/add`,
           icon: PlusIcon,
         }}
       />

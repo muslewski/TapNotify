@@ -22,6 +22,8 @@ export type EntityConfig<T> = {
   entityParam: string;
   /** Icon component for the heading. */
   entityHeadingIcon?: LucideIcon;
+  /** Custom Description displayed in the heading. */
+  entityDescription?: string;
   /** Zod schema for form validation. */
   schema: z.ZodObject<any>;
   /** Initial data for editing an entity. If not provided, a new entity is created. */

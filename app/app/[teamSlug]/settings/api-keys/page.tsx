@@ -20,7 +20,7 @@ export default function ApiKeysPage({
       <Heading
         title="API Keys"
         mainIcon={KeyIcon}
-        description="Manage your API credentials"
+        description="Generate and manage API credentials for integrations."
       />
       <UnderDevelopment />
     </Container>

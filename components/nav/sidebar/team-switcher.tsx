@@ -133,7 +133,7 @@ export default function TeamSwitcher() {
             >
               {activeTeam ? (
                 <>
-                  <div className="flex aspect-square size-8 items-center justify-center rounded-lg overflow-hidden  text-sidebar-primary-foreground">
+                  <div className="flex aspect-square size-8 items-center justify-center rounded-lg overflow-hidden  text-sidebar-primary-foreground group-data-[collapsible=icon]:scale-75 transition-all">
                     <Image
                       src={activeTeam.logoUrl || "/fallbacks/user.png"}
                       alt={activeTeam.name}
@@ -142,7 +142,7 @@ export default function TeamSwitcher() {
                       className="h-full w-auto object-cover"
                     />
                   </div>
-                  <div className="grid flex-1 text-left text-sm leading-tight">
+                  <div className="grid flex-1 text-left text-sm leading-tight group-data-[collapsible=icon]:hidden">
                     <span className="truncate font-semibold">
                       {activeTeam.name}
                     </span>
@@ -152,7 +152,7 @@ export default function TeamSwitcher() {
                       </span>
                     )}
                   </div>
-                  <ChevronsUpDown className="ml-auto transition-transform duration-200 group-hover/team:rotate-180" />
+                  <ChevronsUpDown className="ml-auto transition-transform duration-200 group-hover/team:rotate-180 group-data-[collapsible=icon]:hidden" />
                 </>
               ) : (
                 <span>No teams available</span>

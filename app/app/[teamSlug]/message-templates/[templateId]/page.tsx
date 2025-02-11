@@ -15,8 +15,8 @@ export default async function CreateMessageTemplatePage({
 
   const template = await getMessageTemplateByTemplateId(templateId);
 
-  // If template is not found and templateId is not "create", show 404
-  if (!template && templateId !== "create") {
+  // If template is not found and templateId is not "add", show 404
+  if (!template && templateId !== "add") {
     return (
       <Container>
         <NotFound />
@@ -25,7 +25,10 @@ export default async function CreateMessageTemplatePage({
   }
 
   // Check if template belongs to the team
-  if (!(await checkIfTemplateBelongsToTeam(templateId, teamSlug))) {
+  if (
+    !(await checkIfTemplateBelongsToTeam(templateId, teamSlug)) &&
+    templateId !== "add"
+  ) {
     return (
       <Container>
         <NotFound />

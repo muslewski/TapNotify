@@ -20,7 +20,7 @@ export default function ImportContactsPage({
       <Heading
         title="Import Contacts"
         mainIcon={ImportIcon}
-        description="Import your contacts from external sources"
+        description="Easily upload and integrate contacts from external sources."
       />
       <UnderDevelopment />
     </Container>

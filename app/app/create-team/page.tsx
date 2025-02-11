@@ -22,7 +22,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { UploadDropzone } from "@/lib/utils";
+import { UploadDropzone } from "@/lib/uploadthing-components";
 import Image from "next/image";
 
 const formSchema = z.object({
