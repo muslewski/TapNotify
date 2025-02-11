@@ -104,14 +104,14 @@ export default function EntityForm<T>({ config }: { config: EntityConfig<T> }) {
           { method: "DELETE" }
         );
 
-        if (!response.ok) throw new Error(`Error: ${response.status}`);
+        if (!response.ok) throw new Error(await response.text());
         toast.success(`${config.entityName} deleted successfully.`);
         router.push(`/app/${params.teamSlug}/${config.entityPath}`);
         router.refresh();
       }
     } catch (error) {
       console.error(error);
-      toast.error("Something went wrong.");
+      if (error instanceof Error) toast.error(error.message);
     } finally {
       setLoading(false);
     }

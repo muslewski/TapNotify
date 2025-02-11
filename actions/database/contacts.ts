@@ -93,3 +93,32 @@ export async function doesContactExistAndNotSameContact(
 
   return contact;
 }
+
+export async function checkIfContactBelongsToTeam(
+  contactId: string,
+  teamSlug: string
+): Promise<boolean> {
+  try {
+    const contact = await db.contact.findUnique({
+      where: {
+        id: contactId,
+      },
+      select: {
+        team: {
+          select: {
+            slug: true,
+          },
+        },
+      },
+    });
+
+    if (!contact || !contact.team) {
+      return false;
+    }
+
+    return contact.team.slug === teamSlug;
+  } catch (error) {
+    console.error("Error checking contact team:", error);
+    return false;
+  }
+}

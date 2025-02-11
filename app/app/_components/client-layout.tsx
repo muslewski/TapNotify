@@ -21,6 +21,8 @@ import { usePathname, useRouter } from "next/navigation";
 import React, { ReactNode, useEffect, useState } from "react";
 import Loading from "@/app/app/_components/loading";
 import { sidebarData } from "@/data/sidebar-data";
+import { motion, AnimatePresence } from "framer-motion";
+import { ChevronRight } from "lucide-react";
 
 interface ClientTeamLayoutProps {
   children: ReactNode;
@@ -168,22 +170,80 @@ function BreadcrumbNav({
   return (
     <Breadcrumb>
       <BreadcrumbList>
-        {breadcrumbs.map((breadcrumb) => (
-          <React.Fragment key={breadcrumb.href}>
-            <BreadcrumbItem className="hidden md:block">
-              {breadcrumb.isLast ? (
-                <BreadcrumbPage>{breadcrumb.label}</BreadcrumbPage>
-              ) : (
-                <BreadcrumbLink asChild>
-                  <Link href={breadcrumb.href}>{breadcrumb.label}</Link>
-                </BreadcrumbLink>
+        <AnimatePresence mode="wait" initial={false}>
+          {breadcrumbs.map((breadcrumb, index) => (
+            <motion.div
+              key={breadcrumb.href}
+              initial={{ x: 50, opacity: 0 }}
+              animate={{
+                x: 0,
+                opacity: 1,
+                transition: {
+                  duration: 0.25,
+                  delay: index * 0.08,
+                  ease: [0.32, 0.72, 0, 1], // Custom easing for smoother motion
+                },
+              }}
+              exit={{
+                x: 30,
+                opacity: 0,
+                transition: {
+                  duration: 0.2,
+                  ease: [0.32, 0, 0.67, 0],
+                },
+              }}
+              className="flex items-center"
+            >
+              <BreadcrumbItem className="hidden md:block">
+                {breadcrumb.isLast ? (
+                  <BreadcrumbPage className="font-medium text-foreground/90 transition-opacity duration-200">
+                    {breadcrumb.label}
+                  </BreadcrumbPage>
+                ) : (
+                  <motion.div
+                    whileHover={{
+                      scale: 1.02,
+                      transition: { duration: 0.15, ease: "easeOut" },
+                    }}
+                    whileTap={{
+                      scale: 0.98,
+                      transition: { duration: 0.1 },
+                    }}
+                  >
+                    <BreadcrumbLink asChild>
+                      <Link
+                        href={breadcrumb.href}
+                        className="text-muted-foreground/75 hover:text-foreground/90 transition-all duration-200"
+                      >
+                        {breadcrumb.label}
+                      </Link>
+                    </BreadcrumbLink>
+                  </motion.div>
+                )}
+              </BreadcrumbItem>
+
+              {!breadcrumb.isLast && (
+                <motion.div
+                  initial={{ opacity: 0, scale: 0.5 }}
+                  animate={{
+                    opacity: 1,
+                    scale: 1,
+                    transition: {
+                      duration: 0.2,
+                      delay: index * 0.08 + 0.08,
+                      ease: "easeOut",
+                    },
+                  }}
+                  className="ml-2 mr-1"
+                >
+                  <BreadcrumbSeparator className="hidden md:block text-muted-foreground/30 transition-opacity duration-200">
+                    <ChevronRight className="h-4 w-4" />
+                  </BreadcrumbSeparator>
+                </motion.div>
               )}
-            </BreadcrumbItem>
-            {!breadcrumb.isLast && (
-              <BreadcrumbSeparator className="hidden md:block" />
-            )}
-          </React.Fragment>
-        ))}
+            </motion.div>
+          ))}
+        </AnimatePresence>
       </BreadcrumbList>
     </Breadcrumb>
   );

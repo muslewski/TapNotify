@@ -1,6 +1,9 @@
 // GET, PATCH, DELETE specific contact
 
-import { doesContactExistAndNotSameContact } from "@/actions/database/contacts";
+import {
+  checkIfContactBelongsToTeam,
+  doesContactExistAndNotSameContact,
+} from "@/actions/database/contacts";
 import { isTeamMember } from "@/actions/database/teamMembers";
 import { currentUserId } from "@/lib/auth";
 import db from "@/lib/prisma";
@@ -39,6 +42,11 @@ export async function GET(_req: Request, { params }: ContactFunctionParams) {
     // Check if contactId is provided
     if (!contactId) {
       return new NextResponse("Contact ID is required", { status: 400 });
+    }
+
+    // Check if contact belongs to the team
+    if (!(await checkIfContactBelongsToTeam(contactId, teamSlug))) {
+      return new NextResponse("Contact not found", { status: 404 });
     }
 
     // Get contact from database
@@ -84,6 +92,11 @@ export async function PATCH(req: Request, { params }: ContactFunctionParams) {
     // Check if contactId is provided
     if (!contactId) {
       return new NextResponse("Contact ID is required", { status: 400 });
+    }
+
+    // Check if contact belongs to the team
+    if (!(await checkIfContactBelongsToTeam(contactId, teamSlug))) {
+      return new NextResponse("Contact not found", { status: 404 });
     }
 
     // Get body from request
@@ -156,6 +169,11 @@ export async function DELETE(_req: Request, { params }: ContactFunctionParams) {
     // Check if contactId is provided
     if (!contactId) {
       return new NextResponse("Contact ID is required", { status: 400 });
+    }
+
+    // Check if contact belongs to the team
+    if (!(await checkIfContactBelongsToTeam(contactId, teamSlug))) {
+      return new NextResponse("Contact not found", { status: 404 });
     }
 
     // Delete contact from database

@@ -33,3 +33,32 @@ export async function getCampaignByCampaignId(campaignId: string) {
 
   return campaign;
 }
+
+export async function checkIfCampaignBelongsToTeam(
+  campaignId: string,
+  teamSlug: string
+): Promise<boolean> {
+  try {
+    const campaign = await db.campaign.findUnique({
+      where: {
+        id: campaignId,
+      },
+      select: {
+        team: {
+          select: {
+            slug: true,
+          },
+        },
+      },
+    });
+
+    if (!campaign || !campaign.team) {
+      return false;
+    }
+
+    return campaign.team.slug === teamSlug;
+  } catch (error) {
+    console.error("Error checking campaign team:", error);
+    return false;
+  }
+}

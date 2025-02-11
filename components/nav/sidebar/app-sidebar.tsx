@@ -27,6 +27,7 @@ export default function AppSidebar({ teamSlug, ...props }: AppSidebarProps) {
     <Sidebar
       collapsible="icon"
       onClick={() => open === false && setOpen(true)}
+      className=""
       {...props}
     >
       <SidebarHeader>

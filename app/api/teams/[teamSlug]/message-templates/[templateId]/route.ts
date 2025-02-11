@@ -1,5 +1,6 @@
 // GET, PATCH, DELETE specific template
 
+import { checkIfTemplateBelongsToTeam } from "@/actions/database/message-templates";
 import { isTeamMember } from "@/actions/database/teamMembers";
 import { currentUserId } from "@/lib/auth";
 import db from "@/lib/prisma";
@@ -38,6 +39,13 @@ export async function GET(_req: Request, { params }: TemplateFunctionParams) {
     // Check if templateId is provided
     if (!templateId) {
       return new NextResponse("Template ID is required", { status: 400 });
+    }
+
+    // Check if template belongs to team
+    if (!(await checkIfTemplateBelongsToTeam(templateId, teamSlug))) {
+      return new NextResponse("Template does not belong to team", {
+        status: 400,
+      });
     }
 
     // Get template from database
@@ -83,6 +91,13 @@ export async function PATCH(req: Request, { params }: TemplateFunctionParams) {
     // Check if templateId is provided
     if (!templateId) {
       return new NextResponse("Template ID is required", { status: 400 });
+    }
+
+    // Check if template belongs to team
+    if (!(await checkIfTemplateBelongsToTeam(templateId, teamSlug))) {
+      return new NextResponse("Template does not belong to team", {
+        status: 400,
+      });
     }
 
     // Get body from request
@@ -144,6 +159,13 @@ export async function DELETE(
     // Check if templateId is provided
     if (!templateId) {
       return new NextResponse("Template ID is required", { status: 400 });
+    }
+
+    // Check if template belongs to team
+    if (!(await checkIfTemplateBelongsToTeam(templateId, teamSlug))) {
+      return new NextResponse("Template does not belong to team", {
+        status: 400,
+      });
     }
 
     // Delete template from database

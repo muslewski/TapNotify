@@ -129,7 +129,7 @@ export default function TeamSwitcher() {
           <DropdownMenuTrigger asChild>
             <SidebarMenuButton
               size="lg"
-              className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
+              className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground group/team"
             >
               {activeTeam ? (
                 <>
@@ -152,7 +152,7 @@ export default function TeamSwitcher() {
                       </span>
                     )}
                   </div>
-                  <ChevronsUpDown className="ml-auto" />
+                  <ChevronsUpDown className="ml-auto transition-transform duration-200 group-hover/team:rotate-180" />
                 </>
               ) : (
                 <span>No teams available</span>

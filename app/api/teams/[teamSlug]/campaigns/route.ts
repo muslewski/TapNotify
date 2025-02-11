@@ -148,6 +148,12 @@ export async function POST(req: Request, { params }: CampaignsFunctionParams) {
       );
     }
 
+    // Create Alphanumeric Sender ID
+    const alphanumericSenderId = await createAlphanumericSenderId(
+      teamSlug,
+      title
+    );
+
     // Create campaign and messages in a transaction
     const newCampaign = await db.$transaction(async (tx) => {
       const campaign = await tx.campaign.create({

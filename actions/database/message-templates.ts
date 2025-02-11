@@ -35,3 +35,32 @@ export async function getMessageTemplateByTemplateId(templateId: string) {
 
   return template;
 }
+
+export async function checkIfTemplateBelongsToTeam(
+  templateId: string,
+  teamSlug: string
+): Promise<boolean> {
+  try {
+    const template = await db.messageTemplate.findUnique({
+      where: {
+        id: templateId,
+      },
+      select: {
+        team: {
+          select: {
+            slug: true,
+          },
+        },
+      },
+    });
+
+    if (!template || !template.team) {
+      return false;
+    }
+
+    return template.team.slug === teamSlug;
+  } catch (error) {
+    console.error("[CHECK_TEMPLATE_TEAM]", error);
+    return false;
+  }
+}

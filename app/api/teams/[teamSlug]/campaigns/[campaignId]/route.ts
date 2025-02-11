@@ -1,5 +1,6 @@
 // GET, PATCH, DELETE specific campaign
 
+import { checkIfCampaignBelongsToTeam } from "@/actions/database/campaigns";
 import { isTeamMember } from "@/actions/database/teamMembers";
 import { currentUserId } from "@/lib/auth";
 import db from "@/lib/prisma";
@@ -39,6 +40,11 @@ export async function GET(_req: Request, { params }: CampaignFunctionParams) {
     // Check if campaignId is provided
     if (!campaignId) {
       return new NextResponse("Campaign ID is required", { status: 400 });
+    }
+
+    // Check if campaign belongs to the team
+    if (!(await checkIfCampaignBelongsToTeam(campaignId, teamSlug))) {
+      return new NextResponse("Campaign not found", { status: 404 });
     }
 
     // Get campaign from database with associated messages and contacts
@@ -97,6 +103,11 @@ export async function PATCH(req: Request, { params }: CampaignFunctionParams) {
     // Check if campaignId is provided
     if (!campaignId) {
       return new NextResponse("Campaign ID is required", { status: 400 });
+    }
+
+    // Check if campaign belongs to the team
+    if (!(await checkIfCampaignBelongsToTeam(campaignId, teamSlug))) {
+      return new NextResponse("Campaign not found", { status: 404 });
     }
 
     // Get body from request
@@ -249,6 +260,11 @@ export async function DELETE(
     // Check if campaignId is provided
     if (!campaignId) {
       return new NextResponse("Campaign ID is required", { status: 400 });
+    }
+
+    // Check if campaign belongs to the team
+    if (!(await checkIfCampaignBelongsToTeam(campaignId, teamSlug))) {
+      return new NextResponse("Campaign not found", { status: 404 });
     }
 
     // Delete campaign from database (this will cascade delete associated messages)

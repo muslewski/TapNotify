@@ -72,14 +72,7 @@ export function ConfirmModalProvider({
                 <Button variant="outline" onClick={handleClose}>
                   {options.cancelLabel || "Cancel"}
                 </Button>
-                <Button
-                  className={
-                    options.confirmVariant === "destructive"
-                      ? "bg-red-600 hover:bg-red-700"
-                      : ""
-                  }
-                  onClick={handleConfirm}
-                >
+                <Button variant="destructive" onClick={handleConfirm}>
                   {options.confirmLabel || "Confirm"}
                 </Button>
               </DialogFooter>
