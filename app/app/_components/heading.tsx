@@ -50,7 +50,7 @@ export default function Heading({
   };
 
   return (
-    <>
+    <div className="space-y-4 pb-8">
       <div className="flex items-end justify-between">
         <div>
           <h2 className="text-3xl font-bold tracking-tight">{title}</h2>
@@ -82,6 +82,6 @@ export default function Heading({
         )}
       </div>
       <Separator />
-    </>
+    </div>
   );
 }
