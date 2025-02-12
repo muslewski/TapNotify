@@ -72,7 +72,10 @@ export function ConfirmModalProvider({
                 <Button variant="outline" onClick={handleClose}>
                   {options.cancelLabel || "Cancel"}
                 </Button>
-                <Button variant="destructive" onClick={handleConfirm}>
+                <Button
+                  variant={options.confirmVariant}
+                  onClick={handleConfirm}
+                >
                   {options.confirmLabel || "Confirm"}
                 </Button>
               </DialogFooter>

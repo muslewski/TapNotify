@@ -2,7 +2,7 @@
 
 import twilio from "twilio";
 
-// This functions creates a new Message Service in Twilio on team level
+// This functions creates a new Message Service in Twilio on campaign level
 
 const accountSid = process.env.TWILIO_ACCOUNT_SID;
 const authToken = process.env.TWILIO_AUTH_TOKEN;
@@ -58,7 +58,7 @@ export async function updateMessageService(
   }
 }
 
-export async function DeleteMessageService(messageServiceSID: string) {
+export async function deleteMessageService(messageServiceSID: string) {
   try {
     await client.messaging.v1.services(messageServiceSID).remove();
 

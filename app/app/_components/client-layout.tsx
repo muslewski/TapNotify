@@ -85,9 +85,8 @@ function isPathMatchingDynamicPattern(
   pathSegment: string,
   patternSegment: string
 ): boolean {
-  return (
-    patternSegment.includes("{{dynamic}}") || pathSegment === patternSegment
-  );
+  // Check if the pattern segment starts with : (indicating a parameter)
+  return patternSegment.startsWith(":") || pathSegment === patternSegment;
 }
 
 // Helper function to match URL patterns
@@ -102,7 +101,7 @@ function matchUrlPattern(currentPath: string, pattern: string): boolean {
   );
 }
 
-// Moved breadcrumb generation to a custom hook
+// In your useBreadcrumbs hook, modify the dynamic route handling:
 function useBreadcrumbs(pathname: string, teamSlug: string) {
   return React.useMemo(() => {
     const navData = sidebarData(teamSlug).navMain;
@@ -137,9 +136,8 @@ function useBreadcrumbs(pathname: string, teamSlug: string) {
           });
 
         if (subItem) {
-          // For dynamic routes, use the actual path segment as the label
           breadcrumbs.push({
-            href: currentPath,
+            href: currentPath, // Use the actual path instead of the pattern
             label: subItem.title,
             isLast: currentPath === pathname,
             isDynamic: subItem.dynamic,
@@ -150,7 +148,7 @@ function useBreadcrumbs(pathname: string, teamSlug: string) {
 
       if (navItem) {
         breadcrumbs.push({
-          href: navItem.url,
+          href: currentPath, // Use the actual path instead of the pattern
           label: navItem.title,
           isLast: currentPath === pathname,
           isDynamic: false,

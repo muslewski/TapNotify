@@ -10,7 +10,9 @@ export async function getCampaignsByTeamSlug(teamSlug: string) {
       },
     },
     include: {
-      template: true,
+      template: {
+        include: { user: true },
+      },
       messages: true,
     },
   });
@@ -27,7 +29,9 @@ export async function getCampaignByCampaignId(campaignId: string) {
       messages: {
         include: { recipient: true },
       },
-      template: true,
+      template: {
+        include: { user: true },
+      },
     },
   });
 

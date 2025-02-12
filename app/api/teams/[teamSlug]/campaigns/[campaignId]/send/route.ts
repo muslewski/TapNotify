@@ -59,11 +59,6 @@ export async function POST(_req: Request, { params }: SendFunctionParams) {
             recipient: true,
           },
         },
-        team: {
-          select: {
-            messagingServiceSID: true,
-          },
-        },
       },
     });
 
@@ -75,7 +70,7 @@ export async function POST(_req: Request, { params }: SendFunctionParams) {
     // Prepare messages for sending
     const messagesToSend = campaign.messages.map((message) => ({
       alphanumericSenderId: campaign.alphanumericSenderId,
-      messagingServiceSID: campaign.team.messagingServiceSID,
+      messagingServiceSID: campaign.messagingServiceSID,
       phoneNumber: message.recipient.phone,
       message: message.message,
       messageId: message.id,

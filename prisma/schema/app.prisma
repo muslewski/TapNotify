@@ -22,7 +22,6 @@ model Team {
   name                  String
   slug                  String           @unique
   logoUrl               String?
-  messagingServiceSID   String?     // Twilio messaging service SID for this team
   createdAt             DateTime         @default(now())
   updatedAt             DateTime         @updatedAt
   members               TeamMember[]     // Relation to team memberships
@@ -45,21 +44,22 @@ model TeamMember {
 
 
 model Campaign {
-  id          String          @id @default(cuid())
-  title       String
-  createdAt   DateTime        @default(now())
-  updatedAt   DateTime        @updatedAt
-  status      CampaignStatus  @default(DRAFT)
-  scheduledAt DateTime?
-  completedAt DateTime?
-  teamId      String
-  templateId  String
-  userId      String
+  id                    String          @id @default(cuid())
+  title                 String
+  createdAt             DateTime        @default(now())
+  updatedAt             DateTime        @updatedAt
+  status                CampaignStatus  @default(DRAFT)
+  scheduledAt           DateTime?
+  completedAt           DateTime?
+  teamId                String
+  templateId            String
+  userId                String
+  messagingServiceSID   String?     // Twilio messaging service SID for this campaign
   alphanumericSenderId        String? @db.VarChar(11) // Twilio alphanumeric sender ID eg. "PizzaShop"
-  team        Team            @relation(fields: [teamId], references: [id], onDelete: Cascade)
-  template    MessageTemplate @relation(fields: [templateId], references: [id])
-  user        User            @relation(fields: [userId], references: [id])
-  messages    Message[]
+  team                  Team            @relation(fields: [teamId], references: [id], onDelete: Cascade)
+  template              MessageTemplate @relation(fields: [templateId], references: [id])
+  user                  User            @relation(fields: [userId], references: [id])
+  messages              Message[]
 }
 
 model MessageTemplate {
@@ -70,6 +70,7 @@ model MessageTemplate {
   updatedAt DateTime   @updatedAt
   teamId    String
   userId    String
+  messages  Message[]
   campaigns Campaign[]
   user      User       @relation(fields: [userId], references: [id])
   team      Team      @relation(fields: [teamId], references: [id], onDelete: Cascade)
@@ -77,12 +78,17 @@ model MessageTemplate {
 
 model Message {
   id           String         @id @default(cuid())
-  message      String
+  message      String?
   status       MessageStatus  @default(DRAFT)
   createdAt    DateTime       @default(now())
   updatedAt    DateTime       @updatedAt
   sentAt       DateTime?
   errorMessage String?
+
+  templateId   String?
+  template     MessageTemplate?  @relation(fields: [templateId], references: [id])
+  withTemplate Boolean        @default(false)
+
   campaignId   String
   recipientId  String
   campaign     Campaign       @relation(fields: [campaignId], references: [id], onDelete: Cascade)
@@ -90,16 +96,17 @@ model Message {
 } 
 
 model Contact {
-  id        String    @id @default(cuid())
-  phone    String
-  name      String?
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
-  userId    String
-  teamId    String
-  messages  Message[]
-  user      User      @relation(fields: [userId], references: [id])
-  team      Team      @relation(fields: [teamId], references: [id])
+  id                String    @id @default(cuid())
+  phone             String
+  displayName       String?  // Name to display to the recipient eg. "John" (external use)
+  contactLabel      String?  // Label of the contact eg. "John Doe - Pizza" (internal use)
+  createdAt         DateTime  @default(now())
+  updatedAt         DateTime  @updatedAt
+  userId            String
+  teamId            String
+  messages          Message[]
+  user              User      @relation(fields: [userId], references: [id])
+  team              Team      @relation(fields: [teamId], references: [id])
 
   @@unique([teamId, phone])
 }

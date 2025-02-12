@@ -15,20 +15,20 @@ const client = twilio(accountSid, authToken);
 
 export async function addAlphaSenderToService(
   messageServiceSID: string,
-  alphaSenderID: string
+  newAlphaSenderID: string
 ) {
   try {
     const alphaSender = await client.messaging.v1
       .services(messageServiceSID)
       .alphaSenders.create({
-        alphaSender: alphaSenderID,
+        alphaSender: newAlphaSenderID,
       });
 
     console.log(
       "Alpha Sender Added to Message Service, here is SID:",
       alphaSender.accountSid
     );
-    return alphaSender.accountSid;
+    return alphaSender.alphaSender;
   } catch (error) {
     console.error("[TWILIO_ADD_ALPHA_SENDER_TO_SERVICE_ERROR]", error);
     throw new Error(
@@ -39,6 +39,7 @@ export async function addAlphaSenderToService(
   }
 }
 
+/** Currently not working */
 export async function removeAlphaSenderFromService(
   messageServiceSID: string,
   alphaSenderID: string

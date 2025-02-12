@@ -1,6 +1,6 @@
 "use client";
 
-import { CampaignColumn } from "@/app/app/[teamSlug]/campaigns/_components/columns";
+import { CampaignMessagesColumn } from "@/app/app/[teamSlug]/campaigns/[campaignId]/messages/_components/columns";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -28,7 +28,7 @@ import { useState } from "react";
 import { toast } from "sonner";
 
 interface CellActionProps {
-  data: CampaignColumn;
+  data: CampaignMessagesColumn;
 }
 
 export function CellAction({ data }: CellActionProps) {
@@ -37,21 +37,20 @@ export function CellAction({ data }: CellActionProps) {
   const params = useParams();
   const router = useRouter();
 
-  const startCampaign = async () => {
+  const sendSingleMessage = async () => {
     try {
       setLoading(true);
       const confirmed = await confirmModal({
-        heading: "Start Campaign",
-        description:
-          "Are you sure you want to start this campaign? This will send messages to all contacts included in this campaign.",
-        confirmLabel: "Start",
+        heading: "Send Message",
+        description: "Are you sure you want to send this message to recipient?",
+        confirmLabel: "Send",
         confirmVariant: "default",
       });
 
       if (confirmed) {
         // Send request to send campaign
         const response = await fetch(
-          `/api/teams/${params.teamSlug}/campaigns/${data.id}/send`,
+          `/api/teams/${params.teamSlug}/campaigns/${params.campaignId}/messages/${data.id}/send`,
           {
             method: "POST",
           }
@@ -61,12 +60,12 @@ export function CellAction({ data }: CellActionProps) {
           throw new Error(`Error: ${response.status} ${response.statusText}`);
         }
 
-        toast.success("Campaign sent messages successfully.");
+        toast.success("Message sent successfully.");
         router.refresh(); // Refresh the page to reflect changes
       }
     } catch (error) {
       console.error(error);
-      toast.error("Failed to start campaign.");
+      toast.error("Failed to sent message.");
     } finally {
       setLoading(false);
     }
@@ -76,8 +75,9 @@ export function CellAction({ data }: CellActionProps) {
     try {
       setLoading(true);
       const confirmed = await confirmModal({
-        heading: "Delete Campaign",
-        description: "Are you sure you want to delete this campaign?",
+        heading: "Delete Message",
+        description:
+          "Are you sure you want to delete this message and contact from campaign?",
         confirmLabel: "Delete",
         confirmVariant: "destructive",
       });
@@ -85,21 +85,21 @@ export function CellAction({ data }: CellActionProps) {
       if (confirmed) {
         // Send request to delete an entity
         const response = await fetch(
-          `/api/teams/${params.teamSlug}/campaigns/${data.id}`,
+          `/api/teams/${params.teamSlug}/campaigns/${params.campaignId}/messages/${data.id}`,
           {
             method: "DELETE",
           }
         );
 
         if (response.ok) {
-          toast.success("Campaign deleted successfully.");
+          toast.success("Message deleted successfully.");
         } else {
           throw new Error(`Error: ${response.status} ${response.statusText}`);
         }
       }
     } catch (error) {
       console.error(error);
-      toast.error("Failed to delete contact.");
+      toast.error("Failed to delete message.");
     } finally {
       setLoading(false);
       router.refresh(); // Refresh the page to reflect changes
@@ -110,16 +110,16 @@ export function CellAction({ data }: CellActionProps) {
     try {
       setLoading(true);
       const confirmed = await confirmModal({
-        heading: "Reopen Campaign",
+        heading: "Reopen Message",
         description:
-          "This will move your campaign back to draft state. Are you sure?",
+          "This will move your message back to the draft state, allowing you to edit and resend it. Are you sure?",
         confirmLabel: "Reopen",
         confirmVariant: "default",
       });
 
       if (confirmed) {
         const response = await fetch(
-          `/api/teams/${params.teamSlug}/campaigns/${data.id}/reopen`,
+          `/api/teams/${params.teamSlug}/campaigns/${params.campaignId}/messages/${data.id}/reopen`,
           {
             method: "POST",
           }
@@ -129,12 +129,12 @@ export function CellAction({ data }: CellActionProps) {
           throw new Error(`Error: ${response.status} ${response.statusText}`);
         }
 
-        toast.success("Campaign reopened successfully.");
+        toast.success("Message reopened successfully.");
         router.refresh(); // Refresh the page to reflect changes
       }
     } catch (error) {
       console.error(error);
-      toast.error("Failed to reopen campaign.");
+      toast.error("Failed to reopen message.");
     } finally {
       setLoading(false);
     }
@@ -149,14 +149,14 @@ export function CellAction({ data }: CellActionProps) {
               variant="default"
               size="icon"
               className="size-8 p-0"
-              onClick={startCampaign}
+              onClick={sendSingleMessage}
               disabled={loading || data.status !== "DRAFT"}
             >
               <SendIcon className="size-4" />
             </Button>
           </TooltipTrigger>
           <TooltipContent>
-            <p>Start Campaign</p>
+            <p>Send Message</p>
           </TooltipContent>
         </Tooltip>
       </TooltipProvider>
@@ -171,18 +171,21 @@ export function CellAction({ data }: CellActionProps) {
 
         <DropdownMenuContent align="end">
           <DropdownMenuLabel>Actions</DropdownMenuLabel>
-          {data.status === "FAILED" || data.status === "COMPLETED" ? (
-            // Add re-open option for failed and completed campaigns
+          {data.status === "FAILED" || data.status === "SENT" ? (
+            // Add re-open option for failed and sent messages
             <DropdownMenuItem onClick={handleReopen} disabled={loading}>
               <Undo2 className="size-4 mr-2" />
               Reopen
             </DropdownMenuItem>
           ) : null}
 
-          {data.status === "FAILED" || data.status === "COMPLETED" ? null : (
+          {data.status === "FAILED" || data.status === "SENT" ? null : (
             <DropdownMenuItem
-              onClick={() =>
-                router.push(`/app/${params.teamSlug}/campaigns/${data.id}`)
+              onClick={
+                () =>
+                  router.push(
+                    `/app/${params.teamSlug}/campaigns/${params.campaignId}/messages/${data.id}`
+                  ) // Redirect to edit page
               }
             >
               <EditIcon className="size-4 mr-2" />

@@ -31,6 +31,7 @@ export default function CampaignClient({
       />
       <DataTable
         searchKey="title"
+        searchKeyLabel="titles"
         columns={columns}
         data={initialData}
         pageSize={4}

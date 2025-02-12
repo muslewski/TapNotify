@@ -1,10 +1,6 @@
 // GET, PATCH, DELETE specific team
 
 import { isTeamMember } from "@/actions/database/teamMembers";
-import {
-  DeleteMessageService,
-  updateMessageService,
-} from "@/actions/twilio/twilio-service";
 import { currentUserId } from "@/lib/auth";
 import db from "@/lib/prisma";
 import { NextResponse } from "next/server";
@@ -56,24 +52,6 @@ export async function PATCH(req: Request, { params }: TeamFunctionParams) {
       }
     }
 
-    // get messaging service SID from team that we want to update and select only the SID
-    const teamWithSID = await db.team.findUnique({
-      where: {
-        slug: teamSlug,
-      },
-      select: {
-        messagingServiceSID: true,
-      },
-    });
-
-    // check if team exists
-    if (!teamWithSID || !teamWithSID.messagingServiceSID) {
-      return new NextResponse("Team not found", { status: 404 });
-    }
-
-    // update message service friendly name
-    await updateMessageService(teamWithSID.messagingServiceSID, name);
-
     // update team in database
     const team = await db.team.update({
       where: {
@@ -115,22 +93,7 @@ export async function DELETE(_req: Request, { params }: TeamFunctionParams) {
       return new NextResponse("Unauthorized", { status: 401 });
     }
 
-    // Get messaging service SID from team that we want to delete and select only the SID
-    const teamWithSID = await db.team.findUnique({
-      where: {
-        slug: teamSlug,
-      },
-      select: {
-        messagingServiceSID: true,
-      },
-    });
-
-    if (!teamWithSID || !teamWithSID.messagingServiceSID) {
-      return new NextResponse("Team not found", { status: 404 });
-    }
-
-    // delete message service from Twilio
-    await DeleteMessageService(teamWithSID.messagingServiceSID);
+    //! When deleting team we also should delete all messaging services related to this team
 
     // delete team in database
     const team = await db.team.delete({

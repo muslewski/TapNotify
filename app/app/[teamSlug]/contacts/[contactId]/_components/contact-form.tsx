@@ -7,7 +7,8 @@ import { UserPenIcon, UserPlusIcon } from "lucide-react";
 import { z } from "zod";
 
 const contactSchema = z.object({
-  name: z.string().min(1, "Name is required"),
+  contactLabel: z.string().min(1, "ContactLabel is required"),
+  displayName: z.string().min(1, "Display name is required"),
   phone: z
     .string()
     .max(15, "Incorrect phone number")
@@ -16,11 +17,19 @@ const contactSchema = z.object({
 
 const contactFields = [
   {
-    name: "name",
-    label: "Name",
-    placeholder: "John Doe",
-    description: "The name as it should appear in messages.",
-    className: "max-w-xs",
+    name: "contactLabel",
+    label: "Contact Label",
+    placeholder: "John Doe - Instagram Ads",
+    description: "Internal name for identifying the contact.",
+    className: "max-w-md",
+    type: "text",
+  },
+  {
+    name: "displayName",
+    label: "Display Name",
+    placeholder: "John",
+    description: "The name as it should appear in dynamic messages.",
+    className: "max-w-md",
     type: "text",
   },
   {

@@ -1,5 +1,6 @@
 "use client";
 
+import Loading from "@/components/loading";
 import { useCurrentUser } from "@/hooks/use-current-user";
 import { useRouter } from "next/navigation";
 import { use, useEffect } from "react";
@@ -24,5 +25,5 @@ export default function TeamRedirectPage({
     return <div>Sign in to view this page</div>;
   }
 
-  return null;
+  return <Loading />;
 }

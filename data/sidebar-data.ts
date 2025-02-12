@@ -71,7 +71,7 @@ export const sidebarData = (teamSlug: string): SidebarDataInterface => ({
         },
         {
           title: "Edit Campaign",
-          url: `/app/${teamSlug}/campaigns/{{dynamic}}`,
+          url: `/app/${teamSlug}/campaigns/:campaignId`,
           hidden: true,
           dynamic: true,
         },
@@ -79,6 +79,23 @@ export const sidebarData = (teamSlug: string): SidebarDataInterface => ({
           title: "Schedule",
           url: `/app/${teamSlug}/campaigns/schedule`,
           underDevelopment: true,
+        },
+        {
+          title: "Campaign Messages",
+          url: `/app/${teamSlug}/campaigns/:campaignId/messages`,
+          hidden: true,
+          dynamic: true,
+        },
+        {
+          title: "Add Message",
+          url: `/app/${teamSlug}/campaigns/:campaignId/messages/add`,
+          hidden: true,
+        },
+        {
+          title: "Edit Message",
+          url: `/app/${teamSlug}/campaigns/:campaignId/messages/:messageId`,
+          hidden: true,
+          dynamic: true,
         },
       ],
     },
@@ -98,7 +115,7 @@ export const sidebarData = (teamSlug: string): SidebarDataInterface => ({
         },
         {
           title: "Edit Template",
-          url: `/app/${teamSlug}/message-templates/{{dynamic}}`,
+          url: `/app/${teamSlug}/message-templates/:templateId`,
           hidden: true,
           dynamic: true,
         },
@@ -120,7 +137,7 @@ export const sidebarData = (teamSlug: string): SidebarDataInterface => ({
         },
         {
           title: "Edit Contact",
-          url: `/app/${teamSlug}/contacts/{{dynamic}}`,
+          url: `/app/${teamSlug}/contacts/:contactId`,
           hidden: true,
           dynamic: true,
         },

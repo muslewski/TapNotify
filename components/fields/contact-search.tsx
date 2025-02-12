@@ -43,16 +43,16 @@ function fuzzySearch(items: Contact[], searchValue: string) {
       }
     }
 
-    if (!item.name) return false;
+    if (!item.contactLabel) return false;
 
-    const name = item.name.toLowerCase();
-    if (name.includes(search)) return true;
+    const label = item.contactLabel.toLowerCase();
+    if (label.includes(search)) return true;
 
     const searchLetters = search.split("");
     let currentIndex = 0;
 
     for (const letter of searchLetters) {
-      const index = name.indexOf(letter, currentIndex);
+      const index = label.indexOf(letter, currentIndex);
       if (index === -1) return false;
       currentIndex = index + 1;
     }
@@ -211,7 +211,7 @@ export function ContactSearchField({
         <PopoverContent className="w-[300px] p-0" align="start">
           <Command shouldFilter={false}>
             <CommandInput
-              placeholder="Search by name or phone..."
+              placeholder="Search by label or phone..."
               value={inputValue}
               onValueChange={setInputValue}
               className="border-none focus:ring-0"
@@ -272,7 +272,10 @@ export function ContactSearchField({
                             )}
                           >
                             <div>
-                              {highlightMatch(contact.name || "", inputValue)}
+                              {highlightMatch(
+                                contact.contactLabel || "",
+                                inputValue
+                              )}
                             </div>
                             <div className="text-muted-foreground text-xs">
                               {highlightMatch(contact.phone || "", inputValue)}
@@ -297,7 +300,7 @@ export function ContactSearchField({
               variant="secondary"
               className="flex items-center gap-1"
             >
-              {contact.name}
+              {contact.contactLabel}
               <Button
                 variant="ghost"
                 size="sm"

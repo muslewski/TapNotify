@@ -2,6 +2,7 @@
 
 import { isTeamMember } from "@/actions/database/teamMembers";
 import { addAlphaSenderToService } from "@/actions/twilio/twilio-sender";
+import { createMessageService } from "@/actions/twilio/twilio-service";
 import { currentUserId } from "@/lib/auth";
 import db from "@/lib/prisma";
 import { replaceTemplateVariables } from "@/lib/replace-template-variables";
@@ -133,7 +134,7 @@ export async function POST(req: Request, { params }: CampaignsFunctionParams) {
       return new NextResponse("Template not found", { status: 404 });
     }
 
-    // Get all contacts to access their names and phone numbers
+    // Get all contacts to access their displayName and phone numbers
     const contacts = await db.contact.findMany({
       where: {
         id: { in: contactIds },
@@ -141,7 +142,7 @@ export async function POST(req: Request, { params }: CampaignsFunctionParams) {
       },
       select: {
         id: true,
-        name: true,
+        displayName: true,
         phone: true,
       },
     });
@@ -153,32 +154,20 @@ export async function POST(req: Request, { params }: CampaignsFunctionParams) {
       );
     }
 
-    // Get Message Service SID from team
-    const teamWithMessageService = await db.team.findUnique({
-      where: { slug: teamSlug },
-      select: { messagingServiceSID: true },
-    });
-
-    if (
-      !teamWithMessageService ||
-      !teamWithMessageService.messagingServiceSID
-    ) {
-      return new NextResponse("Team with Messaging Service SID not found.", {
-        status: 404,
-      });
-    }
-
-    // Create Alphanumeric Sender ID
-    await addAlphaSenderToService(
-      teamWithMessageService.messagingServiceSID,
-      alphaSenderId
+    // Create Message Sevice for campaign
+    const messagingServiceSID = await createMessageService(
+      title + ` (${teamSlug})`
     );
+
+    // Create Alphanumeric Sender ID in messaging service
+    await addAlphaSenderToService(messagingServiceSID, alphaSenderId);
 
     // Create campaign and messages in a transaction
     const newCampaign = await db.$transaction(async (tx) => {
       const campaign = await tx.campaign.create({
         data: {
           title,
+          messagingServiceSID: messagingServiceSID,
           alphanumericSenderId: alphaSenderId,
           team: { connect: { slug: teamSlug } },
           user: { connect: { id: userId } },
@@ -189,7 +178,7 @@ export async function POST(req: Request, { params }: CampaignsFunctionParams) {
                 const processedMessage = replaceTemplateVariables(
                   template.content,
                   {
-                    name: contact.name || "",
+                    name: contact.displayName || "",
                     phone: contact.phone || "",
                   }
                 );
@@ -197,6 +186,7 @@ export async function POST(req: Request, { params }: CampaignsFunctionParams) {
                 return {
                   recipient: { connect: { id: contact.id } },
                   message: processedMessage,
+                  withTemplate: true,
                 };
               } catch (error) {
                 console.error(

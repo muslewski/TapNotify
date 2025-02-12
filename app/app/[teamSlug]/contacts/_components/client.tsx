@@ -27,7 +27,12 @@ export default function ContactClient({
           icon: PlusIcon,
         }}
       />
-      <DataTable searchKey="name" columns={columns} data={initialData} />
+      <DataTable
+        searchKey="contactLabel"
+        searchKeyLabel="contact labels"
+        columns={columns}
+        data={initialData}
+      />
     </>
   );
 }

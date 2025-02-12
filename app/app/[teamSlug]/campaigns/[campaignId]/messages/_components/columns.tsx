@@ -1,27 +1,19 @@
 "use client";
 
-import { CellAction } from "@/app/app/[teamSlug]/campaigns/_components/cell-action";
-import OpenMessagesButton from "@/app/app/[teamSlug]/campaigns/_components/open-messages-button";
+import { CellAction } from "@/app/app/[teamSlug]/campaigns/[campaignId]/messages/_components/cell-action";
 import { DateDisplayCell } from "@/app/app/_components/date-display-cell";
-import { HeaderWithTooltip } from "@/app/app/_components/header-with-tooltip";
 import { MessageTemplateCell } from "@/app/app/_components/message-template-cell";
 import SortButton from "@/app/app/_components/sort-button";
 import { StatusBadge } from "@/app/app/_components/status-badge";
-import {
-  Campaign,
-  Message,
-  MessageTemplate,
-  User as PrismaUser,
-} from "@prisma/client";
+import { Message, MessageTemplate, User as PrismaUser } from "@prisma/client";
 import { ColumnDef } from "@tanstack/react-table";
 
-export type CampaignColumn = Campaign & {
-  template: MessageTemplate & { user: PrismaUser };
-  messages: Message[];
+export type CampaignMessagesColumn = Message & {
+  template: (MessageTemplate & { user: PrismaUser }) | null;
   // Add any additional properties if needed
 };
 
-export const columns: ColumnDef<CampaignColumn>[] = [
+export const columns: ColumnDef<CampaignMessagesColumn>[] = [
   {
     accessorKey: "status",
     header: "Status",
@@ -30,32 +22,8 @@ export const columns: ColumnDef<CampaignColumn>[] = [
     ),
   },
   {
-    accessorKey: "title",
-    header: ({ column }) => <SortButton column={column} label="Title" />,
-  },
-  {
-    accessorKey: "alphanumericSenderId",
-    header: () => (
-      <HeaderWithTooltip
-        label="Alphanumeric Sender ID"
-        tooltipText="A unique identifier that appears as the sender of SMS messages. Must contain only letters and numbers."
-      />
-    ),
-  },
-  {
-    accessorKey: "messages",
-    header: () => (
-      <HeaderWithTooltip
-        label="Messages"
-        tooltipText="Open to edit messages and view contacts."
-      />
-    ),
-    cell: ({ row }) => (
-      <OpenMessagesButton
-        contactLength={row.original.messages.length}
-        data={row.original}
-      />
-    ),
+    accessorKey: "message",
+    header: "Message",
   },
   {
     accessorKey: "template.title",

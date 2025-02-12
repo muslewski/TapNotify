@@ -15,17 +15,19 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import SentMessagesGraph from "@/app/app/[teamSlug]/dashboard/_components/sent-messages-graph";
 import Heading from "@/app/app/_components/heading";
 import { useParams, useRouter } from "next/navigation";
+import { useTeamStore } from "@/store/use-team-store";
 
 export default function DashboardClient() {
   const router = useRouter();
   const params = useParams();
+  const { activeTeam } = useTeamStore();
 
   return (
     <>
       <Heading
         title="Dashboard"
         mainIcon={ChartArea}
-        description="Overview of your activity"
+        description={`Overview of your activities in ${activeTeam?.name}.`}
       />
       <div className="flex-grow overflow-hidden rounded-lg">
         <ScrollArea className="h-full overflow-y-auto pr-3" type="always">

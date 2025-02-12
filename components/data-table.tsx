@@ -36,6 +36,7 @@ interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
   searchKey: string;
+  searchKeyLabel: string;
   pageSize?: number;
 }
 
@@ -43,6 +44,7 @@ export function DataTable<TData, TValue>({
   columns,
   data,
   searchKey,
+  searchKeyLabel,
   pageSize = 8,
 }: DataTableProps<TData, TValue>) {
   const [sorting, setSorting] = useState<SortingState>([]);
@@ -72,7 +74,7 @@ export function DataTable<TData, TValue>({
     <div>
       <div className="flex items-center pb-4">
         <Input
-          placeholder={`Filter ${searchKey}s...`}
+          placeholder={`Filter ${searchKeyLabel}...`}
           value={(table.getColumn(searchKey)?.getFilterValue() as string) ?? ""}
           onChange={(event) =>
             table.getColumn(searchKey)?.setFilterValue(event.target.value)

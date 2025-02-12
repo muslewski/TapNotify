@@ -81,11 +81,16 @@ export async function POST(req: Request, { params }: ContactsFunctionParams) {
 
     // Get body from request
     const body = await req.json();
-    const { name, phone } = body;
+    const { contactLabel, displayName, phone } = body;
 
-    // Check if name is provided
-    if (!name) {
-      return new NextResponse("Name is required", { status: 400 });
+    // Check if contactLabel is provided
+    if (!contactLabel) {
+      return new NextResponse("Contact Label is required", { status: 400 });
+    }
+
+    // Check if displayName is provided
+    if (!displayName) {
+      return new NextResponse("Display Name is required", { status: 400 });
     }
 
     // Check if phone is provided
@@ -106,7 +111,8 @@ export async function POST(req: Request, { params }: ContactsFunctionParams) {
     // Create contact in database
     const contact = await db.contact.create({
       data: {
-        name,
+        contactLabel,
+        displayName,
         phone,
         user: {
           connect: {
