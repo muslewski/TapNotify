@@ -1,6 +1,6 @@
 "use client";
 
-import Loading from "@/app/app/_components/loading";
+import Loading from "@/components/loading";
 import { useCurrentUser } from "@/hooks/use-current-user";
 import { useTeamStore } from "@/store/use-team-store";
 import { useRouter } from "next/navigation"; // Changed from next/router
@@ -30,7 +30,7 @@ export default function AppRedirectPage() {
   }, [activeTeam, router]);
 
   if (!authUser || !authUser.id) {
-    return <div>Sign in to view this page</div>;
+    return <Loading />;
   }
 
   if (error) {

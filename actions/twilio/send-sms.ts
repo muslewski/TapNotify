@@ -5,19 +5,14 @@ import twilio from "twilio";
 const accountSid = process.env.TWILIO_ACCOUNT_SID;
 const authToken = process.env.TWILIO_AUTH_TOKEN;
 const twilioFallbackPhone = process.env.TWILIO_PHONE_NUMBER;
-const messagingServiceSid = process.env.TWILIO_MESSAGING_SERVICE_SID;
 
 export default async function sendSMS(
   alphanumericSenderId: string,
+  messagingServiceSID: string,
   phoneNumber: string,
   message: string
 ) {
-  if (
-    !accountSid ||
-    !authToken ||
-    !twilioFallbackPhone ||
-    !messagingServiceSid
-  ) {
+  if (!accountSid || !authToken || !twilioFallbackPhone) {
     throw new Error("Missing Twilio credentials in environment variables");
   }
 
@@ -30,7 +25,7 @@ export default async function sendSMS(
       body: message,
       from: alphanumericSenderId || twilioFallbackPhone,
       to: phoneNumber,
-      messagingServiceSid: alphanumericSenderId,
+      messagingServiceSid: messagingServiceSID,
     });
 
     console.log("SMS sent:", result);

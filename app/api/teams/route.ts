@@ -59,7 +59,7 @@ export async function POST(req: Request) {
         name: name,
         slug: slug,
         logoUrl: logoUrl,
-        MessagingServiceSID: messageServiceSid,
+        messagingServiceSID: messageServiceSid,
       },
     });
 

@@ -61,7 +61,7 @@ export async function POST(_req: Request, { params }: SendFunctionParams) {
         },
         team: {
           select: {
-            alphaSenderId: true,
+            messagingServiceSID: true,
           },
         },
       },
@@ -74,18 +74,12 @@ export async function POST(_req: Request, { params }: SendFunctionParams) {
 
     // Prepare messages for sending
     const messagesToSend = campaign.messages.map((message) => ({
-      alphanumericSenderId: campaign.team.alphaSenderId,
+      alphanumericSenderId: campaign.alphanumericSenderId,
+      messagingServiceSID: campaign.team.messagingServiceSID,
       phoneNumber: message.recipient.phone,
       message: message.message,
       messageId: message.id,
     }));
-
-    // TODO: Implement your SMS sending function here
-    // This is where you'll integrate with your SMS service
-    // For each message in messagesToSend:
-    // 1. Send the SMS
-    // 2. Update the message status in the database
-    // 3. Handle any errors
 
     // Track if all messages were sent successfully
     let allMessagesSent = true;
@@ -94,6 +88,7 @@ export async function POST(_req: Request, { params }: SendFunctionParams) {
       try {
         await sendSMS(
           messageData.alphanumericSenderId || "",
+          messageData.messagingServiceSID || "",
           messageData.phoneNumber,
           messageData.message
         );

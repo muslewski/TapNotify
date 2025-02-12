@@ -16,6 +16,17 @@ interface CampaignWithRelations extends Campaign {
 
 const campaignSchema = z.object({
   title: z.string().min(1, "Name is required"),
+  alphanumericSenderId: z
+    .string()
+    .min(1, "Alphanumeric Sender ID is required")
+    .max(11, "Alphanumeric Sender ID must not exceed 11 characters")
+    .refine((val) => val.trim().length > 0, {
+      message: "Alphanumeric Sender ID cannot be empty or contain only spaces",
+    })
+    .refine((val) => /^[a-zA-Z0-9 ]+$/.test(val), {
+      message:
+        "Alphanumeric Sender ID can only contain letters, numbers, and spaces",
+    }),
   contactIds: z.array(z.string()),
   templateId: z.string(),
 });
@@ -32,10 +43,19 @@ const getCampaignFields = (
   {
     name: "title",
     label: "Title",
-    description: "The title of the campaign.",
+    description: "Only visible to you and your team.",
     type: "text",
     className: "max-w-xl",
     placeholder: "Summer Sale 2025",
+  },
+  {
+    name: "alphanumericSenderId",
+    label: "Alphanumeric Sender ID",
+    description:
+      "This is the name that will appear as the sender of your SMS messages.",
+    type: "text",
+    className: "max-w-xl",
+    placeholder: "MyCompany",
   },
   {
     name: "contactIds",

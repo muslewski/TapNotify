@@ -62,17 +62,17 @@ export async function PATCH(req: Request, { params }: TeamFunctionParams) {
         slug: teamSlug,
       },
       select: {
-        MessagingServiceSID: true,
+        messagingServiceSID: true,
       },
     });
 
     // check if team exists
-    if (!teamWithSID || !teamWithSID.MessagingServiceSID) {
+    if (!teamWithSID || !teamWithSID.messagingServiceSID) {
       return new NextResponse("Team not found", { status: 404 });
     }
 
     // update message service friendly name
-    await updateMessageService(teamWithSID.MessagingServiceSID, name);
+    await updateMessageService(teamWithSID.messagingServiceSID, name);
 
     // update team in database
     const team = await db.team.update({
@@ -121,16 +121,16 @@ export async function DELETE(_req: Request, { params }: TeamFunctionParams) {
         slug: teamSlug,
       },
       select: {
-        MessagingServiceSID: true,
+        messagingServiceSID: true,
       },
     });
 
-    if (!teamWithSID || !teamWithSID.MessagingServiceSID) {
+    if (!teamWithSID || !teamWithSID.messagingServiceSID) {
       return new NextResponse("Team not found", { status: 404 });
     }
 
     // delete message service from Twilio
-    await DeleteMessageService(teamWithSID.MessagingServiceSID);
+    await DeleteMessageService(teamWithSID.messagingServiceSID);
 
     // delete team in database
     const team = await db.team.delete({

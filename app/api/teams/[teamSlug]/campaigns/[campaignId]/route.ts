@@ -2,9 +2,11 @@
 
 import { checkIfCampaignBelongsToTeam } from "@/actions/database/campaigns";
 import { isTeamMember } from "@/actions/database/teamMembers";
+import { updateAlphaSenderInService } from "@/actions/twilio/twilio-sender";
 import { currentUserId } from "@/lib/auth";
 import db from "@/lib/prisma";
 import { replaceTemplateVariables } from "@/lib/replace-template-variables";
+import { validateAlphanumericSenderId } from "@/lib/validate-alpha-sender";
 import { NextResponse } from "next/server";
 
 interface CampaignFunctionParams {
@@ -112,11 +114,33 @@ export async function PATCH(req: Request, { params }: CampaignFunctionParams) {
 
     // Get body from request
     const body = await req.json();
-    const { title, contactIds, templateId } = body;
+    const {
+      title,
+      alphanumericSenderId: alphaSenderId,
+      contactIds,
+      templateId,
+    } = body;
 
     // Check if title is provided
     if (!title) {
       return new NextResponse("Title is required", { status: 400 });
+    }
+
+    // Check if alphanumericSenderId is provided and valid
+    if (!alphaSenderId) {
+      return new NextResponse("Alphanumeric Sender ID is required", {
+        status: 400,
+      });
+    }
+
+    const isValidAlphaSender = validateAlphanumericSenderId(alphaSenderId);
+    if (!isValidAlphaSender.isValid) {
+      return new NextResponse(
+        isValidAlphaSender.error || "Invalid Alphanumeric Sender ID",
+        {
+          status: 400,
+        }
+      );
     }
 
     // Get the existing campaign
@@ -127,15 +151,46 @@ export async function PATCH(req: Request, { params }: CampaignFunctionParams) {
           slug: teamSlug,
         },
       },
+      include: {
+        team: {
+          select: {
+            messagingServiceSID: true,
+          },
+        },
+      },
     });
 
     if (!existingCampaign) {
       return new NextResponse("Campaign not found", { status: 404 });
     }
 
+    if (
+      !existingCampaign.team.messagingServiceSID ||
+      !existingCampaign.alphanumericSenderId
+    ) {
+      return new NextResponse(
+        "Team Messaging Service SID or Campaign Alphanumeric Sender ID not found",
+        {
+          status: 404,
+        }
+      );
+    }
+
+    // check if the new alpha sender ID is different from the existing one
+    if (alphaSenderId !== existingCampaign.alphanumericSenderId) {
+      // Update Alpha Sender ID
+      console.log("Updating Alpha Sender ID in Messaging Service...");
+      await updateAlphaSenderInService(
+        existingCampaign.team.messagingServiceSID,
+        existingCampaign.alphanumericSenderId,
+        alphaSenderId
+      );
+    }
+
     // eslint-disable-next-line
     let updateData: any = {
       title,
+      alphanumericSenderId: alphaSenderId,
     };
 
     // If templateId is provided, update template and regenerate messages

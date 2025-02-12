@@ -1,6 +1,7 @@
 // GET, POST campaigns
 
 import { isTeamMember } from "@/actions/database/teamMembers";
+import { addAlphaSenderToService } from "@/actions/twilio/twilio-sender";
 import { currentUserId } from "@/lib/auth";
 import db from "@/lib/prisma";
 import { replaceTemplateVariables } from "@/lib/replace-template-variables";
@@ -82,7 +83,12 @@ export async function POST(req: Request, { params }: CampaignsFunctionParams) {
 
     // Get body from request
     const body = await req.json();
-    const { title, alphanumericSenderId, contactIds, templateId } = body;
+    const {
+      title,
+      alphanumericSenderId: alphaSenderId,
+      contactIds,
+      templateId,
+    } = body;
 
     // Check if name is provided
     if (!title) {
@@ -90,14 +96,13 @@ export async function POST(req: Request, { params }: CampaignsFunctionParams) {
     }
 
     // Check if alphanumericSenderId is provided and valid
-    if (!alphanumericSenderId) {
+    if (!alphaSenderId) {
       return new NextResponse("Alphanumeric Sender ID is required", {
         status: 400,
       });
     }
 
-    const isValidAlphaSender =
-      validateAlphanumericSenderId(alphanumericSenderId);
+    const isValidAlphaSender = validateAlphanumericSenderId(alphaSenderId);
     if (!isValidAlphaSender.isValid) {
       return new NextResponse(
         isValidAlphaSender.error || "Invalid Alphanumeric Sender ID",
@@ -128,7 +133,7 @@ export async function POST(req: Request, { params }: CampaignsFunctionParams) {
       return new NextResponse("Template not found", { status: 404 });
     }
 
-    // Get all contacts to access their names
+    // Get all contacts to access their names and phone numbers
     const contacts = await db.contact.findMany({
       where: {
         id: { in: contactIds },
@@ -148,10 +153,25 @@ export async function POST(req: Request, { params }: CampaignsFunctionParams) {
       );
     }
 
+    // Get Message Service SID from team
+    const teamWithMessageService = await db.team.findUnique({
+      where: { slug: teamSlug },
+      select: { messagingServiceSID: true },
+    });
+
+    if (
+      !teamWithMessageService ||
+      !teamWithMessageService.messagingServiceSID
+    ) {
+      return new NextResponse("Team with Messaging Service SID not found.", {
+        status: 404,
+      });
+    }
+
     // Create Alphanumeric Sender ID
-    const alphanumericSenderId = await createAlphanumericSenderId(
-      teamSlug,
-      title
+    await addAlphaSenderToService(
+      teamWithMessageService.messagingServiceSID,
+      alphaSenderId
     );
 
     // Create campaign and messages in a transaction
@@ -159,6 +179,7 @@ export async function POST(req: Request, { params }: CampaignsFunctionParams) {
       const campaign = await tx.campaign.create({
         data: {
           title,
+          alphanumericSenderId: alphaSenderId,
           team: { connect: { slug: teamSlug } },
           user: { connect: { id: userId } },
           template: { connect: { id: templateId } },

@@ -22,7 +22,7 @@ model Team {
   name                  String
   slug                  String           @unique
   logoUrl               String?
-  MessagingServiceSID   String?     // Twilio messaging service SID for this team
+  messagingServiceSID   String?     // Twilio messaging service SID for this team
   createdAt             DateTime         @default(now())
   updatedAt             DateTime         @updatedAt
   members               TeamMember[]     // Relation to team memberships
@@ -55,7 +55,7 @@ model Campaign {
   teamId      String
   templateId  String
   userId      String
-  AlphanumericSenderId        String? @db.VarChar(11) // Twilio alphanumeric sender ID eg. "PizzaShop"
+  alphanumericSenderId        String? @db.VarChar(11) // Twilio alphanumeric sender ID eg. "PizzaShop"
   team        Team            @relation(fields: [teamId], references: [id], onDelete: Cascade)
   template    MessageTemplate @relation(fields: [templateId], references: [id])
   user        User            @relation(fields: [userId], references: [id])

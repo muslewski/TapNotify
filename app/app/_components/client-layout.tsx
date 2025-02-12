@@ -19,7 +19,7 @@ import { useTeamStore } from "@/store/use-team-store";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import React, { ReactNode, useEffect, useState } from "react";
-import Loading from "@/app/app/_components/loading";
+import Loading from "@/components/loading";
 import { sidebarData } from "@/data/sidebar-data";
 import { motion, AnimatePresence } from "framer-motion";
 import { ChevronRight } from "lucide-react";

@@ -123,7 +123,7 @@ export default function Heading({
           initial={{ opacity: 0, x: 8 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ delay: 0.3 }}
-          className="flex items-center gap-3"
+          className="flex items-center gap-3 self-end"
         >
           {redirect && (
             <motion.div whileHover={{ y: -1 }} whileTap={{ y: 0 }}>
