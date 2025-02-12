@@ -186,6 +186,7 @@ export async function POST(req: Request, { params }: CampaignsFunctionParams) {
                 return {
                   recipient: { connect: { id: contact.id } },
                   message: processedMessage,
+                  template: { connect: { id: templateId } },
                   withTemplate: true,
                 };
               } catch (error) {

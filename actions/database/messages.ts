@@ -21,6 +21,11 @@ export async function getMessagesFromCampaign(
           user: true,
         },
       },
+      recipient: {
+        include: {
+          user: true,
+        },
+      },
     },
   });
 

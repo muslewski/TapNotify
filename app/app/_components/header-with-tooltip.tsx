@@ -22,7 +22,7 @@ export const HeaderWithTooltip = ({
   className,
 }: HeaderWithTooltipProps) => {
   return (
-    <div className={cn("flex items-center space-x-2 group", className)}>
+    <div className={cn("flex items-center space-x-2 group/tooltip", className)}>
       <span className="text-sm font-medium tracking-tight">{label}</span>
       <TooltipProvider delayDuration={200}>
         <Tooltip>
@@ -33,7 +33,7 @@ export const HeaderWithTooltip = ({
               className="relative inline-flex items-center justify-center p-1"
             >
               <motion.span
-                className="absolute inset-0 rounded-full bg-gradient-to-r from-blue-100 to-indigo-100 opacity-0 group-hover:opacity-100 transition-all duration-300 blur-sm"
+                className="absolute inset-0 rounded-full bg-gradient-to-r from-blue-100 to-indigo-100 opacity-0 group-hover/tooltip:opacity-100 transition-all duration-300 blur-sm"
                 initial={false}
                 animate={{
                   scale: [1, 1.2, 1],
@@ -45,7 +45,7 @@ export const HeaderWithTooltip = ({
                 }}
               />
               <motion.span
-                className="absolute inset-0 rounded-full bg-gradient-to-r from-blue-400/20 to-indigo-400/20 opacity-0 group-hover:opacity-100 transition-all duration-300"
+                className="absolute inset-0 rounded-full bg-gradient-to-r from-blue-400/20 to-indigo-400/20 opacity-0 group-hover/tooltip:opacity-100 transition-all duration-300"
                 initial={false}
                 animate={{
                   rotate: [0, 360],
