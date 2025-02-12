@@ -1,6 +1,7 @@
 // GET, PATCH, DELETE specific team
 
 import { isTeamMember } from "@/actions/database/teamMembers";
+import { deleteMessageService } from "@/actions/twilio/twilio-service";
 import { currentUserId } from "@/lib/auth";
 import db from "@/lib/prisma";
 import { NextResponse } from "next/server";
@@ -93,16 +94,84 @@ export async function DELETE(_req: Request, { params }: TeamFunctionParams) {
       return new NextResponse("Unauthorized", { status: 401 });
     }
 
-    //! When deleting team we also should delete all messaging services related to this team
-
-    // delete team in database
-    const team = await db.team.delete({
-      where: {
-        slug: teamSlug,
+    // Get the team first to ensure it exists
+    const team = await db.team.findUnique({
+      where: { slug: teamSlug },
+      include: {
+        campaigns: true,
+        contacts: true,
+        messageTemplates: true,
+        members: true,
       },
     });
 
-    return NextResponse.json(team);
+    if (!team) {
+      return new NextResponse("Team not found", { status: 404 });
+    }
+
+    // Delete the team and all related records in a transaction
+    const deletedTeam = await db.$transaction(async (tx) => {
+      // First, delete all Twilio message services
+      const deleteMessageServicePromises = team.campaigns
+        .filter((campaign) => campaign.messagingServiceSID) // Filter out campaigns without messagingServiceSID
+        .map(async (campaign) => {
+          try {
+            if (campaign.messagingServiceSID) {
+              await deleteMessageService(campaign.messagingServiceSID);
+              console.log(
+                `[TWILIO_SERVICE_DELETE] Successfully deleted service ${campaign.messagingServiceSID}`
+              );
+            }
+          } catch (error) {
+            console.error(
+              `[TWILIO_SERVICE_DELETE] Failed to delete service ${campaign.messagingServiceSID}:`,
+              error
+            );
+            // Continue with other deletions even if one message service deletion fails
+          }
+        });
+
+      // Wait for all message service deletions to complete
+      await Promise.all(deleteMessageServicePromises);
+
+      // Delete all messages related to campaigns in this team
+      await tx.message.deleteMany({
+        where: {
+          campaign: {
+            teamId: team.id,
+          },
+        },
+      });
+
+      // Delete all campaigns
+      await tx.campaign.deleteMany({
+        where: { teamId: team.id },
+      });
+
+      // Delete all message templates
+      await tx.messageTemplate.deleteMany({
+        where: { teamId: team.id },
+      });
+
+      // Delete all contacts
+      await tx.contact.deleteMany({
+        where: { teamId: team.id },
+      });
+
+      // Delete all team members
+      await tx.teamMember.deleteMany({
+        where: { teamId: team.id },
+      });
+
+      // Finally delete the team
+      return tx.team.delete({
+        where: { slug: teamSlug },
+      });
+    });
+
+    console.log("[TEAM_DELETE]", deletedTeam);
+
+    return NextResponse.json(deletedTeam);
   } catch (error) {
     console.log("[TEAM_DELETE]", error);
     return new NextResponse("Internal error", { status: 500 });

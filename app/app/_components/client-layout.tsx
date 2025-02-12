@@ -53,6 +53,7 @@ function useTeamAccess(userId: string, teamSlug: string) {
     if (!isLoading) {
       if (teams.length === 0) {
         // Redirect to create team page
+        fetchTeams(userId);
         router.push("/app/create-team");
         return;
       }
@@ -71,7 +72,16 @@ function useTeamAccess(userId: string, teamSlug: string) {
         router.push(`/app/${firstTeam.slug}/dashboard`);
       }
     }
-  }, [isLoading, teams, teamSlug, activeTeam, setActiveTeam, router]);
+  }, [
+    isLoading,
+    teams,
+    teamSlug,
+    activeTeam,
+    setActiveTeam,
+    router,
+    fetchTeams,
+    userId,
+  ]);
 
   return {
     isLoading,

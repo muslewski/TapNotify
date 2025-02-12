@@ -41,5 +41,6 @@ export default function AppRedirectPage() {
     return <Loading />;
   }
 
+  fetchTeams(authUser.id);
   router.push(`/app/create-team`);
 }
