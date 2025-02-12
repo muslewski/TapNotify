@@ -177,30 +177,41 @@ export default function EntityForm<T>({ config }: { config: EntityConfig<T> }) {
           onSubmit={form.handleSubmit(onSubmit)}
           className="space-y-8 w-full flex flex-col"
         >
-          {config.fields.map((field) => (
-            <FormField
-              key={field.name}
-              control={form.control}
-              name={field.name}
-              render={({ field: formField }) => (
-                <FormItem
-                  className={cn(
-                    "w-full flex flex-col gap-1 py-2",
-                    field.className
-                  )}
-                >
-                  <FormLabel className={field.labelClassName}>
-                    {field.label}
-                  </FormLabel>
-                  <FormControl>{renderField(field, formField)}</FormControl>
-                  {field.description && (
-                    <FormDescription>{field.description}</FormDescription>
-                  )}
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-          ))}
+          {config.fields.map((field) =>
+            field.hidden ? (
+              <FormField
+                key={field.name}
+                control={form.control}
+                name={field.name}
+                render={({ field: formField }) => (
+                  <input type="hidden" {...formField} />
+                )}
+              />
+            ) : (
+              <FormField
+                key={field.name}
+                control={form.control}
+                name={field.name}
+                render={({ field: formField }) => (
+                  <FormItem
+                    className={cn(
+                      "w-full flex flex-col gap-1 py-2",
+                      field.className
+                    )}
+                  >
+                    <FormLabel className={field.labelClassName}>
+                      {field.label}
+                    </FormLabel>
+                    <FormControl>{renderField(field, formField)}</FormControl>
+                    {field.description && (
+                      <FormDescription>{field.description}</FormDescription>
+                    )}
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            )
+          )}
 
           <Button
             type="submit"

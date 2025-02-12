@@ -31,3 +31,65 @@ export async function getMessagesFromCampaign(
 
   return messages;
 }
+
+export async function getMessageByMessageId(
+  teamSlug: string,
+  campaignId: string,
+  messageId: string
+) {
+  const message = await db.message.findFirst({
+    where: {
+      id: messageId,
+      campaign: {
+        id: campaignId,
+        team: {
+          slug: teamSlug,
+        },
+      },
+    },
+    include: {
+      template: true,
+      recipient: true,
+    },
+  });
+
+  return message;
+}
+
+export async function checkIfMessageBelongsToCampaign(
+  messageId: string,
+  campaignId: string,
+  teamSlug: string
+): Promise<boolean> {
+  try {
+    const message = await db.message.findUnique({
+      where: {
+        id: messageId,
+      },
+      select: {
+        campaign: {
+          select: {
+            id: true,
+            team: {
+              select: {
+                slug: true,
+              },
+            },
+          },
+        },
+      },
+    });
+
+    if (!message || !message.campaign || !message.campaign.team) {
+      return false;
+    }
+
+    return (
+      message.campaign.id === campaignId &&
+      message.campaign.team.slug === teamSlug
+    );
+  } catch (error) {
+    console.error(error);
+    return false;
+  }
+}

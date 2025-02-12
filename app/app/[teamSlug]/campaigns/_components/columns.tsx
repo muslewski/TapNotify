@@ -1,7 +1,7 @@
 "use client";
 
 import { CellAction } from "@/app/app/[teamSlug]/campaigns/_components/cell-action";
-import OpenMessagesButton from "@/app/app/[teamSlug]/campaigns/_components/open-messages-button";
+// import OpenMessagesButton from "@/app/app/[teamSlug]/campaigns/_components/open-messages-button";
 import { DateDisplayCell } from "@/app/app/_components/date-display-cell";
 import { HeaderWithTooltip } from "@/app/app/_components/header-with-tooltip";
 import { MessageTemplateCell } from "@/app/app/_components/message-template-cell";
@@ -42,20 +42,24 @@ export const columns: ColumnDef<CampaignColumn>[] = [
       />
     ),
   },
+  // {
+  //   accessorKey: "messages",
+  //   header: () => (
+  //     <HeaderWithTooltip
+  //       label="Messages"
+  //       tooltipText="Open to edit messages and view contacts."
+  //     />
+  //   ),
+  //   cell: ({ row }) => (
+  //     <OpenMessagesButton
+  //       contactLength={row.original.messages.length}
+  //       data={row.original}
+  //     />
+  //   ),
+  // },
   {
-    accessorKey: "messages",
-    header: () => (
-      <HeaderWithTooltip
-        label="Messages"
-        tooltipText="Open to edit messages and view contacts."
-      />
-    ),
-    cell: ({ row }) => (
-      <OpenMessagesButton
-        contactLength={row.original.messages.length}
-        data={row.original}
-      />
-    ),
+    accessorKey: "messages.length",
+    header: "Contacts",
   },
   {
     accessorKey: "template.title",

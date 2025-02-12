@@ -114,6 +114,19 @@ export function ContactSearchField({
 
   const handleSelect = useCallback(
     (selectedValue: string) => {
+      // If in single select mode, replace the entire selection
+      if (customProps?.singleSelect) {
+        const selectedContact = contacts.find(
+          (contact) => contact.id === selectedValue
+        );
+        if (!selectedContact) return;
+
+        setSelectedContacts([selectedContact]);
+        form.setValue(field.name, selectedContact.id);
+        setOpen(false); // Close the popover after selection
+        return;
+      }
+
       if (selectedValue === "select-all") {
         // Toggle all filtered contacts
         const allSelected = filteredContacts.every((contact) =>
@@ -152,7 +165,14 @@ export function ContactSearchField({
         return [...prev, selectedContact];
       });
     },
-    [contacts, filteredContacts, selectedContacts]
+    [
+      contacts,
+      filteredContacts,
+      selectedContacts,
+      customProps?.singleSelect,
+      field.name,
+      form,
+    ]
   );
 
   const removeContact = useCallback((contactId: string) => {
@@ -201,10 +221,12 @@ export function ContactSearchField({
             className="w-full justify-between"
           >
             {selectedContacts.length > 0
-              ? `${selectedContacts.length} contact${
-                  selectedContacts.length > 1 ? "s" : ""
-                } selected`
-              : "Select contacts..."}
+              ? customProps?.singleSelect
+                ? selectedContacts[0].contactLabel || selectedContacts[0].phone
+                : `${selectedContacts.length} contact${
+                    selectedContacts.length > 1 ? "s" : ""
+                  } selected`
+              : "Select contact..."}
             <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
           </Button>
         </PopoverTrigger>
@@ -226,23 +248,27 @@ export function ContactSearchField({
               )}
               {!loading && !error && filteredContacts.length > 0 && (
                 <>
-                  <CommandItem
-                    value="select-all"
-                    onSelect={() => handleSelect("select-all")}
-                    className="cursor-pointer"
-                  >
-                    <Check
-                      className={cn(
-                        "mr-2 h-4 w-4",
-                        allFilteredSelected ? "opacity-100" : "opacity-0"
-                      )}
-                    />
-                    <span className="font-medium">
-                      {allFilteredSelected ? "Deselect All" : "Select All"}
-                      {inputValue.trim() ? " Filtered" : ""}
-                    </span>
-                  </CommandItem>
-                  <CommandSeparator />
+                  {!customProps?.singleSelect && (
+                    <>
+                      <CommandItem
+                        value="select-all"
+                        onSelect={() => handleSelect("select-all")}
+                        className="cursor-pointer"
+                      >
+                        <Check
+                          className={cn(
+                            "mr-2 h-4 w-4",
+                            allFilteredSelected ? "opacity-100" : "opacity-0"
+                          )}
+                        />
+                        <span className="font-medium">
+                          {allFilteredSelected ? "Deselect All" : "Select All"}
+                          {inputValue.trim() ? " Filtered" : ""}
+                        </span>
+                      </CommandItem>
+                      <CommandSeparator />
+                    </>
+                  )}
                   <CommandGroup>
                     {filteredContacts.map((contact) => {
                       const isSelected = selectedContacts.some(
@@ -292,7 +318,7 @@ export function ContactSearchField({
         </PopoverContent>
       </Popover>
 
-      {selectedContacts.length > 0 && (
+      {!customProps?.singleSelect && selectedContacts.length > 0 && (
         <div className="flex flex-wrap gap-2">
           {selectedContacts.map((contact) => (
             <Badge

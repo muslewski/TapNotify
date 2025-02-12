@@ -29,14 +29,15 @@ export const columns: ColumnDef<CampaignMessagesColumn>[] = [
     ),
   },
   {
+    accessorKey: "message",
+    header: "Message",
+  },
+  {
     accessorKey: "recipient.displayName",
     header: "Recipient",
     cell: ({ row }) => <RecipientCell recipient={row.original.recipient} />,
   },
-  {
-    accessorKey: "message",
-    header: "Message",
-  },
+
   {
     accessorKey: "template.title",
     header: "Message Template",

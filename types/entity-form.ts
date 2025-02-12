@@ -30,6 +30,8 @@ export type EntityConfig<T> = {
   initialData?: T;
   /** Array of fields to be rendered in the form. */
   fields: FormFieldConfig[];
+  /** Optional function to run before submitting the form. */
+  onValidate?: (data: any) => Record<string, string>;
 };
 
 /**
@@ -52,6 +54,8 @@ export type BaseFieldConfig = {
   controlClassName?: string;
   /** Default value for the field, if any. */
   defaultValue?: any;
+  /** Whether the field should be hidden in the form. */
+  hidden?: boolean | ((formData: any) => boolean);
 };
 
 /**
