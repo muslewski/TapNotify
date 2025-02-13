@@ -8,7 +8,7 @@ import {
   Facebook,
   Twitter,
   Github,
-  MessageSquare,
+  // MessageSquare,
   Loader2,
 } from "lucide-react";
 import { useState } from "react";
@@ -55,13 +55,13 @@ const providers: Provider[] = [
     color: "text-gray-900 dark:text-gray-100",
     bgHover: "hover:bg-gray-50 dark:hover:bg-gray-800/30",
   },
-  {
-    id: "discord",
-    label: "Continue with Discord",
-    icon: MessageSquare,
-    color: "text-indigo-500",
-    bgHover: "hover:bg-indigo-50 dark:hover:bg-indigo-950/30",
-  },
+  // {
+  //   id: "discord",
+  //   label: "Continue with Discord",
+  //   icon: MessageSquare,
+  //   color: "text-indigo-500",
+  //   bgHover: "hover:bg-indigo-50 dark:hover:bg-indigo-950/30",
+  // },
 ];
 
 export default function OAuth({ callbackUrl }: OAuthProps) {

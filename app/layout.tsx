@@ -3,6 +3,7 @@ import "./globals.css";
 import Providers from "@/providers/providers";
 
 import { Plus_Jakarta_Sans } from "next/font/google"; // Inter, Work_Sans, Plus_Jakarta_Sans
+import Head from "next/head";
 
 // Initialize Inter font
 const jakarta = Plus_Jakarta_Sans({
@@ -30,6 +31,9 @@ export default async function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning className={jakarta.variable}>
       <body>
+        <Head>
+          <meta name="apple-mobile-web-app-title" content="TapNotify" />
+        </Head>
         <Providers>
           <main>{children}</main>
         </Providers>
