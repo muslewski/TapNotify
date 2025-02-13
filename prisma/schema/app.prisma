@@ -24,6 +24,7 @@ model Team {
   logoUrl               String?
   createdAt             DateTime         @default(now())
   updatedAt             DateTime         @updatedAt
+  defaultCountryCode    String  
   members               TeamMember[]     // Relation to team memberships
   campaigns             Campaign[]       // Teams can now own campaigns
   messageTemplates      MessageTemplate[] // Teams can now own message templates

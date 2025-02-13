@@ -20,7 +20,7 @@ export async function PATCH(req: Request, { params }: TeamFunctionParams) {
     const userId = await currentUserId();
 
     const body = await req.json();
-    const { name, slug, logoUrl } = body;
+    const { name, slug, logoUrl, defaultCountryCode } = body;
 
     // check if user is authenticated
     if (!userId) {
@@ -35,6 +35,13 @@ export async function PATCH(req: Request, { params }: TeamFunctionParams) {
     // check if params contains teamSlug
     if (!teamSlug) {
       return new NextResponse("Team Slug is required", { status: 400 });
+    }
+
+    // check if phone country code is provided
+    if (!defaultCountryCode) {
+      return new NextResponse("Default Country Code is required", {
+        status: 400,
+      });
     }
 
     // check if user is a member of the team
@@ -62,6 +69,7 @@ export async function PATCH(req: Request, { params }: TeamFunctionParams) {
         name,
         slug,
         logoUrl,
+        defaultCountryCode,
       },
     });
 

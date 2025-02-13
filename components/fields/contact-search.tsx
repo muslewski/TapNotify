@@ -101,10 +101,12 @@ export function ContactSearchField({
   }, [fetchContacts]);
 
   useEffect(() => {
-    form.setValue(
-      field.name,
-      selectedContacts.map((contact) => contact.id)
-    );
+    const newValue = selectedContacts.map((contact) => contact.id);
+    form.setValue(field.name, newValue, {
+      shouldValidate: form.formState.isSubmitted, // Only validate if form was previously submitted
+      shouldDirty: true,
+      shouldTouch: false,
+    });
   }, [selectedContacts, field.name, form]);
 
   const filteredContacts = useMemo(() => {

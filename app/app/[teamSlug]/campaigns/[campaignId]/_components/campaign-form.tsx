@@ -27,8 +27,10 @@ const campaignSchema = z.object({
       message:
         "Alphanumeric Sender ID can only contain letters, numbers, and spaces",
     }),
-  contactIds: z.array(z.string()),
-  templateId: z.string(),
+  contactIds: z
+    .array(z.string())
+    .min(1, "At least one contact must be selected"),
+  templateId: z.string().min(1, "Template ID is required"),
 });
 
 // Create a function to extract contact IDs from campaign messages

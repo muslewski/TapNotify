@@ -1,5 +1,5 @@
 {
-  "name": "mercurify-pre-alpha",
+  "name": "tap-notify",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -50,6 +50,7 @@
     "date-fns": "^4.1.0",
     "embla-carousel-react": "^8.5.2",
     "framer-motion": "^11.18.1",
+    "fuse.js": "^7.1.0",
     "init": "^0.1.2",
     "input-otp": "^1.4.2",
     "lucide-react": "^0.474.0",

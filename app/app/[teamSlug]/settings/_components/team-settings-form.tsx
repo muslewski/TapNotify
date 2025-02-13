@@ -1,5 +1,6 @@
 "use client";
 
+import { CountryCodeField } from "@/app/app/_components/country-code-field";
 import Heading from "@/app/app/_components/heading";
 import { Button } from "@/components/ui/button";
 import {
@@ -27,6 +28,7 @@ import { z } from "zod";
 const formSchema = z.object({
   name: z.string().min(1),
   slug: z.string().min(1),
+  defaultCountryCode: z.string().optional(),
   logoUrl: z.string().optional(),
 });
 
@@ -49,6 +51,7 @@ export default function TeamSettingsForm({
     defaultValues: {
       ...initialData,
       logoUrl: initialData.logoUrl ?? undefined,
+      defaultCountryCode: initialData.defaultCountryCode ?? undefined,
     }, // Set initial form values
   });
 
@@ -144,47 +147,50 @@ export default function TeamSettingsForm({
           onSubmit={form.handleSubmit(onSubmit)}
           className="space-y-10 w-full flex flex-col"
         >
-          <FormField
-            control={form.control}
-            name="name"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Name</FormLabel>
-                <FormControl>
-                  <Input
-                    disabled={isSubmitting}
-                    placeholder="Example Corp"
-                    {...field}
-                  />
-                </FormControl>
-                <FormDescription>
-                  Set a name to represent your team.
-                </FormDescription>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
+          <div className="flex flex-wrap  gap-y-10 gap-x-20">
+            <FormField
+              control={form.control}
+              name="name"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Name</FormLabel>
+                  <FormControl>
+                    <Input
+                      disabled={isSubmitting}
+                      placeholder="Example Corp"
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormDescription>
+                    Set a name to represent your team.
+                  </FormDescription>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
 
-          <FormField
-            control={form.control}
-            name="slug"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Slug</FormLabel>
-                <FormControl>
-                  <Input
-                    disabled={isSubmitting}
-                    placeholder="example-corp"
-                    {...field}
-                  />
-                </FormControl>
-                <FormDescription>
-                  A unique identifier for your team.
-                </FormDescription>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
+            <FormField
+              control={form.control}
+              name="slug"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Slug</FormLabel>
+                  <FormControl>
+                    <Input
+                      disabled={isSubmitting}
+                      placeholder="example-corp"
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormDescription>
+                    A unique identifier for your team.
+                  </FormDescription>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </div>
+          <CountryCodeField control={form.control} disabled={isSubmitting} />
 
           <FormField
             control={form.control}

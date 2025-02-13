@@ -33,13 +33,15 @@ import {
   X,
 } from "lucide-react";
 import Link from "next/link";
-import { useCurrentUser } from "@/hooks/use-current-user"; // Adjust import path as needed
+import { useCurrentUser } from "@/hooks/use-current-user";
 import { useEffect } from "react";
 import { useTeamStore } from "@/store/use-team-store";
+import { CountryCodeField } from "@/app/app/_components/country-code-field";
 
 const formSchema = z.object({
   name: z.string().min(1),
   logoUrl: z.string().optional(),
+  defaultCountryCode: z.string().min(1, "Please select a country code"),
 });
 
 const fadeIn = {
@@ -56,6 +58,7 @@ export default function CreateTeamPage() {
     defaultValues: {
       name: "",
       logoUrl: "",
+      defaultCountryCode: "",
     },
   });
 
@@ -81,7 +84,6 @@ export default function CreateTeamPage() {
     );
   }
 
-  // Only show back button if we have teams and we're coming from a team context
   const shouldShowBackButton = teams && teams.length > 0 && activeTeam;
   const backUrl = shouldShowBackButton
     ? `/app/${activeTeam.slug}/dashboard`
@@ -188,6 +190,13 @@ export default function CreateTeamPage() {
                 </motion.div>
 
                 <motion.div variants={fadeIn} transition={{ delay: 0.3 }}>
+                  <CountryCodeField
+                    control={form.control}
+                    disabled={isSubmitting}
+                  />
+                </motion.div>
+
+                <motion.div variants={fadeIn} transition={{ delay: 0.4 }}>
                   <FormField
                     control={form.control}
                     name="logoUrl"
@@ -264,7 +273,7 @@ export default function CreateTeamPage() {
 
                 <motion.div
                   variants={fadeIn}
-                  transition={{ delay: 0.4 }}
+                  transition={{ delay: 0.5 }}
                   className="pt-4"
                 >
                   <Button

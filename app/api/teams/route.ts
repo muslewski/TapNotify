@@ -11,7 +11,7 @@ export async function POST(req: Request) {
 
     //  Get body from request
     const body = await req.json();
-    const { name, logoUrl } = body;
+    const { name, logoUrl, defaultCountryCode } = body;
 
     // Check if user is authenticated
     if (!userId) {
@@ -46,6 +46,7 @@ export async function POST(req: Request) {
         name: name,
         slug: slug,
         logoUrl: logoUrl,
+        defaultCountryCode: defaultCountryCode,
       },
     });
 

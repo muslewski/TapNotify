@@ -2,6 +2,7 @@
 
 import { CellAction } from "@/app/app/[teamSlug]/contacts/_components/cell-action";
 import { DateDisplayCell } from "@/app/app/_components/date-display-cell";
+import { PhoneNumberCell } from "@/app/app/_components/phone-number.cell";
 import SortButton from "@/app/app/_components/sort-button";
 import { Contact } from "@prisma/client";
 import { ColumnDef } from "@tanstack/react-table";
@@ -20,6 +21,7 @@ export const columns: ColumnDef<ContactColumn>[] = [
   {
     accessorKey: "phone",
     header: "Phone",
+    cell: ({ row }) => <PhoneNumberCell phoneNumber={row.original.phone} />,
   },
   {
     accessorKey: "displayName",
