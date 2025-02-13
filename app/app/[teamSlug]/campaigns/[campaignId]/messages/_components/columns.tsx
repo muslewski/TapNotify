@@ -1,6 +1,6 @@
 "use client";
 
-import { CellAction } from "@/app/app/[teamSlug]/campaigns/[campaignId]/messages/_components/cell-action";
+// import { CellAction } from "@/app/app/[teamSlug]/campaigns/[campaignId]/messages/_components/cell-action";
 import { DateDisplayCell } from "@/app/app/_components/date-display-cell";
 import { MessageTemplateCell } from "@/app/app/_components/message-template-cell";
 import { RecipientCell } from "@/app/app/_components/recipient-cell";
@@ -66,9 +66,9 @@ export const columns: ColumnDef<CampaignMessagesColumn>[] = [
       <DateDisplayCell date={new Date(row.original.updatedAt)} />
     ),
   },
-  {
-    id: "actions",
-    header: "Actions",
-    cell: ({ row }) => <CellAction data={row.original} />,
-  },
+  // {
+  //   id: "actions",
+  //   header: "Actions",
+  //   cell: ({ row }) => <CellAction data={row.original} />,
+  // },
 ];

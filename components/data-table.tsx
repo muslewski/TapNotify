@@ -47,7 +47,12 @@ export function DataTable<TData, TValue>({
   searchKeyLabel,
   pageSize = 8,
 }: DataTableProps<TData, TValue>) {
-  const [sorting, setSorting] = useState<SortingState>([]);
+  const [sorting, setSorting] = useState<SortingState>([
+    {
+      id: "updatedAt",
+      desc: true,
+    },
+  ]);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
 
@@ -67,7 +72,9 @@ export function DataTable<TData, TValue>({
       columnFilters,
       columnVisibility,
     },
-    initialState: { pagination: { pageSize: pageSize } },
+    initialState: {
+      pagination: { pageSize: pageSize },
+    },
   });
 
   return (
