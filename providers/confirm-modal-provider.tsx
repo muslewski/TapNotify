@@ -25,7 +25,13 @@ export function ConfirmModalProvider({
     description: string;
     confirmLabel?: string;
     cancelLabel?: string;
-    confirmVariant?: "default" | "destructive";
+    confirmVariant?:
+      | "default"
+      | "destructive"
+      | "outline"
+      | "secondary"
+      | "ghost"
+      | "link";
   } | null>(null);
 
   const confirmModal = useCallback(
@@ -34,7 +40,13 @@ export function ConfirmModalProvider({
       description: string;
       confirmLabel?: string;
       cancelLabel?: string;
-      confirmVariant?: "default" | "destructive";
+      confirmVariant?:
+        | "default"
+        | "destructive"
+        | "outline"
+        | "secondary"
+        | "ghost"
+        | "link";
     }) => {
       setOptions(options);
       setOpen(true);

@@ -10,7 +10,6 @@ import {
 } from "@/actions/twilio/twilio-service";
 import { currentUserId } from "@/lib/auth";
 import db from "@/lib/prisma";
-import { replaceTemplateVariables } from "@/lib/replace-template-variables";
 import { validateAlphanumericSenderId } from "@/lib/validate-alpha-sender";
 import { NextResponse } from "next/server";
 
@@ -138,6 +137,13 @@ export async function PATCH(req: Request, { params }: CampaignFunctionParams) {
       });
     }
 
+    // Check if at least one contactId or templateId is provided
+    if (!contactIds && !templateId) {
+      return new NextResponse("At least one contact or template is required", {
+        status: 400,
+      });
+    }
+
     const isValidAlphaSender = validateAlphanumericSenderId(alphaSenderId);
     if (!isValidAlphaSender.isValid) {
       return new NextResponse(
@@ -207,10 +213,9 @@ export async function PATCH(req: Request, { params }: CampaignFunctionParams) {
 
     // If templateId is provided, update template and regenerate messages
     if (templateId) {
-      // Get the template to access its content
+      // Get the template
       const template = await db.messageTemplate.findUnique({
         where: { id: templateId, team: { slug: teamSlug } },
-        select: { content: true },
       });
 
       if (!template) {
@@ -242,10 +247,27 @@ export async function PATCH(req: Request, { params }: CampaignFunctionParams) {
         );
       }
 
+      // Get existing messages for this campaign
+      const existingMessages = await db.message.findMany({
+        where: {
+          campaignId,
+        },
+        select: {
+          recipientId: true,
+          status: true,
+        },
+      });
+
+      // Create a map of existing messages by recipient ID
+      const existingMessagesByRecipient = new Map(
+        existingMessages.map((msg) => [msg.recipientId, msg])
+      );
+
       // Delete existing messages
       await db.message.deleteMany({
         where: {
           campaignId,
+          status: { not: "SENT" },
         },
       });
 
@@ -259,20 +281,24 @@ export async function PATCH(req: Request, { params }: CampaignFunctionParams) {
         return new NextResponse("Template not found", { status: 404 });
       }
 
-      // Create new messages
-      updateData.messages = {
-        create: contacts.map((contact) => {
-          const processedMessage = replaceTemplateVariables(template.content, {
-            name: contact.displayName || "",
-            phone: contact.phone || "",
-          });
+      // Create new messages only for contacts that don't have SENT messages
+      const contactsNeedingNewMessages = contacts.filter((contact) => {
+        const existingMessage = existingMessagesByRecipient.get(contact.id);
+        return !existingMessage || existingMessage.status !== "SENT";
+      });
 
-          return {
-            recipient: { connect: { id: contact.id } },
-            message: processedMessage,
-          };
-        }),
-      };
+      if (contactsNeedingNewMessages.length > 0) {
+        updateData.messages = {
+          create: contactsNeedingNewMessages.map((contact) => {
+            return {
+              recipient: { connect: { id: contact.id } },
+              template: {
+                connect: { id: templateId || existingCampaign.templateId },
+              },
+            };
+          }),
+        };
+      }
     }
 
     // Update campaign in database
@@ -297,6 +323,8 @@ export async function PATCH(req: Request, { params }: CampaignFunctionParams) {
     return new NextResponse("Internal Server Error", { status: 500 });
   }
 }
+
+///!!!!!
 
 // This function handles DELETE request to delete specific campaign
 export async function DELETE(

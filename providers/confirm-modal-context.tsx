@@ -7,7 +7,13 @@ interface ConfirmModalOptions {
   description: string;
   confirmLabel?: string;
   cancelLabel?: string;
-  confirmVariant?: "default" | "destructive";
+  confirmVariant?:
+    | "default"
+    | "destructive"
+    | "outline"
+    | "secondary"
+    | "ghost"
+    | "link";
 }
 
 interface ConfirmModalContextType {

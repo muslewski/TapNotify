@@ -18,11 +18,37 @@ interface HeadingProps {
     icon: LucideIcon;
   };
   deleteButton?: {
+    loading?: boolean;
     label: string;
     onClick: () => void;
     confirmModal?: {
       heading: string;
       description: string;
+    };
+  };
+  customButton?: {
+    loading?: boolean;
+    label: string;
+    onClick: () => void;
+    icon: LucideIcon;
+    variant?:
+      | "default"
+      | "destructive"
+      | "outline"
+      | "secondary"
+      | "ghost"
+      | "link";
+    confirmModal?: {
+      heading: string;
+      description: string;
+      confirmLabel?: string;
+      confirmVariant?:
+        | "default"
+        | "destructive"
+        | "outline"
+        | "secondary"
+        | "ghost"
+        | "link";
     };
   };
 }
@@ -34,6 +60,7 @@ export default function Heading({
   number,
   redirect,
   deleteButton,
+  customButton,
 }: HeadingProps) {
   const { confirmModal } = useConfirmModal();
 
@@ -51,6 +78,23 @@ export default function Heading({
       }
     } else {
       deleteButton?.onClick();
+    }
+  };
+
+  const handleCustomAction = async () => {
+    if (customButton?.confirmModal) {
+      const confirmed = await confirmModal({
+        heading: customButton.confirmModal.heading,
+        description: customButton.confirmModal.description,
+        confirmLabel: customButton.confirmModal.confirmLabel || "Confirm",
+        confirmVariant: customButton.confirmModal.confirmVariant || "default",
+      });
+
+      if (confirmed) {
+        customButton.onClick();
+      }
+    } else {
+      customButton?.onClick();
     }
   };
 
@@ -136,12 +180,28 @@ export default function Heading({
             </motion.div>
           )}
 
+          {customButton && (
+            <motion.div whileHover={{ y: -1 }} whileTap={{ y: 0 }}>
+              <Button
+                variant={customButton.variant || "default"}
+                size="sm"
+                onClick={handleCustomAction}
+                disabled={customButton.loading || deleteButton?.loading}
+                className="h-9"
+              >
+                <customButton.icon className="mr-2 h-4 w-4" />
+                {customButton.label}
+              </Button>
+            </motion.div>
+          )}
+
           {deleteButton && (
             <motion.div whileHover={{ y: -1 }} whileTap={{ y: 0 }}>
               <Button
                 variant="destructive"
                 size="sm"
                 onClick={handleDelete}
+                disabled={deleteButton.loading || customButton?.loading}
                 className="h-9"
               >
                 <Trash2 className="mr-2 h-4 w-4" />

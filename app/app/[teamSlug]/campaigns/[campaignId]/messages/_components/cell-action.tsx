@@ -9,19 +9,19 @@ import {
   DropdownMenuLabel,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
+// import {
+//   Tooltip,
+//   TooltipContent,
+//   TooltipProvider,
+//   TooltipTrigger,
+// } from "@/components/ui/tooltip";
 import { useConfirmModal } from "@/providers/confirm-modal-context";
 import {
-  EditIcon,
+  // EditIcon,
   MoreHorizontalIcon,
-  SendIcon,
+  // SendIcon,
   TrashIcon,
-  Undo2,
+  // Undo2,
 } from "lucide-react";
 import { useParams, useRouter } from "next/navigation";
 import { useState } from "react";
@@ -37,39 +37,39 @@ export function CellAction({ data }: CellActionProps) {
   const params = useParams();
   const router = useRouter();
 
-  const sendSingleMessage = async () => {
-    try {
-      setLoading(true);
-      const confirmed = await confirmModal({
-        heading: "Send Message",
-        description: "Are you sure you want to send this message to recipient?",
-        confirmLabel: "Send",
-        confirmVariant: "default",
-      });
+  // const sendSingleMessage = async () => {
+  //   try {
+  //     setLoading(true);
+  //     const confirmed = await confirmModal({
+  //       heading: "Send Message",
+  //       description: "Are you sure you want to send this message to recipient?",
+  //       confirmLabel: "Send",
+  //       confirmVariant: "default",
+  //     });
 
-      if (confirmed) {
-        // Send request to send campaign
-        const response = await fetch(
-          `/api/teams/${params.teamSlug}/campaigns/${params.campaignId}/messages/${data.id}/send`,
-          {
-            method: "POST",
-          }
-        );
+  //     if (confirmed) {
+  //       // Send request to send campaign
+  //       const response = await fetch(
+  //         `/api/teams/${params.teamSlug}/campaigns/${params.campaignId}/messages/${data.id}/send`,
+  //         {
+  //           method: "POST",
+  //         }
+  //       );
 
-        if (!response.ok) {
-          throw new Error(`Error: ${response.status} ${response.statusText}`);
-        }
+  //       if (!response.ok) {
+  //         throw new Error(`Error: ${response.status} ${response.statusText}`);
+  //       }
 
-        toast.success("Message sent successfully.");
-        router.refresh(); // Refresh the page to reflect changes
-      }
-    } catch (error) {
-      console.error(error);
-      toast.error("Failed to sent message.");
-    } finally {
-      setLoading(false);
-    }
-  };
+  //       toast.success("Message sent successfully.");
+  //       router.refresh(); // Refresh the page to reflect changes
+  //     }
+  //   } catch (error) {
+  //     console.error(error);
+  //     toast.error("Failed to sent message.");
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // };
 
   const handleDelete = async () => {
     try {
@@ -106,43 +106,43 @@ export function CellAction({ data }: CellActionProps) {
     }
   };
 
-  const handleReopen = async () => {
-    try {
-      setLoading(true);
-      const confirmed = await confirmModal({
-        heading: "Reopen Message",
-        description:
-          "This will move your message back to the draft state, allowing you to edit and resend it. Are you sure?",
-        confirmLabel: "Reopen",
-        confirmVariant: "default",
-      });
+  // const handleReopen = async () => {
+  //   try {
+  //     setLoading(true);
+  //     const confirmed = await confirmModal({
+  //       heading: "Reopen Message",
+  //       description:
+  //         "This will move your message back to the draft state, allowing you to edit and resend it. Are you sure?",
+  //       confirmLabel: "Reopen",
+  //       confirmVariant: "default",
+  //     });
 
-      if (confirmed) {
-        const response = await fetch(
-          `/api/teams/${params.teamSlug}/campaigns/${params.campaignId}/messages/${data.id}/reopen`,
-          {
-            method: "POST",
-          }
-        );
+  //     if (confirmed) {
+  //       const response = await fetch(
+  //         `/api/teams/${params.teamSlug}/campaigns/${params.campaignId}/messages/${data.id}/reopen`,
+  //         {
+  //           method: "POST",
+  //         }
+  //       );
 
-        if (!response.ok) {
-          throw new Error(`Error: ${response.status} ${response.statusText}`);
-        }
+  //       if (!response.ok) {
+  //         throw new Error(`Error: ${response.status} ${response.statusText}`);
+  //       }
 
-        toast.success("Message reopened successfully.");
-        router.refresh(); // Refresh the page to reflect changes
-      }
-    } catch (error) {
-      console.error(error);
-      toast.error("Failed to reopen message.");
-    } finally {
-      setLoading(false);
-    }
-  };
+  //       toast.success("Message reopened successfully.");
+  //       router.refresh(); // Refresh the page to reflect changes
+  //     }
+  //   } catch (error) {
+  //     console.error(error);
+  //     toast.error("Failed to reopen message.");
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // };
 
   return (
     <div className="flex items-center gap-2">
-      <TooltipProvider delayDuration={50}>
+      {/* <TooltipProvider delayDuration={50}>
         <Tooltip>
           <TooltipTrigger asChild>
             <Button
@@ -159,7 +159,7 @@ export function CellAction({ data }: CellActionProps) {
             <p>Send Message</p>
           </TooltipContent>
         </Tooltip>
-      </TooltipProvider>
+      </TooltipProvider> */}
 
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
@@ -171,15 +171,15 @@ export function CellAction({ data }: CellActionProps) {
 
         <DropdownMenuContent align="end">
           <DropdownMenuLabel>Actions</DropdownMenuLabel>
-          {data.status === "FAILED" || data.status === "SENT" ? (
+          {/* {data.status === "FAILED" || data.status === "SENT" ? (
             // Add re-open option for failed and sent messages
             <DropdownMenuItem onClick={handleReopen} disabled={loading}>
               <Undo2 className="size-4 mr-2" />
               Reopen
             </DropdownMenuItem>
-          ) : null}
+          ) : null} */}
 
-          {data.status === "FAILED" || data.status === "SENT" ? null : (
+          {/* {data.status === "FAILED" || data.status === "SENT" ? null : (
             <DropdownMenuItem
               onClick={
                 () =>
@@ -191,7 +191,7 @@ export function CellAction({ data }: CellActionProps) {
               <EditIcon className="size-4 mr-2" />
               Edit
             </DropdownMenuItem>
-          )}
+          )} */}
           <DropdownMenuItem onClick={handleDelete} disabled={loading}>
             <TrashIcon className="size-4 mr-2" />
             Delete

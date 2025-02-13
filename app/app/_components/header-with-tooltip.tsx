@@ -66,7 +66,7 @@ export const HeaderWithTooltip = ({
           >
             <AnimatePresence>
               <motion.div
-                className="space-y-2"
+                className="space-y-1"
                 initial={{ opacity: 0, y: 5 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -5 }}

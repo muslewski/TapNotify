@@ -9,6 +9,7 @@ import { SmartCell } from "@/components/smart-cell";
 import Link from "next/link";
 import { useParams } from "next/navigation";
 import { HeaderWithTooltip } from "@/app/app/_components/header-with-tooltip";
+import { PhoneNumberFormatter } from "@/app/app/_components/phone-number-formatter";
 
 interface RecipientCellProps {
   recipient: Contact & { user: PrismaUser };
@@ -17,10 +18,6 @@ interface RecipientCellProps {
 export const RecipientCell = ({ recipient }: RecipientCellProps) => {
   const [isCopied, setIsCopied] = useState(false);
   const params = useParams();
-
-  const formatPhoneNumber = (phone: string) => {
-    return phone;
-  };
 
   const copyToClipboard = async (e: React.MouseEvent) => {
     e.stopPropagation();
@@ -42,7 +39,9 @@ export const RecipientCell = ({ recipient }: RecipientCellProps) => {
       preview={
         <div className="flex items-center gap-2">
           <Phone className="h-3 w-3" />
-          <span className="truncate">{formatPhoneNumber(recipient.phone)}</span>
+          <span className="truncate">
+            <PhoneNumberFormatter phoneNumber={recipient.phone} />
+          </span>
         </div>
       }
       dialogTitle="Recipient Details"
@@ -93,8 +92,8 @@ export const RecipientCell = ({ recipient }: RecipientCellProps) => {
             </label>
             <div className="mt-1 flex items-center gap-3">
               <Phone className="h-4 w-4 text-primary" />
-              <span className="text-foreground">
-                {formatPhoneNumber(recipient.phone)}
+              <span className="text-foreground text-sm font-medium">
+                <PhoneNumberFormatter phoneNumber={recipient.phone} />
               </span>
               <Button
                 size="sm"

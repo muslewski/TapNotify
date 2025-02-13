@@ -5,7 +5,6 @@ import { addAlphaSenderToService } from "@/actions/twilio/twilio-sender";
 import { createMessageService } from "@/actions/twilio/twilio-service";
 import { currentUserId } from "@/lib/auth";
 import db from "@/lib/prisma";
-import { replaceTemplateVariables } from "@/lib/replace-template-variables";
 import { validateAlphanumericSenderId } from "@/lib/validate-alpha-sender";
 import { NextResponse } from "next/server";
 
@@ -175,19 +174,9 @@ export async function POST(req: Request, { params }: CampaignsFunctionParams) {
           messages: {
             create: contacts.map((contact) => {
               try {
-                const processedMessage = replaceTemplateVariables(
-                  template.content,
-                  {
-                    name: contact.displayName || "",
-                    phone: contact.phone || "",
-                  }
-                );
-
                 return {
                   recipient: { connect: { id: contact.id } },
-                  message: processedMessage,
                   template: { connect: { id: templateId } },
-                  withTemplate: true,
                 };
               } catch (error) {
                 console.error(

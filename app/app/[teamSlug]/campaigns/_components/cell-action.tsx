@@ -19,6 +19,7 @@ import { useConfirmModal } from "@/providers/confirm-modal-context";
 import {
   EditIcon,
   MoreHorizontalIcon,
+  RotateCcw,
   SendIcon,
   TrashIcon,
   Undo2,
@@ -142,24 +143,89 @@ export function CellAction({ data }: CellActionProps) {
 
   return (
     <div className="flex items-center gap-2">
-      <TooltipProvider delayDuration={50}>
-        <Tooltip>
-          <TooltipTrigger asChild>
-            <Button
-              variant="default"
-              size="icon"
-              className="size-8 p-0"
-              onClick={startCampaign}
-              disabled={loading || data.status !== "DRAFT"}
-            >
-              <SendIcon className="size-4" />
-            </Button>
-          </TooltipTrigger>
-          <TooltipContent>
-            <p>Start Campaign</p>
-          </TooltipContent>
-        </Tooltip>
-      </TooltipProvider>
+      {(data.status === "SENT" || data.status === "FAILED") && (
+        <TooltipProvider delayDuration={50}>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Button
+                variant="default"
+                size="icon"
+                className="size-8 p-0"
+                onClick={startCampaign}
+                disabled={loading}
+              >
+                <RotateCcw className="size-4" />
+              </Button>
+            </TooltipTrigger>
+            <TooltipContent align="end">
+              <div className="space-y-1">
+                <div className="font-medium text-sm text-foreground">
+                  Retry Undelivered
+                </div>
+                <p className="text-sm font-normal text-muted-foreground max-w-[280px] leading-relaxed">
+                  Send messages to contacts who did not receive the message.
+                </p>
+              </div>
+            </TooltipContent>
+          </Tooltip>
+        </TooltipProvider>
+      )}
+
+      {data.status === "DRAFT" && (
+        <TooltipProvider delayDuration={50}>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Button
+                variant="default"
+                size="icon"
+                className="size-8 p-0"
+                onClick={startCampaign}
+                disabled={loading || data.status !== "DRAFT"}
+              >
+                <SendIcon className="size-4" />
+              </Button>
+            </TooltipTrigger>
+            <TooltipContent align="end">
+              <div className="space-y-1">
+                <div className="font-medium text-sm text-foreground">
+                  Start Campaign
+                </div>
+                <p className="text-sm font-normal text-muted-foreground max-w-[280px] leading-relaxed">
+                  Send messages to all contacts in this campaign.
+                </p>
+              </div>
+            </TooltipContent>
+          </Tooltip>
+        </TooltipProvider>
+      )}
+
+      {(data.status === "COMPLETED" || data.status === "FAILED") && (
+        <TooltipProvider delayDuration={50}>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Button
+                variant="default"
+                size="icon"
+                className="size-8 p-0"
+                onClick={handleReopen}
+                disabled={loading}
+              >
+                <Undo2 className="size-4" />
+              </Button>
+            </TooltipTrigger>
+            <TooltipContent align="end">
+              <div className="space-y-1">
+                <div className="font-medium text-sm text-foreground">
+                  Reopen Campaign
+                </div>
+                <p className="text-sm font-normal text-muted-foreground max-w-[280px] leading-relaxed">
+                  Move this campaign back to draft state.
+                </p>
+              </div>
+            </TooltipContent>
+          </Tooltip>
+        </TooltipProvider>
+      )}
 
       <DropdownMenu>
         <DropdownMenuTrigger asChild>

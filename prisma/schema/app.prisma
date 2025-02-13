@@ -12,6 +12,7 @@ enum MessageStatus {
 
 enum CampaignStatus {
   DRAFT
+  SENT
   SCHEDULED
   COMPLETED
   FAILED
@@ -88,7 +89,6 @@ model Message {
 
   templateId   String?
   template     MessageTemplate?  @relation(fields: [templateId], references: [id])
-  withTemplate Boolean        @default(false)
 
   campaignId   String
   recipientId  String

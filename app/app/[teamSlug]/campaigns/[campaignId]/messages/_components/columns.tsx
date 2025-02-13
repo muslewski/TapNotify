@@ -25,15 +25,19 @@ export const columns: ColumnDef<CampaignMessagesColumn>[] = [
     accessorKey: "status",
     header: "Status",
     cell: ({ row }) => (
-      <StatusBadge status={row.original.status} type="campaign" />
+      <StatusBadge
+        status={row.original.status}
+        errorMessage={row.original.errorMessage}
+        type="message"
+      />
     ),
   },
+  // {
+  //   accessorKey: "message",
+  //   header: "Message",
+  // },
   {
-    accessorKey: "message",
-    header: "Message",
-  },
-  {
-    accessorKey: "recipient.displayName",
+    accessorKey: "recipient.contactLabel",
     header: "Recipient",
     cell: ({ row }) => <RecipientCell recipient={row.original.recipient} />,
   },
@@ -44,7 +48,7 @@ export const columns: ColumnDef<CampaignMessagesColumn>[] = [
     cell: ({ row }) => (
       <MessageTemplateCell
         template={row.original.template}
-        disabled={!row.original.withTemplate}
+        disabled={!row.original.template}
       />
     ),
   },
