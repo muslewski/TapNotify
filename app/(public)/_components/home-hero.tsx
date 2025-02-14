@@ -37,18 +37,12 @@ const itemVariants = {
 
 export default function HomeHero() {
   return (
-    <div className="snap-start relative bg-gradient-to-b from-background to-secondary/20 min-h-screen flex flex-col items-center justify-center px-4 sm:px-6 lg:px-8 overflow-hidden">
-      {/* Background decoration */}
-      <div className="absolute inset-0 overflow-hidden">
-        <div className="absolute -top-[40%] -left-[20%] w-[80%] h-[80%] rounded-full bg-primary/5 blur-3xl" />
-        <div className="absolute -bottom-[40%] -right-[20%] w-[80%] h-[80%] rounded-full bg-secondary/5 blur-3xl" />
-      </div>
-
+    <div className="snap-start bg-gradient-to-b from-background to-secondary/20 min-h-screen flex flex-col items-center justify-center px-4 sm:px-6 lg:px-8">
       <motion.div
         variants={containerVariants}
         initial="hidden"
         animate="visible"
-        className="relative text-center max-w-4xl mx-auto"
+        className="text-center max-w-4xl mx-auto"
       >
         <motion.div
           initial={{ scale: 0, rotate: -180 }}
@@ -58,22 +52,9 @@ export default function HomeHero() {
             stiffness: 260,
             damping: 20,
           }}
-          className="mb-8"
+          className="mb-8 relative w-16 h-16 mx-auto"
         >
-          <div className="relative">
-            <MessageSquare className="w-16 h-16 mx-auto text-primary" />
-            <motion.div
-              animate={{
-                scale: [1, 1.2, 1],
-              }}
-              transition={{
-                duration: 2,
-                repeat: Infinity,
-                ease: "easeInOut",
-              }}
-              className="absolute inset-0 bg-primary/20 rounded-full blur-xl"
-            />
-          </div>
+          <MessageSquare className="w-16 h-16 text-primary relative z-10" />
         </motion.div>
 
         <motion.div variants={itemVariants} className="space-y-4">
@@ -109,7 +90,7 @@ export default function HomeHero() {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 1 + index * 0.2 }}
-                className="flex items-center space-x-2 text-muted-foreground"
+                className="flex items-center space-x-2 text-muted-foreground hover:text-primary transition-colors"
               >
                 <feature.icon className="h-5 w-5 text-primary" />
                 <span>{feature.text}</span>
