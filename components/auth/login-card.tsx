@@ -1,10 +1,11 @@
 "use client";
 
 import { motion } from "framer-motion";
-import MagicLink from "@/components/auth/magic-link";
+// import MagicLink from "@/components/auth/magic-link";
 import OAuth from "@/components/auth/oauth";
 import { DEFAULT_LOGIN_REDIRECT } from "@/routes";
 import { useSearchParams } from "next/navigation";
+import ComingSoonMagicLink from "@/components/auth/coming-soon-magic-link";
 
 export default function LoginCard() {
   const searchParams = useSearchParams();
@@ -60,7 +61,8 @@ export default function LoginCard() {
       </div>
 
       <motion.div variants={itemVariants}>
-        <MagicLink callbackUrl={callbackUrl} />
+        {/* <MagicLink callbackUrl={callbackUrl} /> */}
+        <ComingSoonMagicLink />
       </motion.div>
     </motion.div>
   );
