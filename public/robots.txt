@@ -1,0 +1,17 @@
+# Default robots.txt for SaaS application
+# Last updated: 2025-02-14
+
+User-agent: *
+# Allow public routes including sign-in
+Allow: /
+Allow: /sign-in
+
+# Block protected app routes
+Disallow: /app/
+Disallow: /app/*
+
+# Block API routes
+Disallow: /api/
+Disallow: /api/*
+
+Crawl-delay: 10
