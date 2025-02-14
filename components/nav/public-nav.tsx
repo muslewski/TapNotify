@@ -24,7 +24,7 @@ export default function PublicNav() {
 
   const navItems = [
     { href: "/features", label: "Features" },
-    // { href: "/pricing", label: "Pricing" },
+    { href: "/pricing", label: "Pricing" },
     { href: "/contact", label: "Contact" },
   ];
 
