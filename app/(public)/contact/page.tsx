@@ -1,3 +1,9 @@
+import ComingSoon from "@/components/coming-soon";
+
 export default function ContactPage() {
-  return <div></div>;
+  return (
+    <div>
+      <ComingSoon />
+    </div>
+  );
 }

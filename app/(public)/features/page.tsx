@@ -1,3 +1,9 @@
+import ComingSoon from "@/components/coming-soon";
+
 export default function FeaturesPage() {
-  return <div></div>;
+  return (
+    <div>
+      <ComingSoon />
+    </div>
+  );
 }

@@ -1,5 +1,7 @@
 "use client";
 
+import ComingSoon from "@/components/coming-soon";
+
 // import { useState, useEffect } from "react";
 // import { loadStripe } from "@stripe/stripe-js";
 
@@ -43,5 +45,9 @@ export default function Subscriptions() {
   //   }
   // };
 
-  return <div></div>;
+  return (
+    <div>
+      <ComingSoon />
+    </div>
+  );
 }
