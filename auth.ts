@@ -14,7 +14,17 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     Facebook,
     Twitter,
     GitHub,
-    Resend({ from: `TapNotify <${process.env.RESEND_EMAIL}>` }),
+    Resend({
+      from: `TapNotify <${process.env.RESEND_EMAIL}>`,
+      server: {
+        host: process.env.RESEND_SMTP_HOST,
+        port: Number(process.env.RESEND_SMTP_PORT),
+        auth: {
+          user: process.env.RESEND_SMTP_USER,
+          pass: process.env.AUTH_RESEND_KEY,
+        },
+      },
+    }),
   ],
   pages: {
     signIn: "/sign-in",
