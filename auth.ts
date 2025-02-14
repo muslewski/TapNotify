@@ -31,12 +31,4 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     verifyRequest: "/sign-in",
     error: "/sign-in",
   },
-  callbacks: {
-    async redirect({ url, baseUrl }) {
-      // Allows only relative URLs and URLs on the same origin
-      if (url.startsWith(baseUrl)) return url;
-      if (url.startsWith("/")) return new URL(url, baseUrl).toString();
-      return baseUrl;
-    },
-  },
 });
