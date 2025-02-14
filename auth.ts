@@ -6,7 +6,6 @@ import Google from "next-auth/providers/google";
 import Twitter from "next-auth/providers/twitter";
 import Resend from "next-auth/providers/resend";
 import prisma from "@/lib/prisma";
-import { sendVerificationRequest } from "./lib/auth-email";
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
   adapter: PrismaAdapter(prisma),
@@ -15,10 +14,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     Facebook,
     Twitter,
     GitHub,
-    Resend({
-      from: `TapNotify <${process.env.RESEND_EMAIL}>`,
-      sendVerificationRequest,
-    }),
+    Resend({ from: `TapNotify <${process.env.RESEND_EMAIL}>` }),
   ],
   pages: {
     signIn: "/sign-in",
