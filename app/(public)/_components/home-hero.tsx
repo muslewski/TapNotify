@@ -169,7 +169,7 @@ export default function HomeHero() {
             ))}
           </div>
 
-          <motion.div
+          {/* <motion.div
             className="pt-6 border-t border-border/50"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -178,7 +178,7 @@ export default function HomeHero() {
             <p className="text-sm text-muted-foreground">
               Trusted by innovative companies worldwide
             </p>
-          </motion.div>
+          </motion.div> */}
         </motion.div>
       </motion.div>
     </div>
