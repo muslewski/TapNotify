@@ -20,7 +20,10 @@ export const columns: ColumnDef<MessageTemplateColumn>[] = [
     accessorKey: "content",
     header: "Content",
     cell: ({ row }) => (
-      <div className="">{formatTemplateContent(row.original.content)}</div>
+      // TODO: Make it display better
+      <div className="whitespace-pre-wrap">
+        {formatTemplateContent(row.original.content)}
+      </div>
     ),
   },
   {

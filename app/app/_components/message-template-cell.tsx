@@ -78,7 +78,7 @@ export const MessageTemplateCell = ({
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -5 }}
             >
-              <div className="bg-card border rounded-lg p-6 leading-relaxed shadow-sm">
+              <div className="bg-card border rounded-lg p-6 leading-relaxed shadow-sm whitespace-pre-wrap">
                 {formatTemplateContent(template.content)}
               </div>
             </motion.div>
