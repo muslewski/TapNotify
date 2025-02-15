@@ -56,7 +56,7 @@ export default function MagicLink({ callbackUrl }: MagicLinkProps) {
   };
 
   return (
-    <Card className="w-full p-10 space-y-6 border-dashed border-muted">
+    <Card className="w-full p-5 xl:p-10 space-y-6 border-dashed border-muted">
       <div className="space-y-6">
         <p className="text-sm text-muted-foreground">
           We&apos;ll send you a secure link to sign in to your account.

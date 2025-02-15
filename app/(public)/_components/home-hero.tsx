@@ -47,7 +47,7 @@ const floatingAnimation = {
 
 export default function HomeHero() {
   return (
-    <div className="snap-start bg-gradient-to-b from-background to-secondary/20 min-h-screen flex flex-col items-center justify-center px-4 sm:px-6 lg:px-8 relative overflow-hidden">
+    <div className="snap-start bg-gradient-to-b from-background to-secondary/20 min-h-screen flex flex-col items-center justify-center pt-20 xl:pt-0 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
       <motion.div
         variants={floatingAnimation}
         initial="hidden"
@@ -100,7 +100,7 @@ export default function HomeHero() {
         </motion.div>
 
         <motion.div variants={itemVariants} className="space-y-4">
-          <h1 className="text-4xl font-bold tracking-tight text-foreground sm:text-5xl md:text-6xl lg:text-7xl">
+          <h1 className="text-4xl font-bold tracking-tight text-foreground sm:text-5xl xl:text-6xl 2xl:text-7xl">
             Mass SMS,{" "}
             <span className="relative inline-block">
               <span className="relative z-10 text-primary px-3 py-2">
@@ -120,7 +120,7 @@ export default function HomeHero() {
               />
             </span>
           </h1>
-          <p className="mt-3 text-base text-muted-foreground sm:text-lg md:mt-5 md:text-xl max-w-2xl mx-auto">
+          <p className="mt-3 text-muted-foreground sm:text-lg md:mt-5 text-base xl:text-xl max-w-2xl mx-auto">
             Reach thousands of clients instantly with our powerful, reliable,
             and secure SMS platform. Start connecting with your audience today.
           </p>
@@ -169,16 +169,16 @@ export default function HomeHero() {
             ))}
           </div>
 
-          {/* <motion.div
+          <motion.div
             className="pt-6 border-t border-border/50"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 1.8 }}
           >
-            <p className="text-sm text-muted-foreground">
+            {/* <p className="text-muted-foreground">
               Trusted by innovative companies worldwide
-            </p>
-          </motion.div> */}
+            </p> */}
+          </motion.div>
         </motion.div>
       </motion.div>
     </div>

@@ -29,7 +29,7 @@ export default function PublicNav() {
   ];
 
   return (
-    <nav className="border-b fixed z-10 w-full backdrop-blur-md">
+    <nav className="border-b fixed z-50 w-full backdrop-blur-md">
       <div className="flex items-center gap-12 justify-between px-4 py-3 md:px-12 md:py-4">
         <div className="flex items-center">
           <Sheet open={isMenuOpen} onOpenChange={setIsMenuOpen}>

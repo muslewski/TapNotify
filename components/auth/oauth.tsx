@@ -76,7 +76,7 @@ export default function OAuth({ callbackUrl }: OAuthProps) {
   };
 
   return (
-    <Card className="space-y-6 border-dashed border-muted b p-10">
+    <Card className="space-y-6 border-dashed border-muted b p-5 xl:p-10">
       <div className="space-y-2">
         <p className="text-sm text-muted-foreground">
           Choose your preferred social account for secure sign-in experience.
@@ -106,7 +106,7 @@ export default function OAuth({ callbackUrl }: OAuthProps) {
                 onClick={() => handleSignIn(provider.id)}
                 disabled={loading}
                 className={`
-                  w-[250px] h-11 
+                  xl:w-[250px] h-11 
                   flex items-center justify-start gap-3
                   text-sm font-medium
                   transition-all duration-200
@@ -120,7 +120,9 @@ export default function OAuth({ callbackUrl }: OAuthProps) {
                 ) : (
                   <Icon className={`h-5 w-5 ${provider.color} flex-shrink-0`} />
                 )}
-                <span className="text-foreground/80">{provider.label}</span>
+                <span className="text-foreground/80 hidden xl:flex">
+                  {provider.label}
+                </span>
               </Button>
             </motion.div>
           );

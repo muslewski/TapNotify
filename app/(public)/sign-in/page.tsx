@@ -28,7 +28,7 @@ export default function SignInPage() {
   };
 
   return (
-    <div className="relative min-h-screen w-full flex flex-col lg:flex-row overflow-hidden mt-32 md:mt-0">
+    <div className="relative min-h-screen sm:max-h-screen w-full flex flex-col lg:flex-row overflow-hidden mt-32 md:mt-0">
       {/* Decorative background elements */}
       <div className="absolute inset-0 -z-10">
         <div className="absolute inset-0 bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:24px_24px]" />
@@ -37,7 +37,7 @@ export default function SignInPage() {
 
       {/* Left side - Login Form */}
       <div className="relative flex-1 flex justify-center items-center p-4 sm:p-6 lg:p-20 bg-background/95 backdrop-blur-[2px]">
-        <Card className="w-full xl:max-w-[700px] xl:min-w-[700px] p-4 sm:p-6 lg:p-8 shadow-md dark:shadow-2xl dark:shadow-primary/5 border-neutral-200/50 dark:border-neutral-800/50">
+        <Card className=" w-[500px] xl:w-[700px] p-4 sm:p-6 lg:p-8 shadow-md dark:shadow-2xl dark:shadow-primary/5 border-neutral-200/50 dark:border-neutral-800/50">
           <LoginCard />
         </Card>
       </div>
@@ -47,14 +47,14 @@ export default function SignInPage() {
         initial="hidden"
         animate="visible"
         variants={containerVariants}
-        className="relative flex lg:w-[45%] bg-gradient-to-b from-muted/60 via-muted/30 to-transparent dark:from-muted/20 dark:via-muted/10 dark:to-transparent p-6 sm:p-10 lg:p-20 flex-col justify-between"
+        className="relative flex lg:w-[45%] bg-gradient-to-b from-muted/60 via-muted/30 to-transparent dark:from-muted/20 dark:via-muted/10 dark:to-transparent p-6 sm:p-10 lg:p-10 2xl:p-20 flex-col justify-between"
       >
         {/* Decorative circles */}
         <div className="absolute top-20 right-20 w-32 sm:w-64 h-32 sm:h-64 bg-primary/5 rounded-full blur-3xl" />
         <div className="absolute bottom-20 left-20 w-32 sm:w-64 h-32 sm:h-64 bg-primary/5 rounded-full blur-3xl" />
 
         <div />
-        <div className="relative space-y-6 sm:space-y-12 max-w-[500px]">
+        <div className="relative space-y-1 xl:space-y-12 max-w-[500px]">
           <motion.div
             variants={itemVariants}
             className="space-y-4 sm:space-y-6"
@@ -65,13 +65,13 @@ export default function SignInPage() {
               </div>
             </div>
 
-            <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight text-foreground">
+            <h1 className="text-3xl md:text-4xl xl:text-6xl font-bold tracking-tight text-foreground">
               Mass SMS Communication,{" "}
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary-600 to-primary">
                 Simplified
               </span>
             </h1>
-            <p className="text-base sm:text-lg text-muted-foreground leading-relaxed">
+            <p className="text-base sm:text-lg text-muted-foreground leading-relaxed hidden xl:flex">
               Join thousands of businesses revolutionizing their communication
               with TapNotify&apos;s powerful SMS platform.
             </p>
@@ -102,7 +102,7 @@ export default function SignInPage() {
 
         <motion.div
           variants={itemVariants}
-          className="relative flex items-center space-x-4 pt-10 sm:pt-20"
+          className="relative flex items-center space-x-4 pt-2 xl:pt-20"
         >
           <div className="flex -space-x-3">
             {[...Array(4)].map((_, i) => (
