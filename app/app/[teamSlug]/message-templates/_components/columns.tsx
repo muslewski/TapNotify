@@ -2,8 +2,8 @@
 
 import { CellAction } from "@/app/app/[teamSlug]/message-templates/_components/cell-action";
 import { DateDisplayCell } from "@/app/app/_components/date-display-cell";
+import { MessageContentCell } from "@/app/app/_components/message-content-cell";
 import SortButton from "@/app/app/_components/sort-button";
-import { formatTemplateContent } from "@/components/format-template-content";
 import { MessageTemplate } from "@prisma/client";
 import { ColumnDef } from "@tanstack/react-table";
 
@@ -19,12 +19,7 @@ export const columns: ColumnDef<MessageTemplateColumn>[] = [
   {
     accessorKey: "content",
     header: "Content",
-    cell: ({ row }) => (
-      // TODO: Make it display better
-      <div className="whitespace-pre-wrap">
-        {formatTemplateContent(row.original.content)}
-      </div>
-    ),
+    cell: ({ row }) => <MessageContentCell content={row.original.content} />,
   },
   {
     accessorKey: "createdAt",
