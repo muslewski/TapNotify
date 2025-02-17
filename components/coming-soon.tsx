@@ -71,7 +71,7 @@ export default function ComingSoon() {
 
           <motion.div variants={itemVariants} className="space-y-4 text-center">
             <h1 className="text-3xl font-bold tracking-tight">
-              Something Exciting is Coming
+              Something Exciting is Coming!
             </h1>
             <p className="text-muted-foreground text-sm">
               We&apos;re working hard to bring you something amazing. Stay tuned
