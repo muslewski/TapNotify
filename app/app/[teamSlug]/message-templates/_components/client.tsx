@@ -28,8 +28,7 @@ export default function ContactClient({
         }}
       />
       <DataTable
-        searchKey="title"
-        searchKeyLabel="titles"
+        searchFields={[{ key: "title", label: "titles" }]}
         columns={columns}
         data={initialData}
       />

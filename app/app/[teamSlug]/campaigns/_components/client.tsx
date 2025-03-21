@@ -30,8 +30,7 @@ export default function CampaignClient({
         }}
       />
       <DataTable
-        searchKey="title"
-        searchKeyLabel="titles"
+        searchFields={[{ key: "title", label: "titles" }]}
         columns={columns}
         data={initialData}
         pageSize={4}

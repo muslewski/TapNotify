@@ -28,8 +28,10 @@ export default function ContactClient({
         }}
       />
       <DataTable
-        searchKey="contactLabel"
-        searchKeyLabel="contact labels"
+        searchFields={[
+          { key: "contactLabel", label: "contact labels" },
+          { key: "phone", label: "phone numbers" },
+        ]}
         columns={columns}
         data={initialData}
       />

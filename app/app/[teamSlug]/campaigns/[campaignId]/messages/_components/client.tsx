@@ -108,8 +108,7 @@ export default function CampaignMessagesClient({
         }}
       />
       <DataTable
-        searchKey="recipient_contactLabel"
-        searchKeyLabel="recipients"
+        searchFields={[{ key: "recipient_contactLabel", label: "recipients" }]}
         columns={columns}
         data={initialData}
         pageSize={4}

@@ -32,19 +32,22 @@ import {
 import { Input } from "@/components/ui/input";
 import { useState } from "react";
 
+interface SearchField {
+  key: string;
+  label: string;
+}
+
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
-  searchKey: string;
-  searchKeyLabel: string;
+  searchFields: SearchField[];
   pageSize?: number;
 }
 
 export function DataTable<TData, TValue>({
   columns,
   data,
-  searchKey,
-  searchKeyLabel,
+  searchFields,
   pageSize = 8,
 }: DataTableProps<TData, TValue>) {
   const [sorting, setSorting] = useState<SortingState>([
@@ -79,15 +82,20 @@ export function DataTable<TData, TValue>({
 
   return (
     <div>
-      <div className="flex items-center pb-4">
-        <Input
-          placeholder={`Filter ${searchKeyLabel}...`}
-          value={(table.getColumn(searchKey)?.getFilterValue() as string) ?? ""}
-          onChange={(event) =>
-            table.getColumn(searchKey)?.setFilterValue(event.target.value)
-          }
-          className="max-w-sm"
-        />
+      <div className="flex items-center pb-4 gap-4">
+        {searchFields.map((field) => (
+          <Input
+            key={field.key}
+            placeholder={`Filter ${field.label}...`}
+            value={
+              (table.getColumn(field.key)?.getFilterValue() as string) ?? ""
+            }
+            onChange={(event) =>
+              table.getColumn(field.key)?.setFilterValue(event.target.value)
+            }
+            className="max-w-sm"
+          />
+        ))}
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="outline" className="ml-auto">
