@@ -1,6 +1,6 @@
 import { checkIfCampaignBelongsToTeam } from "@/actions/database/campaigns";
 import { isTeamMember } from "@/actions/database/teamMembers";
-import sendSMS from "@/actions/twilio/send-sms";
+import sendBulkSMS from "@/actions/justsend/send-sms";
 import { currentUserId } from "@/lib/auth";
 import db from "@/lib/prisma";
 import { replaceTemplateVariables } from "@/lib/replace-template-variables";
@@ -54,6 +54,7 @@ export async function POST(_req: Request, { params }: SendFunctionParams) {
         },
       },
       include: {
+        template: true,
         messages: {
           include: {
             recipient: true,
@@ -72,8 +73,6 @@ export async function POST(_req: Request, { params }: SendFunctionParams) {
     const messagesToSend = campaign.messages
       .filter((message) => message.status !== "SENT") // Skip messages that are already sent
       .map((message) => ({
-        alphanumericSenderId: campaign.alphanumericSenderId,
-        messagingServiceSID: campaign.messagingServiceSID,
         phoneNumber: message.recipient.phone,
         message: message.template
           ? replaceTemplateVariables(message.template.content, {
@@ -84,99 +83,51 @@ export async function POST(_req: Request, { params }: SendFunctionParams) {
         messageId: message.id,
       }));
 
-    // Track successful and failed messages
-    let successfulMessageCount = 0;
-    let failedMessageCount = 0;
-
-    for (const messageData of messagesToSend) {
-      try {
-        if (!messageData.message) {
-          throw new Error("Message is empty");
-        }
-
-        await sendSMS(
-          messageData.alphanumericSenderId || "",
-          messageData.messagingServiceSID || "",
-          messageData.phoneNumber,
-          messageData.message
-        );
-
-        await db.message.update({
-          where: {
-            id: messageData.messageId,
-          },
-          data: {
-            status: "SENT",
-            sentAt: new Date(),
-          },
-        });
-
-        successfulMessageCount++;
-      } catch (error) {
-        // Update message status to failed
-        await db.message.update({
-          where: {
-            id: messageData.messageId,
-          },
-          data: {
-            status: "FAILED",
-            errorMessage:
-              error instanceof Error ? error.message : "Unknown error",
-          },
-        });
-
-        failedMessageCount++;
-      }
+    if (messagesToSend.length === 0) {
+      return NextResponse.json({ message: "No messages to send" });
     }
 
-    // Get the total count of all messages in the campaign
-    const totalMessages = await db.message.count({
-      where: {
-        campaignId: campaignId,
-      },
-    });
+    try {
+      await sendBulkSMS(
+        campaign.alphanumericSenderId || "INFO",
+        campaign.title,
+        messagesToSend.map((message) => ({
+          msisdn: message.phoneNumber,
+          // content: message.message,
+        })),
+        campaign.template.content
+      );
 
-    // Get the count of failed messages in the campaign
-    const totalFailedMessages = await db.message.count({
-      where: {
-        campaignId: campaignId,
-        status: "FAILED",
-      },
-    });
-
-    // Update campaign status based on message sending results
-    // Set status to FAILED only if ALL messages in the campaign have failed
-    if (totalFailedMessages === totalMessages) {
-      await db.campaign.update({
+      // Mark all messages as PENDING
+      await db.message.updateMany({
         where: {
-          id: campaignId,
+          id: {
+            in: messagesToSend.map((message) => message.messageId),
+          },
         },
         data: {
-          status: "FAILED",
-          completedAt: new Date(),
+          status: "SENT",
+          sentAt: new Date(),
         },
       });
-    } else if (failedMessageCount === 0 && successfulMessageCount > 0) {
-      // If all messages in this batch were successful
+
+      // UPDATE CAMPAING STATUS
       await db.campaign.update({
         where: {
           id: campaignId,
         },
         data: {
           status: "COMPLETED",
-          completedAt: new Date(),
         },
       });
-    } else {
-      // If there's a mix of successful and failed messages, or if there are still unsent messages
-      await db.campaign.update({
-        where: {
-          id: campaignId,
-        },
-        data: {
-          status: "SENT",
-        },
+
+      return NextResponse.json({
+        message: "Bulk SMS sent successfully",
+        status: "PENDING",
       });
+    } catch (error) {
+      console.error("Error sending bulk SMS:", error);
+      return new NextResponse("Error sending bulk SMS", { status: 500 });
     }
 
     // Return the campaign with updated message statuses

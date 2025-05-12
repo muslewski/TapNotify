@@ -12,6 +12,7 @@ import { MessagesSquare } from "lucide-react";
 import Link from "next/link";
 import { useParams } from "next/navigation";
 import { motion } from "framer-motion";
+import { useEffect, useRef } from "react";
 
 interface OpenMessagesProps {
   contactLength: number;
@@ -23,14 +24,18 @@ export default function OpenMessagesButton({
   data,
 }: OpenMessagesProps) {
   const params = useParams();
+  const intervalRef = useRef<NodeJS.Timeout | null>(null); // Add ref to store interval ID
 
   // Calculate the counts and percentages for each status
   const statusCounts =
-    data.messages?.reduce((acc, message) => {
-      const status = message.status?.toLowerCase() || "draft";
-      acc[status] = (acc[status] || 0) + 1;
-      return acc;
-    }, {} as Record<string, number>) || {};
+    data.messages?.reduce(
+      (acc, message) => {
+        const status = message.status?.toLowerCase() || "draft";
+        acc[status] = (acc[status] || 0) + 1;
+        return acc;
+      },
+      {} as Record<string, number>
+    ) || {};
 
   const total =
     Object.values(statusCounts).reduce((sum, count) => sum + count, 0) || 1;
@@ -46,6 +51,41 @@ export default function OpenMessagesButton({
         total) *
       100,
   };
+
+  // Add useEffect to monitor pending messages
+  useEffect(() => {
+    const pendingCount = statusCounts.pending || 0;
+
+    // Clear any existing interval
+    if (intervalRef.current) {
+      clearInterval(intervalRef.current);
+      intervalRef.current = null;
+    }
+
+    // If there are pending messages, start logging
+    if (pendingCount > 0) {
+      console.log(
+        `Started monitoring ${pendingCount} pending messages for campaign ${data.id}`
+      );
+
+      // Set up interval to log every 5 seconds
+      intervalRef.current = setInterval(() => {
+        console.log(
+          `Still waiting on ${pendingCount} pending messages for campaign ${data.id}`
+        );
+      }, 5000);
+    }
+
+    // Clean up interval on unmount or when pendingCount changes
+    return () => {
+      if (intervalRef.current) {
+        clearInterval(intervalRef.current);
+        if (pendingCount > 0) {
+          console.log("Stopped monitoring pending messages");
+        }
+      }
+    };
+  }, [statusCounts.pending, data.id]);
 
   return (
     <TooltipProvider>
@@ -68,42 +108,63 @@ export default function OpenMessagesButton({
 
               {/* Progress Bar */}
               <div className="h-1 w-full flex rounded-full overflow-hidden">
-                {/* Sent Messages (Green) */}
-                {percentages.sent > 0 && (
+                {/* if  */}
+                {statusCounts.pending > 0 ? (
                   <div
-                    className="bg-green-500"
-                    style={{ width: `${percentages.sent}%` }}
+                    className="bg-yellow-500 animate-pulse"
+                    style={{
+                      width: `${(statusCounts.pending / total) * 100}%`,
+                    }}
                   />
-                )}
-                {/* Failed Messages (Red) */}
-                {percentages.failed > 0 && (
-                  <div
-                    className="bg-red-500"
-                    style={{ width: `${percentages.failed}%` }}
-                  />
-                )}
-                {/* Draft and Other Messages (Gray) */}
-                {percentages.draft > 0 && (
-                  <div
-                    className="bg-gray-300"
-                    style={{ width: `${percentages.draft}%` }}
-                  />
+                ) : (
+                  <>
+                    {/* Sent Messages (Green) */}
+                    {percentages.sent > 0 && (
+                      <div
+                        className="bg-green-500"
+                        style={{ width: `${percentages.sent}%` }}
+                      />
+                    )}
+                    {/* Failed Messages (Red) */}
+                    {percentages.failed > 0 && (
+                      <div
+                        className="bg-red-500"
+                        style={{ width: `${percentages.failed}%` }}
+                      />
+                    )}
+                    {/* Draft and Other Messages (Gray) */}
+                    {percentages.draft > 0 && (
+                      <div
+                        className="bg-gray-300"
+                        style={{ width: `${percentages.draft}%` }}
+                      />
+                    )}
+                  </>
                 )}
               </div>
 
               {/* Status Legend */}
               <div className="flex justify-between text-xs text-muted-foreground px-1">
-                <span>{statusCounts.sent || 0} sent</span>
-                <span>{statusCounts.failed || 0} failed</span>
-                <span>
-                  {(statusCounts.draft || 0) +
-                    Object.entries(statusCounts)
-                      .filter(
-                        ([key]) => !["sent", "failed", "draft"].includes(key)
-                      )
-                      .reduce((sum, [, count]) => sum + count, 0)}{" "}
-                  draft
-                </span>
+                {statusCounts.pending > 0 ? (
+                  <span className="animate-pulse w-full text-center">
+                    {statusCounts.pending || 0} pending
+                  </span>
+                ) : (
+                  <>
+                    <span>{statusCounts.sent || 0} sent</span>
+                    <span>{statusCounts.failed || 0} failed</span>
+                    <span>
+                      {(statusCounts.draft || 0) +
+                        Object.entries(statusCounts)
+                          .filter(
+                            ([key]) =>
+                              !["sent", "failed", "draft"].includes(key)
+                          )
+                          .reduce((sum, [, count]) => sum + count, 0)}{" "}
+                      draft
+                    </span>
+                  </>
+                )}
               </div>
             </motion.div>
           </Link>

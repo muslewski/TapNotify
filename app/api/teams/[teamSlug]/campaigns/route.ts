@@ -1,8 +1,8 @@
 // GET, POST campaigns
 
 import { isTeamMember } from "@/actions/database/teamMembers";
-import { addAlphaSenderToService } from "@/actions/twilio/twilio-sender";
-import { createMessageService } from "@/actions/twilio/twilio-service";
+// import { addAlphaSenderToService } from "@/actions/twilio/twilio-sender";
+// import { createMessageService } from "@/actions/twilio/twilio-service";
 import { currentUserId } from "@/lib/auth";
 import db from "@/lib/prisma";
 import { validateAlphanumericSenderId } from "@/lib/validate-alpha-sender";
@@ -154,19 +154,19 @@ export async function POST(req: Request, { params }: CampaignsFunctionParams) {
     }
 
     // Create Message Sevice for campaign
-    const messagingServiceSID = await createMessageService(
-      title + ` (${teamSlug})`
-    );
+    // const messagingServiceSID = await createMessageService(
+    //   title + ` (${teamSlug})`
+    // );
 
     // Create Alphanumeric Sender ID in messaging service
-    await addAlphaSenderToService(messagingServiceSID, alphaSenderId);
+    // await addAlphaSenderToService(messagingServiceSID, alphaSenderId);
 
     // Create campaign and messages in a transaction
     const newCampaign = await db.$transaction(async (tx) => {
       const campaign = await tx.campaign.create({
         data: {
           title,
-          messagingServiceSID: messagingServiceSID,
+          messagingServiceSID: null,
           alphanumericSenderId: alphaSenderId,
           team: { connect: { slug: teamSlug } },
           user: { connect: { id: userId } },

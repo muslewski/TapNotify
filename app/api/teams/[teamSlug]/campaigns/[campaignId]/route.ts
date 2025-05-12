@@ -2,12 +2,12 @@
 
 import { checkIfCampaignBelongsToTeam } from "@/actions/database/campaigns";
 import { isTeamMember } from "@/actions/database/teamMembers";
-import { addAlphaSenderToService } from "@/actions/twilio/twilio-sender";
-import {
-  createMessageService,
-  deleteMessageService,
-  updateMessageService,
-} from "@/actions/twilio/twilio-service";
+// import { addAlphaSenderToService } from "@/actions/twilio/twilio-sender";
+// import {
+//   createMessageService,
+//   deleteMessageService,
+//   updateMessageService,
+// } from "@/actions/twilio/twilio-service";
 import { currentUserId } from "@/lib/auth";
 import db from "@/lib/prisma";
 import { validateAlphanumericSenderId } from "@/lib/validate-alpha-sender";
@@ -169,46 +169,46 @@ export async function PATCH(req: Request, { params }: CampaignFunctionParams) {
     }
 
     if (
-      !existingCampaign.messagingServiceSID ||
+      // exclamation existingCampaign.messagingServiceSID ||
       !existingCampaign.alphanumericSenderId
     ) {
       return new NextResponse(
-        "Messaging Service SID or Alphanumeric Sender ID not found in the campaign",
+        "Alphanumeric Sender ID not found in the campaign",
         {
           status: 404,
         }
       );
     }
 
-    let updatedMessagingServiceSID = existingCampaign.messagingServiceSID;
+    // let updatedMessagingServiceSID = existingCampaign.messagingServiceSID;
 
     // check if the new alpha sender ID is different from the existing one
-    if (alphaSenderId !== existingCampaign.alphanumericSenderId) {
-      console.log("Updating Alpha Sender ID in Messaging Service...");
-      // Delete service from Twilio
-      await deleteMessageService(existingCampaign.messagingServiceSID);
-      // Create new service
-      updatedMessagingServiceSID = await createMessageService(
-        existingCampaign.title + ` (${teamSlug})`
-      );
-      // add alpha sender to the new service
-      await addAlphaSenderToService(updatedMessagingServiceSID, alphaSenderId);
-    }
+    // if (alphaSenderId !== existingCampaign.alphanumericSenderId) {
+    //   console.log("Updating Alpha Sender ID in Messaging Service...");
+    //   // Delete service from Twilio
+    //   await deleteMessageService(existingCampaign.messagingServiceSID);
+    //   // Create new service
+    //   updatedMessagingServiceSID = await createMessageService(
+    //     existingCampaign.title + ` (${teamSlug})`
+    //   );
+    //   // add alpha sender to the new service
+    //   await addAlphaSenderToService(updatedMessagingServiceSID, alphaSenderId);
+    // }
 
     // check if the new title is different from the existing one and update service friendly name
-    if (title !== existingCampaign.title) {
-      console.log("Updating Campaign Title in Messaging Service...");
-      await updateMessageService(
-        updatedMessagingServiceSID,
-        title + ` (${teamSlug})`
-      );
-    }
+    // if (title !== existingCampaign.title) {
+    //   console.log("Updating Campaign Title in Messaging Service...");
+    //   await updateMessageService(
+    //     updatedMessagingServiceSID,
+    //     title + ` (${teamSlug})`
+    //   );
+    // }
 
     // eslint-disable-next-line
     let updateData: any = {
       title,
       alphanumericSenderId: alphaSenderId,
-      messagingServiceSID: updatedMessagingServiceSID,
+      messagingServiceSID: null,
     };
 
     // If templateId is provided, update template and regenerate messages
@@ -363,30 +363,30 @@ export async function DELETE(
     }
 
     // Get the message service SID from the campaign
-    const campaign = await db.campaign.findFirst({
-      where: {
-        id: campaignId,
-        team: {
-          slug: teamSlug,
-        },
-      },
-      select: {
-        messagingServiceSID: true,
-      },
-    });
+    // const campaign = await db.campaign.findFirst({
+    //   where: {
+    //     id: campaignId,
+    //     team: {
+    //       slug: teamSlug,
+    //     },
+    //   },
+    //   select: {
+    //     messagingServiceSID: true,
+    //   },
+    // });
 
-    if (!campaign) {
-      return new NextResponse("Campaign not found", { status: 404 });
-    }
+    // if (!campaign) {
+    //   return new NextResponse("Campaign not found", { status: 404 });
+    // }
 
-    if (!campaign.messagingServiceSID) {
-      return new NextResponse("Messaging Service SID not found in campaign", {
-        status: 404,
-      });
-    }
+    // if (!campaign.messagingServiceSID) {
+    //   return new NextResponse("Messaging Service SID not found in campaign", {
+    //     status: 404,
+    //   });
+    // }
 
     // Delete message service from Twilio
-    await deleteMessageService(campaign.messagingServiceSID);
+    // await deleteMessageService(campaign.messagingServiceSID);
 
     // Delete campaign from database (this will cascade delete associated messages)
     await db.campaign.delete({
